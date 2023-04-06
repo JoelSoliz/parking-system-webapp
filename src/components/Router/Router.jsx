@@ -7,6 +7,7 @@ import MainLayout from '../Layout/MainLayout'
 import Home from '../../routes/common/Home'
 import Login from '../../routes/common/Login'
 import NotFound from '../../routes/common/NotFound'
+import RegisterUser from '../../routes/common/RegisterUser'
 import Unauthorized from '../../routes/common/Unauthorized'
 
 const Router = () => {
@@ -15,6 +16,7 @@ const Router = () => {
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
+        <Route path="register-user" element={<RegisterUser />} />
         <Route path="unauthorized" element={<Unauthorized />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>

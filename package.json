@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "format": "prettier --write",
+    "format": "prettier --write .",
     "lint": "eslint src --max-warnings=0 --ext .js,.jsx --color",
     "lint:fix": "eslint --max-warnings=0 --color --fix",
     "lint:css": "stylelint --fix",
@@ -19,9 +19,11 @@
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.9",
     "@mui/material": "^5.11.10",
+    "@reduxjs/toolkit": "^1.9.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-helmet": "^6.1.0",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^6.10.0"
   },
   "devDependencies": {
