@@ -1,23 +1,18 @@
-import { Box, Typography } from '@mui/material'
 import React from 'react'
+import { Typography } from '@mui/material'
+import Layout from '../../components/Layout/Layout'
 
-function App() {
+const Home = () => {
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      flexDirection="column"
-      justifyContent="center"
-      minHeight="100vh"
-    >
+    <Layout title="Home">
       <Typography variant="h1" color="Highlight">
         Parking System
       </Typography>
       <Typography variant="body1">
         Welcome to Parking System frontend project.
       </Typography>
-    </Box>
+    </Layout>
   )
 }
 
-export default App
+export default Home
