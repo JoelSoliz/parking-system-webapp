@@ -1,5 +1,5 @@
 import { Controller, useForm } from 'react-hook-form'
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Button,
   Card,
@@ -7,12 +7,19 @@ import {
   TextField,
   Typography,
   Stack,
+  FormHelperText,
 } from '@mui/material'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
-import FormGroup from '@mui/material/FormGroup'
 import Layout from '../../components/Layout/Layout'
-import { RadioButtonChecked } from '@mui/icons-material'
+import Radio from '@mui/material/Radio'
+import RadioGroup from '@mui/material/RadioGroup'
+import IconButton from '@mui/material/IconButton'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import InputAdornment from '@mui/material/InputAdornment'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 const ERROR_MESSAGES = {
   maxLength: 'La longitud máxima es',
@@ -20,10 +27,15 @@ const ERROR_MESSAGES = {
   required: 'Este campo es requerido.',
   numbers: 'Solo se admiten números.',
   valido: 'Ingrese un número de CI válido.',
-  quantityMin: 'Ingrese 7 dígitos.',
-  quantityMax: 'La cantidad máxima es de 7 dígitos.',
+  quantityMin: 'Ingrese 7 dígitos como mínimo.',
+  quantityMax: 'Solo se admiten 8 dígitos como máximo.',
   email: 'Correo electrónico inválido.',
   letters: 'Solo se admiten letras.',
+  celularValido: 'Ingrese un número móvil válido.',
+  celularValidoInicia: 'Un número válido inicia con 6 o 7.',
+  celularValidoMin: 'El número movil debe tener 8 dígitos.',
+  celularValidoMax: 'Solo se admiten 8 dígitos como máximo.',
+  espacios: 'No se admiten espacios.',
 }
 const RegisterUser = () => {
   const {
@@ -32,6 +44,10 @@ const RegisterUser = () => {
     handleSubmit,
     watch,
   } = useForm({ mode: 'onChange' })
+  const [showPassword, setShowPassword] = useState(false)
+  const handleClickShowPassword = () => setShowPassword((show) => !show)
+  const [showPasswordC, setShowPasswordC] = useState(false)
+  const handleClickShowPasswordC = () => setShowPasswordC((show) => !show)
   return (
     <Layout title="Registrar Usuario">
       {' '}
@@ -127,7 +143,7 @@ const RegisterUser = () => {
               if (parseInt(value) <= 1000000) {
                 return ERROR_MESSAGES.quantityMin
               }
-              if (parseInt(value) > 10000000) {
+              if (parseInt(value) > 100000000) {
                 return ERROR_MESSAGES.quantityMax
               }
               return true
@@ -159,7 +175,7 @@ const RegisterUser = () => {
             minLength: { message: `${ERROR_MESSAGES.minLength} 6.`, value: 6 },
             pattern: {
               message: ERROR_MESSAGES.email,
-              value: /^[A-Z0-9._]+@[A-Z0-9.]+\.[A-Z]{2,}$/i,
+              value: /^[A-Z0-9._]+@[A-Z0-9.]+\.[com]{2,}$/i,
             },
             required: { message: ERROR_MESSAGES.required, value: true },
           }}
@@ -177,25 +193,91 @@ const RegisterUser = () => {
             </>
           )}
         />
+
+        <Controller
+          control={control}
+          name="phone"
+          rules={{
+            required: { message: ERROR_MESSAGES.required, value: true },
+            validate: (value) => {
+              if (isNaN(parseInt(value))) {
+                return ERROR_MESSAGES.celularValido
+              }
+              if (parseFloat(value) % 1 != 0) {
+                return ERROR_MESSAGES.celularValido
+              }
+              if (parseInt(value) <= 0) {
+                return ERROR_MESSAGES.celularValido
+              }
+              if (parseInt(value) < 60_000_000) {
+                return ERROR_MESSAGES.celularValido
+              }
+              if (parseInt(value) >= 80_000_000) {
+                return ERROR_MESSAGES.celularValido
+              }
+              return true
+            },
+          }}
+          render={({ field: { onBlur, onChange, value } }) => (
+            <>
+              <TextField
+                error={!!errors.phone?.message}
+                value={value}
+                onChange={(event) => onChange(event.target.value)}
+                label="Celular"
+                variant="outlined"
+                type={'number'}
+                helperText={errors.phone?.message}
+              />
+            </>
+          )}
+        />
         <Controller
           control={control}
           name="password"
           rules={{
+            pattern: {
+              message: ERROR_MESSAGES.espacios,
+              value: /^[a-zA-Z0-9,.\-_!"#$%&/=?¡¿+~*{}()|°^¨]*$/i,
+            },
             maxLength: { message: `${ERROR_MESSAGES.maxLength} 8.`, value: 8 },
             minLength: { message: `${ERROR_MESSAGES.minLength} 5.`, value: 5 },
             required: { message: ERROR_MESSAGES.required, value: true },
           }}
           render={({ field: { onBlur, onChange, value } }) => (
             <>
-              <TextField
-                error={!!errors.password?.message}
-                value={value}
-                onChange={(event) => onChange(event.target.value)}
-                label="Contraseña"
-                variant="outlined"
-                type={'password'}
-                helperText={errors.password?.message}
-              />
+              <FormControl variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Contraseña
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? 'text' : 'password'}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        color="black"
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  error={!!errors.password?.message}
+                  value={value}
+                  onChange={(event) => onChange(event.target.value)}
+                  label="Contraseña"
+                  variant="outlined"
+                  helperText={errors.password?.message}
+                />
+                {!!errors.password?.message && (
+                  <FormHelperText error>
+                    {errors.password?.message}
+                  </FormHelperText>
+                )}
+              </FormControl>
             </>
           )}
         />
@@ -211,15 +293,39 @@ const RegisterUser = () => {
           }}
           render={({ field: { onBlur, onChange, value } }) => (
             <>
-              <TextField
-                error={!!errors.passwordConfirmation?.message}
-                value={value}
-                onChange={(event) => onChange(event.target.value)}
-                label="Confirmar contraseña"
-                variant="outlined"
-                type={'password'}
-                helperText={errors.passwordConfirmation?.message}
-              />
+              {' '}
+              <FormControl variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Confirmar contraseña
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPasswordC ? 'text' : 'password'}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        color="black"
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPasswordC}
+                        edge="end"
+                      >
+                        {showPasswordC ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  error={!!errors.passwordConfirmation?.message}
+                  value={value}
+                  onChange={(event) => onChange(event.target.value)}
+                  label="Confirmar contraseña"
+                  variant="outlined"
+                  helperText={errors.passwordConfirmation?.message}
+                />
+                {!!errors.passwordConfirmation?.message && (
+                  <FormHelperText error>
+                    {errors.passwordConfirmation?.message}
+                  </FormHelperText>
+                )}
+              </FormControl>
             </>
           )}
         />
@@ -227,13 +333,15 @@ const RegisterUser = () => {
         <Typography gutterBottom variant="h8" component="div" sx={{ m: 0 }}>
           Recibir notificaciones por:
         </Typography>
-        <FormGroup>
+        <RadioGroup>
+          <FormControlLabel value="email" control={<Radio />} label="Email" />
           <FormControlLabel
-            control={<Checkbox defaultChecked />}
-            label="Email"
+            value="whatsaap"
+            control={<Radio />}
+            label="WhatsApp"
           />
-          <FormControlLabel control={<Checkbox />} label="WhatsApp" />
-        </FormGroup>
+        </RadioGroup>
+
         <Stack direction="row" spacing={2}>
           <Button variant="contained">Cancelar</Button>
           <Button variant="contained">Registrarse</Button>
