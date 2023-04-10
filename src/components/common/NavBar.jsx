@@ -19,24 +19,30 @@ const NavBar = () => {
   return (
     <AppBar sx={{ p: '0 5%' }}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <h3>Parqueo San Simon</h3>
+        <h3>Parqueo San Simón</h3>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
           {isNonMobileDevice ? (
             <>
               <Link style={{ color: '#fff', textDecoration: 'none' }} to={''}>
-                Home
+                Inicio
               </Link>
               <Link
                 style={{ color: '#fff', textDecoration: 'none' }}
                 to={'/login'}
               >
-                Login
+                Iniciar sesión
               </Link>
               <Link
                 style={{ color: '#fff', textDecoration: 'none' }}
                 to={'/register-user'}
               >
-                Sign up
+                Regístrate
+              </Link>
+              <Link
+                style={{ color: '#fff', textDecoration: 'none' }}
+                to={'/register-vehicle'}
+              >
+                Registrar Vehículo
               </Link>
             </>
           ) : (
@@ -64,7 +70,7 @@ const NavBar = () => {
                     style={{ color: '#333', textDecoration: 'none' }}
                     to={''}
                   >
-                    Home
+                    Inicio
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
@@ -72,7 +78,7 @@ const NavBar = () => {
                     style={{ color: '#333', textDecoration: 'none' }}
                     to={'/login'}
                   >
-                    Login
+                    Iniciar Sesión
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
@@ -80,7 +86,15 @@ const NavBar = () => {
                     style={{ color: '#333', textDecoration: 'none' }}
                     to={'/register-user'}
                   >
-                    Sign up
+                    Regístrate
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <Link
+                    style={{ color: '#333', textDecoration: 'none' }}
+                    to={'/register-vehicle'}
+                  >
+                    Registrar Vehículo
                   </Link>
                 </MenuItem>
               </Menu>
