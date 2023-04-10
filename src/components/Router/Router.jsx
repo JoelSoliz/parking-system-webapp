@@ -9,6 +9,7 @@ import Login from '../../routes/common/Login'
 import NotFound from '../../routes/common/NotFound'
 import RegisterUser from '../../routes/common/RegisterUser'
 import Unauthorized from '../../routes/common/Unauthorized'
+import RegisterVehicle from '../../routes/client/RegisterVehicle'
 
 const Router = () => {
   return (
@@ -17,6 +18,7 @@ const Router = () => {
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register-user" element={<RegisterUser />} />
+        <Route path="register-vehicle" element={<RegisterVehicle />} />
         <Route path="unauthorized" element={<Unauthorized />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
@@ -24,7 +26,7 @@ const Router = () => {
           index
           element={
             <PrivateRoute needed_permission="admin_view">
-              I'm admin
+              I am admin
             </PrivateRoute>
           }
         />

@@ -5,7 +5,7 @@ import Layout from '../../components/Layout/Layout'
 const Unauthorized = () => {
   return (
     <Layout title="Unauthorized">
-      <Typography>You aren't authorized to be here!</Typography>
+      <Typography>You are not authorized to be here!</Typography>
     </Layout>
   )
 }

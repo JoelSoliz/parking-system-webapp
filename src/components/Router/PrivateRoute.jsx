@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Navigate, Route } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 const PrivateRoute = ({ children, needed_permission }) => {
-  const [user, _] = useState({
+  const [user] = useState({
     authenticated: true,
     permissions: ['admin_view'],
   })

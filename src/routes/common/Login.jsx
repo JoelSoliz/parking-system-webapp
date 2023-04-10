@@ -30,12 +30,12 @@ const ERROR_MESSAGES = {
 const Login = () => {
   const {
     control,
-    formState: { errors, isValid },
-    handleSubmit,
-    watch,
+    formState: { errors },
+    // handleSubmit,
   } = useForm({ mode: 'onChange' })
   const [showPassword, setShowPassword] = useState(false)
   const handleClickShowPassword = () => setShowPassword((show) => !show)
+
   return (
     <Layout title="Login">
       <Box alignItems="center" justifyContent="center">
@@ -51,7 +51,13 @@ const Login = () => {
           }}
         >
           <CardContent sx={{ m: 0 }}>
-            <Typography gutterBottom variant="h4" component="div" sx={{ m: 0 }}>
+            <Typography
+              gutterBottom
+              variant="h4"
+              component="div"
+              align="center"
+              sx={{ m: 0 }}
+            >
               Bienvenido
             </Typography>
           </CardContent>
@@ -100,7 +106,7 @@ const Login = () => {
               },
               required: { message: ERROR_MESSAGES.required, value: true },
             }}
-            render={({ field: { onBlur, onChange, value } }) => (
+            render={({ field: { onChange, value } }) => (
               <>
                 <FormControl variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">
@@ -138,7 +144,7 @@ const Login = () => {
             )}
           />
 
-          <Button variant="contained">Login</Button>
+          <Button variant="contained">Iniciar Sesión</Button>
         </Card>
       </Box>
     </Layout>

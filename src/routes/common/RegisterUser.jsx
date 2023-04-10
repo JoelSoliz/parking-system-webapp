@@ -40,8 +40,8 @@ const ERROR_MESSAGES = {
 const RegisterUser = () => {
   const {
     control,
-    formState: { errors, isValid },
-    handleSubmit,
+    formState: { errors },
+    // handleSubmit,
     watch,
   } = useForm({ mode: 'onChange' })
   const [showPassword, setShowPassword] = useState(false)
@@ -63,8 +63,14 @@ const RegisterUser = () => {
         }}
       >
         <CardContent sx={{ m: 0 }}>
-          <Typography gutterBottom variant="h4" component="div" sx={{ m: 0 }}>
-            Sign up
+          <Typography
+            gutterBottom
+            variant="h4"
+            component="div"
+            align="center"
+            sx={{ m: 0 }}
+          >
+            Registrarse
           </Typography>
         </CardContent>
         <Controller
@@ -179,7 +185,7 @@ const RegisterUser = () => {
             },
             required: { message: ERROR_MESSAGES.required, value: true },
           }}
-          render={({ field: { onBlur, onChange, value } }) => (
+          render={({ field: { onChange, value } }) => (
             <>
               <TextField
                 error={!!errors.email?.message}
@@ -209,16 +215,16 @@ const RegisterUser = () => {
               if (parseInt(value) <= 0) {
                 return ERROR_MESSAGES.celularValido
               }
-              if (parseInt(value) < 60_000_000) {
+              if (parseInt(value) < 60000000) {
                 return ERROR_MESSAGES.celularValido
               }
-              if (parseInt(value) >= 80_000_000) {
+              if (parseInt(value) >= 80000000) {
                 return ERROR_MESSAGES.celularValido
               }
               return true
             },
           }}
-          render={({ field: { onBlur, onChange, value } }) => (
+          render={({ field: { onChange, value } }) => (
             <>
               <TextField
                 error={!!errors.phone?.message}
@@ -244,7 +250,7 @@ const RegisterUser = () => {
             minLength: { message: `${ERROR_MESSAGES.minLength} 5.`, value: 5 },
             required: { message: ERROR_MESSAGES.required, value: true },
           }}
-          render={({ field: { onBlur, onChange, value } }) => (
+          render={({ field: { onChange, value } }) => (
             <>
               <FormControl variant="outlined">
                 <InputLabel htmlFor="outlined-adornment-password">
@@ -291,7 +297,7 @@ const RegisterUser = () => {
             validate: (value) =>
               value === watch('password') || 'La contraseña no coincide.',
           }}
-          render={({ field: { onBlur, onChange, value } }) => (
+          render={({ field: { onChange, value } }) => (
             <>
               {' '}
               <FormControl variant="outlined">
