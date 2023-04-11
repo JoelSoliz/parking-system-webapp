@@ -25,7 +25,8 @@
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.43.9",
     "react-redux": "^8.0.5",
-    "react-router-dom": "^6.10.0"
+    "react-router-dom": "^6.10.0",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.4.4",
