@@ -1,6 +1,7 @@
 import React from 'react'
 import { Typography } from '@mui/material'
 import Layout from '../../components/Layout/Layout'
+import UserDetailsModal from '../admin/components/UserDetailsModal'
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
       <Typography variant="body1">
         Welcome to Parking System frontend project.
       </Typography>
+      <UserDetailsModal />
     </Layout>
   )
 }
