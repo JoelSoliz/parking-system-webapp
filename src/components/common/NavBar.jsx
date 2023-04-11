@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppBar, Box, IconButton, Toolbar, useMediaQuery } from '@mui/material'
+import { AppBar, Box, IconButton, Toolbar, useMediaQuery, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { Menu as MenuIcon } from '@mui/icons-material'
 import Menu from '@mui/material/Menu'
@@ -17,9 +17,11 @@ const NavBar = () => {
   const isNonMobileDevice = useMediaQuery('(min-width: 1000px)')
 
   return (
-    <AppBar sx={{ p: '0 5%' }}>
+    <AppBar sx={{ p: '0 5%' }} style={{ background: '#094067' }}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <h3>Parqueo San Simón</h3>
+        <Typography variant="h5" color="#fffffe" style={{ fontWeight: 'bold' }} >
+          Parqueo San Simón
+        </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
           {isNonMobileDevice ? (
             <>
@@ -36,7 +38,7 @@ const NavBar = () => {
                 style={{ color: '#fff', textDecoration: 'none' }}
                 to={'/register-user'}
               >
-                Regístrate
+                Regístrarse
               </Link>
               <Link
                 style={{ color: '#fff', textDecoration: 'none' }}
@@ -86,7 +88,7 @@ const NavBar = () => {
                     style={{ color: '#333', textDecoration: 'none' }}
                     to={'/register-user'}
                   >
-                    Regístrate
+                    Regístrarse
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>

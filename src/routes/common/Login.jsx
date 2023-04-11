@@ -38,7 +38,7 @@ const Login = () => {
 
   return (
     <Layout title="Login">
-      <Box alignItems="center" justifyContent="center">
+      <Box alignItems="center" justifyContent="center" marginY={8}>
         <Card
           sx={{
             p: 4,
@@ -48,7 +48,9 @@ const Login = () => {
             flexDirection: 'column',
             gap: 4,
             borderRadius: '15px',
+            border: 5
           }}
+          style={{ borderColor: '#90b4ce' }}
         >
           <CardContent sx={{ m: 0 }}>
             <Typography
@@ -144,11 +146,13 @@ const Login = () => {
             )}
           />
 
-          <Button variant="contained">Iniciar Sesión</Button>
+          <Button variant="contained" color='secondary' >Iniciar Sesión</Button>
         </Card>
       </Box>
     </Layout>
   )
 }
+
+
 
 export default Login

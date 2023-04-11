@@ -26,7 +26,7 @@ const Router = () => {
           index
           element={
             <PrivateRoute needed_permission="admin_view">
-              I am admin
+
             </PrivateRoute>
           }
         />
