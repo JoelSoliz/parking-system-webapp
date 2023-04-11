@@ -2,42 +2,29 @@ import React, { useState } from 'react'
 import { styled } from '@mui/material/styles'
 
 import { Button, Modal, Fade, Typography, Box } from '@mui/material'
+import { useSelector } from 'react-redux'
+import { customersSelector } from '../../../store/slices/customers'
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   '& .MuiPaper-root': {
-    backgroundColor: 'white', // Change the background color to white
+    backgroundColor: 'white',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
-    maxWidth: 400, // Reduce the maximum width to 400 pixels
-    width: '100%', // Set the width to 100% to center the modal
-    margin: '0 auto', // Set the margin to auto to center the modal
+    maxWidth: 400,
+    width: '100%',
+    margin: '0 auto',
   },
 }))
 
-const UserDetailsModal = () => {
-  const user = {
-    name: 'John Doe',
-    surname: 'True',
-    ci: '9397790',
-    email: 'johndoe@example.com',
-    phone: '555-1234',
-  }
-  const [open, setOpen] = useState(false)
+const UserDetailsModal = ({ open, onClose }) => {
+  const { selectedCustomer } = useSelector(customersSelector)
 
-  const handleOpen = () => {
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
   return (
     <>
-      <Button onClick={handleOpen}>View User Info</Button>
-      <StyledModal open={open} onClose={handleClose}>
+      <StyledModal open={open} onClose={onClose}>
         <Fade in={open}>
           <Box
             backgroundColor={'#fffffe'}
@@ -54,23 +41,23 @@ const UserDetailsModal = () => {
             </Box>
             <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
               <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>CI:</strong> {user.ci}
+                <strong>CI:</strong> {selectedCustomer?.ci}
               </Typography>
 
               <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Nombre(s):</strong> {user.name}
+                <strong>Nombre(s):</strong> {selectedCustomer?.name}
               </Typography>
 
               <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Apellido(s):</strong> {user.surname}
+                <strong>Apellido(s):</strong> {selectedCustomer?.last_name}
               </Typography>
 
               <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Correo electrónico:</strong> {user.email}
+                <strong>Correo electrónico:</strong> {selectedCustomer?.email}
               </Typography>
 
               <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Celular:</strong> {user.phone}
+                <strong>Celular:</strong> {selectedCustomer?.phone}
               </Typography>
             </Box>
           </Box>
