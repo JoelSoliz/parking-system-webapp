@@ -60,7 +60,10 @@ const RegisterUser = () => {
           flexDirection: 'column',
           gap: 4,
           borderRadius: '15px',
+          marginY: 8,
+          border: 5,
         }}
+        style={{ borderColor: '#90b4ce' }}
       >
         <CardContent sx={{ m: 0 }}>
           <Typography
@@ -349,8 +352,8 @@ const RegisterUser = () => {
         </RadioGroup>
 
         <Stack direction="row" spacing={2}>
-          <Button variant="contained">Cancelar</Button>
-          <Button variant="contained">Registrarse</Button>
+          <Button variant="contained" color='secondary' >Cancelar</Button>
+          <Button variant="contained" color='secondary' >Registrarse</Button>
         </Stack>
       </Card>
     </Layout>

@@ -62,7 +62,10 @@ const RegisterVehicle = () => {
           flexDirection: 'column',
           gap: 4,
           borderRadius: '15px',
+          border: 5,
+          marginY: 8,
         }}
+        style={{ borderColor: '#90b4ce' }}
       >
         <CardContent sx={{ m: 0 }}>
           <Typography
@@ -206,8 +209,8 @@ const RegisterVehicle = () => {
           justifyContent={'center'}
           gap={'20px'}
         >
-          <Button variant="contained"> Cancelar </Button>
-          <Button variant="contained"> Registrar </Button>
+          <Button variant="contained" color='secondary' > Cancelar </Button>
+          <Button variant="contained" color='secondary' > Registrar </Button>
         </Stack>
       </Card>
     </Layout>
