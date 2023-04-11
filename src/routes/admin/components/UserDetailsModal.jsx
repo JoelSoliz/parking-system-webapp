@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { styled } from '@mui/material/styles'
 
-import { Button, Modal, Fade, Typography, Avatar, Grid } from '@mui/material'
+import { Button, Modal, Fade, Typography, Box } from '@mui/material'
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
@@ -17,11 +17,6 @@ const StyledModal = styled(Modal)(({ theme }) => ({
   },
 }))
 
-const StyledAvatar = styled(Avatar)(({ theme }) => ({
-  width: theme.spacing(20),
-  height: theme.spacing(20),
-  margin: 'auto',
-}))
 const UserDetailsModal = () => {
   const user = {
     name: 'John Doe',
@@ -29,7 +24,6 @@ const UserDetailsModal = () => {
     ci: '9397790',
     email: 'johndoe@example.com',
     phone: '555-1234',
-    avatarUrl: 'https://randomuser.me/api/portraits/men/83.jpg',
   }
   const [open, setOpen] = useState(false)
 
@@ -45,41 +39,41 @@ const UserDetailsModal = () => {
       <Button onClick={handleOpen}>View User Info</Button>
       <StyledModal open={open} onClose={handleClose}>
         <Fade in={open}>
-          <Grid backgroundColor={'#fffffe'} container spacing={2}>
-            <Grid item xs={12}>
-              <StyledAvatar alt={user.name} src={user.avatarUrl} />
-            </Grid>
-            <Grid item xs={12}>
+          <Box
+            backgroundColor={'#fffffe'}
+            container
+            spacing={5}
+            width={'40%'}
+            paddingY={'50px'}
+            borderRadius={'20px'}
+          >
+            <Box marginBottom={'20px'}>
               <Typography color="black" variant="h4" align="center">
-                Detalles del usuario
+                Detalles de usuario
               </Typography>
-            </Grid>
-            <Grid item xs={12}>
+            </Box>
+            <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
               <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                CI: {user.ci}
+                <strong>CI:</strong> {user.ci}
               </Typography>
-            </Grid>
-            <Grid item xs={12}>
+
               <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                Nombre(s): {user.name}
+                <strong>Nombre(s):</strong> {user.name}
               </Typography>
-            </Grid>
-            <Grid item xs={12}>
+
               <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                Apellido(s): {user.surname}
+                <strong>Apellido(s):</strong> {user.surname}
               </Typography>
-            </Grid>
-            <Grid item xs={12}>
+
               <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                Correo electrónico: {user.email}
+                <strong>Correo electrónico:</strong> {user.email}
               </Typography>
-            </Grid>
-            <Grid item xs={12}>
+
               <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                Celular: {user.phone}
+                <strong>Celular:</strong> {user.phone}
               </Typography>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Fade>
       </StyledModal>
     </>
