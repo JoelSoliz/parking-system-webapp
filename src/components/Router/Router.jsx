@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
-import PrivateRoute from './PrivateRoute'
+// import PrivateRoute from './PrivateRoute'
 import AdminLayout from '../Layout/AdminLayout'
 import MainLayout from '../Layout/MainLayout'
 import Home from '../../routes/common/Home'
@@ -26,9 +26,9 @@ const Router = () => {
         <Route
           index
           element={
-            <PrivateRoute needed_permission="admin_view">
-              <UserList />
-            </PrivateRoute>
+            // <PrivateRoute needed_permission="admin_view">
+            <UserList />
+            // </PrivateRoute>
           }
         />
       </Route>
