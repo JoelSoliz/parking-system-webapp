@@ -20,6 +20,9 @@ import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import { useDispatch, useSelector } from 'react-redux'
+import { registerUser, sessionSelector } from '../../store/slices/session'
+import { useNavigate } from 'react-router-dom'
 
 const ERROR_MESSAGES = {
   maxLength: 'La longitud máxima es',
@@ -38,10 +41,13 @@ const ERROR_MESSAGES = {
   espacios: 'No se admiten espacios.',
 }
 const RegisterUser = () => {
+  const navigate = useNavigate()
+  const { loading } = useSelector(sessionSelector)
+  const dispatch = useDispatch()
   const {
     control,
-    formState: { errors },
-    // handleSubmit,
+    formState: { errors, isValid },
+    handleSubmit,
     watch,
   } = useForm({ mode: 'onChange' })
   const [showPassword, setShowPassword] = useState(false)
@@ -50,7 +56,6 @@ const RegisterUser = () => {
   const handleClickShowPasswordC = () => setShowPasswordC((show) => !show)
   return (
     <Layout title="Registrar Usuario">
-      {' '}
       <Card
         sx={{
           p: 10,
@@ -107,7 +112,7 @@ const RegisterUser = () => {
         />
         <Controller
           control={control}
-          name="surname"
+          name="last_name"
           rules={{
             pattern: {
               message: ERROR_MESSAGES.letters,
@@ -123,13 +128,13 @@ const RegisterUser = () => {
           render={({ field: { onChange, value } }) => (
             <>
               <TextField
-                error={!!errors.surname?.message}
+                error={!!errors.last_name?.message}
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
                 label="Apellido(s)"
                 variant="outlined"
                 type={'text'}
-                helperText={errors.surname?.message}
+                helperText={errors.last_name?.message}
               />
             </>
           )}
@@ -350,11 +355,32 @@ const RegisterUser = () => {
             label="WhatsApp"
           />
         </RadioGroup>
-
-        <Stack direction="row" spacing={2}>
-          <Button variant="contained" color='secondary' >Cancelar</Button>
-          <Button variant="contained" color='secondary' >Registrarse</Button>
-        </Stack>
+        {loading === 'failed' && (
+          <Typography color={'error'} textAlign={'center'}>
+            Error, verifique los datos ingresados.
+          </Typography>
+        )}
+        {loading === 'pending' ? (
+          <Typography>Iniciando sesión...</Typography>
+        ) : (
+          <Stack direction="row" spacing={2}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => navigate('/')}
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleSubmit((data) => dispatch(registerUser(data)))}
+              disabled={!isValid}
+            >
+              Registrarse
+            </Button>
+          </Stack>
+        )}
       </Card>
     </Layout>
   )

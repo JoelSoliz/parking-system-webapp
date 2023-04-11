@@ -17,6 +17,9 @@ import InputAdornment from '@mui/material/InputAdornment'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Layout from '../../components/Layout/Layout'
+import { useDispatch, useSelector } from 'react-redux'
+import { login, sessionSelector } from '../../store/slices/session'
+import { Navigate } from 'react-router-dom'
 
 const ERROR_MESSAGES = {
   email: 'Correo electrónico inválido.',
@@ -28,16 +31,19 @@ const ERROR_MESSAGES = {
 }
 
 const Login = () => {
+  const { isAuthenticate, loading } = useSelector(sessionSelector)
+  const dispatch = useDispatch()
   const {
     control,
-    formState: { errors },
-    // handleSubmit,
+    formState: { errors, isValid },
+    handleSubmit,
   } = useForm({ mode: 'onChange' })
   const [showPassword, setShowPassword] = useState(false)
   const handleClickShowPassword = () => setShowPassword((show) => !show)
 
   return (
     <Layout title="Login">
+      {isAuthenticate && <Navigate to={'/'} />}
       <Box alignItems="center" justifyContent="center" marginY={8}>
         <Card
           sx={{
@@ -48,7 +54,7 @@ const Login = () => {
             flexDirection: 'column',
             gap: 4,
             borderRadius: '15px',
-            border: 5
+            border: 5,
           }}
           style={{ borderColor: '#90b4ce' }}
         >
@@ -145,14 +151,27 @@ const Login = () => {
               </>
             )}
           />
-
-          <Button variant="contained" color='secondary' >Iniciar Sesión</Button>
+          {loading === 'failed' && (
+            <Typography color={'error'} textAlign={'center'}>
+              Credenciales inválidas
+            </Typography>
+          )}
+          {loading === 'pending' ? (
+            <Typography>Iniciando sesión...</Typography>
+          ) : (
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleSubmit((data) => dispatch(login(data)))}
+              disabled={!isValid}
+            >
+              Iniciar Sesión
+            </Button>
+          )}
         </Card>
       </Box>
     </Layout>
   )
 }
-
-
 
 export default Login
