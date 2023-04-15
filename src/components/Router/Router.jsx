@@ -19,8 +19,8 @@ const Router = () => {
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register-user" element={<RegisterUser />} />
-        <Route path="register-vehicle" element={<RegisterVehicle />} />
         <Route path="unauthorized" element={<Unauthorized />} />
+        <Route path="register-vehicle" element={<RegisterVehicle />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route

@@ -6,6 +6,7 @@ import { CssBaseline, ThemeProvider, Typography } from '@mui/material'
 import Router from '../components/Router/Router'
 import theme from '../theme'
 import store, { persistor } from '../store/store'
+import { Toaster } from 'sonner'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <BrowserRouter>
+            <Toaster position="bottom-center" richColors />
             <Router />
           </BrowserRouter>
         </ThemeProvider>

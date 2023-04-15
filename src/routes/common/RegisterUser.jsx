@@ -40,6 +40,7 @@ const ERROR_MESSAGES = {
   celularValidoMax: 'Solo se admiten 8 dígitos como máximo.',
   espacios: 'No se admiten espacios.',
 }
+
 const RegisterUser = () => {
   const navigate = useNavigate()
   const { loading } = useSelector(sessionSelector)
@@ -307,7 +308,6 @@ const RegisterUser = () => {
           }}
           render={({ field: { onChange, value } }) => (
             <>
-              {' '}
               <FormControl variant="outlined">
                 <InputLabel htmlFor="outlined-adornment-password">
                   Confirmar contraseña
@@ -347,14 +347,33 @@ const RegisterUser = () => {
         <Typography gutterBottom variant="h8" component="div" sx={{ m: 0 }}>
           Recibir notificaciones por:
         </Typography>
-        <RadioGroup>
-          <FormControlLabel value="email" control={<Radio />} label="Email" />
-          <FormControlLabel
-            value="whatsaap"
-            control={<Radio />}
-            label="WhatsApp"
-          />
-        </RadioGroup>
+        <Controller
+          control={control}
+          name="notification"
+          rules={{
+            required: { message: ERROR_MESSAGES.required, value: true },
+          }}
+          render={({ field: { onChange, value } }) => (
+            <>
+              <RadioGroup
+                error={errors.notification?.message}
+                value={value}
+                onChange={(event) => onChange(event.target.checked)}
+              >
+                <FormControlLabel
+                  value="email"
+                  control={<Radio />}
+                  label="Email"
+                />
+                <FormControlLabel
+                  value="whatsaap"
+                  control={<Radio />}
+                  label="WhatsApp"
+                />
+              </RadioGroup>
+            </>
+          )}
+        />
         {loading === 'failed' && (
           <Typography color={'error'} textAlign={'center'}>
             Error, verifique los datos ingresados.
@@ -371,6 +390,7 @@ const RegisterUser = () => {
             >
               Cancelar
             </Button>
+
             <Button
               variant="contained"
               color="secondary"
