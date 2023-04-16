@@ -19,7 +19,7 @@ const StyledModal = styled(Modal)(({ theme }) => ({
   },
 }))
 
-const UserDetailsModal = ({ open, onClose }) => {
+const RequestDetail = ({ open, onClose }) => {
   const { selectedCustomer } = useSelector(customersSelector)
 
   return (
@@ -36,28 +36,51 @@ const UserDetailsModal = ({ open, onClose }) => {
           >
             <Box marginBottom={'20px'}>
               <Typography color="black" variant="h4" align="center">
-                Detalles de usuario
+                Especificaciones de la solicitud
               </Typography>
             </Box>
+            <Typography color="black" variant="h5" align="left">
+              Datos del solicitante
+            </Typography>
+            <Typography color="black" variant="subtitle1" paddingLeft="100px">
+              <strong>Nombre(s) y Apellido(s): </strong>{' '}
+              {selectedCustomer?.name}
+            </Typography>
+
             <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
               <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>CI:</strong> {selectedCustomer?.ci}
+                <strong>CI: </strong> {selectedCustomer?.ci}
+              </Typography>
+
+              <Typography color="black" variant="h5" align="left">
+                Datos del vehículo
               </Typography>
 
               <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Nombre(s):</strong> {selectedCustomer?.name}
+                <strong>Número de placa: </strong> {selectedCustomer?.last_name}
               </Typography>
 
               <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Apellido(s):</strong> {selectedCustomer?.last_name}
+                <strong>Tipo: </strong> {selectedCustomer?.email}
               </Typography>
 
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Correo electrónico:</strong> {selectedCustomer?.email}
+              <Typography color="black" variant="h5" align="left">
+                Detalle de solicitud
               </Typography>
-
               <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Celular:</strong> {selectedCustomer?.phone}
+                <strong>Fecha y hora de la solicitud: </strong>{' '}
+                {selectedCustomer?.phone}
+              </Typography>
+              <Typography color="black" variant="subtitle1" paddingLeft="100px">
+                <strong>Fecha de inicio y fin de la reserva:</strong>{' '}
+                {selectedCustomer?.phone}
+              </Typography>
+              <Typography color="black" variant="subtitle1" paddingLeft="100px">
+                <strong>Horario de reserva solicitada: </strong>{' '}
+                {selectedCustomer?.phone}
+              </Typography>
+              <Typography color="black" variant="subtitle1" paddingLeft="100px">
+                <strong>Sitio del parqueo: </strong> {selectedCustomer?.phone}
               </Typography>
             </Box>
           </Box>
@@ -67,4 +90,4 @@ const UserDetailsModal = ({ open, onClose }) => {
   )
 }
 
-export default UserDetailsModal
+export default RequestDetail

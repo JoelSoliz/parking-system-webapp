@@ -1,11 +1,23 @@
 import React from 'react'
-import { AppBar, Box, IconButton, Toolbar, useMediaQuery, Typography } from '@mui/material'
+import {
+  Button,
+  AppBar,
+  Box,
+  IconButton,
+  Toolbar,
+  useMediaQuery,
+  Typography,
+} from '@mui/material'
 import { Link } from 'react-router-dom'
 import { Menu as MenuIcon } from '@mui/icons-material'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import { useDispatch, useSelector } from 'react-redux'
+import { logout, sessionSelector } from '../../store/slices/session'
 
 const NavBar = () => {
+  const { isAuthenticate } = useSelector(sessionSelector)
+  const dispatch = useDispatch()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -19,7 +31,7 @@ const NavBar = () => {
   return (
     <AppBar sx={{ p: '0 5%' }} style={{ background: '#094067' }}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography variant="h5" color="#fffffe" style={{ fontWeight: 'bold' }} >
+        <Typography variant="h5" color="#fffffe" style={{ fontWeight: 'bold' }}>
           Parqueo San Simón
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
@@ -28,24 +40,41 @@ const NavBar = () => {
               <Link style={{ color: '#fff', textDecoration: 'none' }} to={''}>
                 Inicio
               </Link>
-              <Link
-                style={{ color: '#fff', textDecoration: 'none' }}
-                to={'/login'}
-              >
-                Iniciar sesión
-              </Link>
-              <Link
-                style={{ color: '#fff', textDecoration: 'none' }}
-                to={'/register-user'}
-              >
-                Regístrarse
-              </Link>
-              <Link
-                style={{ color: '#fff', textDecoration: 'none' }}
-                to={'/register-vehicle'}
-              >
-                Registrar Vehículo
-              </Link>
+              {!isAuthenticate ? (
+                <>
+                  <Link
+                    style={{ color: '#fff', textDecoration: 'none' }}
+                    to={'/login'}
+                  >
+                    Iniciar sesión
+                  </Link>
+                  <Link
+                    style={{ color: '#fff', textDecoration: 'none' }}
+                    to={'/register-user'}
+                  >
+                    Regístrarse
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    style={{ color: '#fff', textDecoration: 'none' }}
+                    to={'/register-vehicle'}
+                  >
+                    Registrar Vehículo
+                  </Link>
+                  <Button
+                    style={{
+                      color: '#fff',
+                      textTransform: 'none',
+                      zoom: 1.15,
+                    }}
+                    onClick={() => dispatch(logout())}
+                  >
+                    Cerrar Sesión
+                  </Button>
+                </>
+              )}
             </>
           ) : (
             <>
@@ -67,38 +96,57 @@ const NavBar = () => {
                 onClose={handleClose}
                 MenuListProps={{ 'aria-labelledby': 'basic.button' }}
               >
-                <MenuItem onClick={handleClose}>
-                  <Link
-                    style={{ color: '#333', textDecoration: 'none' }}
-                    to={''}
-                  >
-                    Inicio
-                  </Link>
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <Link
-                    style={{ color: '#333', textDecoration: 'none' }}
-                    to={'/login'}
-                  >
-                    Iniciar Sesión
-                  </Link>
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <Link
-                    style={{ color: '#333', textDecoration: 'none' }}
-                    to={'/register-user'}
-                  >
-                    Regístrarse
-                  </Link>
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <Link
-                    style={{ color: '#333', textDecoration: 'none' }}
-                    to={'/register-vehicle'}
-                  >
-                    Registrar Vehículo
-                  </Link>
-                </MenuItem>
+                {!isAuthenticate ? (
+                  <>
+                    <MenuItem onClick={handleClose}>
+                      <Link
+                        style={{ color: '#333', textDecoration: 'none' }}
+                        to={''}
+                      >
+                        Inicio
+                      </Link>
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
+                      <Link
+                        style={{ color: '#333', textDecoration: 'none' }}
+                        to={'/login'}
+                      >
+                        Iniciar Sesión
+                      </Link>
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
+                      <Link
+                        style={{ color: '#333', textDecoration: 'none' }}
+                        to={'/register-user'}
+                      >
+                        Regístrarse
+                      </Link>
+                    </MenuItem>
+                  </>
+                ) : (
+                  <>
+                    <MenuItem onClick={handleClose}>
+                      <Link
+                        style={{ color: '#333', textDecoration: 'none' }}
+                        to={'/register-vehicle'}
+                      >
+                        Registrar Vehículo
+                      </Link>
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
+                      <Button
+                        style={{
+                          color: '#333',
+                          textTransform: 'none',
+                          zoom: 1.15,
+                        }}
+                        onClick={() => dispatch(logout())}
+                      >
+                        Cerrar Sesión
+                      </Button>
+                    </MenuItem>
+                  </>
+                )}
               </Menu>
             </>
           )}

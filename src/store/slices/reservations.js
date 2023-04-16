@@ -31,7 +31,7 @@ export const reservationsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getReservations.pending, (state, _) => {
+    builder.addCase(getReservations.pending, (state) => {
       state.loading = 'pending'
     })
     builder.addCase(getReservations.fulfilled, (state, { payload }) => {
@@ -39,7 +39,7 @@ export const reservationsSlice = createSlice({
       state.reservations = [...payload.results]
       state.total_pages = payload.total_pages
     })
-    builder.addCase(getReservations.rejected, (state, _) => {
+    builder.addCase(getReservations.rejected, (state) => {
       state.loading = 'failed'
     })
   },
@@ -52,6 +52,6 @@ export const reservationsSelector = createSelector(
   (state) => state,
 )
 
-export const {} = reservationsSlice.actions
+export const { a = {} } = reservationsSlice.actions
 
 export default reservationsSlice.reducer

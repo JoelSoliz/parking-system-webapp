@@ -52,18 +52,18 @@ export const customersSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getCustomer.pending, (state, _) => {
+    builder.addCase(getCustomer.pending, (state) => {
       state.loading = 'pending'
     })
     builder.addCase(getCustomer.fulfilled, (state, { payload }) => {
       state.loading = 'succeeded'
       state.selectedCustomer = payload
     })
-    builder.addCase(getCustomer.rejected, (state, _) => {
+    builder.addCase(getCustomer.rejected, (state) => {
       state.loading = 'failed'
     })
 
-    builder.addCase(getCustomers.pending, (state, _) => {
+    builder.addCase(getCustomers.pending, (state) => {
       state.loading = 'pending'
     })
     builder.addCase(getCustomers.fulfilled, (state, { payload }) => {
@@ -72,7 +72,7 @@ export const customersSlice = createSlice({
       state.total_pages = payload.total_pages
       state.total = payload.total_elements
     })
-    builder.addCase(getCustomers.rejected, (state, _) => {
+    builder.addCase(getCustomers.rejected, (state) => {
       state.loading = 'failed'
     })
   },
@@ -85,6 +85,6 @@ export const customersSelector = createSelector(
   (state) => state,
 )
 
-export const {} = customersSlice.actions
+export const { a = {} } = customersSlice.actions
 
 export default customersSlice.reducer

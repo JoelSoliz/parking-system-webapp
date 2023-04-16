@@ -25,7 +25,7 @@ const ERROR_MESSAGES = {
 const RegisterVehicle = () => {
   const {
     control,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm({ mode: 'onChange' })
   const [imageSrc, setImageSrc] = useState(null)
 
@@ -201,6 +201,7 @@ const RegisterVehicle = () => {
             style={{ maxWidth: '100%', marginTop: 10 }}
           />
         )}
+
         <Stack
           direction="row"
           spacing={3}
@@ -209,8 +210,12 @@ const RegisterVehicle = () => {
           justifyContent={'center'}
           gap={'20px'}
         >
-          <Button variant="contained" color='secondary' > Cancelar </Button>
-          <Button variant="contained" color='secondary' > Registrar </Button>
+          <Button variant="contained" color="secondary">
+            Cancelar
+          </Button>
+          <Button variant="contained" color="secondary" disabled={!isValid}>
+            Registrar
+          </Button>
         </Stack>
       </Card>
     </Layout>
