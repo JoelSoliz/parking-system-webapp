@@ -10,6 +10,7 @@ import NotFound from '../../routes/common/NotFound'
 import RegisterUser from '../../routes/common/RegisterUser'
 import Unauthorized from '../../routes/common/Unauthorized'
 import RegisterVehicle from '../../routes/client/RegisterVehicle'
+import ReservationRequest from '../../routes/client/ReservationRequest'
 import UserList from '../../routes/admin/UserList'
 
 const Router = () => {
@@ -21,6 +22,7 @@ const Router = () => {
         <Route path="register-user" element={<RegisterUser />} />
         <Route path="unauthorized" element={<Unauthorized />} />
         <Route path="register-vehicle" element={<RegisterVehicle />} />
+        <Route path="request" element={<ReservationRequest />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route

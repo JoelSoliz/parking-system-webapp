@@ -63,6 +63,12 @@ const NavBar = () => {
                   >
                     Registrar Vehículo
                   </Link>
+                  <Link
+                    style={{ color: '#fff', textDecoration: 'none' }}
+                    to={'/request'}
+                  >
+                    Solicitar Reserva
+                  </Link>
                   <Button
                     style={{
                       color: '#fff',
@@ -131,6 +137,14 @@ const NavBar = () => {
                         to={'/register-vehicle'}
                       >
                         Registrar Vehículo
+                      </Link>
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
+                      <Link
+                        style={{ color: '#333', textDecoration: 'none' }}
+                        to={'/request'}
+                      >
+                        Solicitar Reserva
                       </Link>
                     </MenuItem>
                     <MenuItem onClick={handleClose}>

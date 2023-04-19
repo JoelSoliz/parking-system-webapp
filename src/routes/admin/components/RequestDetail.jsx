@@ -29,57 +29,67 @@ const RequestDetail = ({ open, onClose }) => {
           <Box
             backgroundColor={'#fffffe'}
             container
-            spacing={5}
+            spacing={4}
             width={'40%'}
-            paddingY={'50px'}
+            padding={'2rem'}
             borderRadius={'20px'}
+            overflow-y={'auto'}
           >
-            <Box marginBottom={'20px'}>
-              <Typography color="black" variant="h4" align="center">
-                Especificaciones de la solicitud
+            <Box marginBottom={'5px'}>
+              <button>
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <Typography variant="h5" align="center" color="#094067">
+                <strong>Especificaciones de la solicitud</strong>
               </Typography>
             </Box>
-            <Typography color="black" variant="h5" align="left">
-              Datos del solicitante
-            </Typography>
-            <Typography color="black" variant="subtitle1" paddingLeft="100px">
-              <strong>Nombre(s) y Apellido(s): </strong>{' '}
-              {selectedCustomer?.name}
-            </Typography>
-
             <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
+              <Typography color="black" variant="h6" align="center">
+                <strong>Datos del solicitante </strong>
+              </Typography>
+
+              <Typography color="black" variant="subtitle1">
+                <strong>Nombre(s): </strong>
+                {selectedCustomer?.name}
+              </Typography>
+
+              <Typography color="black" variant="subtitle1">
+                <strong>Apellido(s): </strong>
+                {selectedCustomer?.surname}
+              </Typography>
+
+              <Typography color="black" variant="subtitle1">
                 <strong>CI: </strong> {selectedCustomer?.ci}
               </Typography>
 
-              <Typography color="black" variant="h5" align="left">
-                Datos del vehículo
+              <Typography color="black" variant="h6" align="center">
+                <strong>Datos del vehículo </strong>
               </Typography>
 
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
+              <Typography color="black" variant="subtitle1">
                 <strong>Número de placa: </strong> {selectedCustomer?.last_name}
               </Typography>
 
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
+              <Typography color="black" variant="subtitle1">
                 <strong>Tipo: </strong> {selectedCustomer?.email}
               </Typography>
 
-              <Typography color="black" variant="h5" align="left">
-                Detalle de solicitud
+              <Typography color="black" variant="h6" align="center">
+                <strong>Detalles de solicitud </strong>
               </Typography>
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Fecha y hora de la solicitud: </strong>{' '}
+              <Typography color="black" variant="subtitle1">
+                <strong>Fecha y hora de la solicitud: </strong>
                 {selectedCustomer?.phone}
               </Typography>
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Fecha de inicio y fin de la reserva:</strong>{' '}
+              <Typography color="black" variant="subtitle1">
+                <strong>Fecha de inicio y fin de la reserva:</strong>
                 {selectedCustomer?.phone}
               </Typography>
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Horario de reserva solicitada: </strong>{' '}
+              <Typography color="black" variant="subtitle1">
+                <strong>Horario de reserva solicitada: </strong>
                 {selectedCustomer?.phone}
               </Typography>
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
+              <Typography color="black" variant="subtitle1">
                 <strong>Sitio del parqueo: </strong> {selectedCustomer?.phone}
               </Typography>
             </Box>

@@ -75,7 +75,7 @@ const RegisterVehicle = () => {
             align="center"
             sx={{ m: 0 }}
           >
-            Registrar Vehículo
+            Registro de vehículo
           </Typography>
         </CardContent>
         <Controller
