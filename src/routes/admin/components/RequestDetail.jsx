@@ -29,14 +29,18 @@ const RequestDetail = ({ open, onClose }) => {
           <Box
             backgroundColor={'#fffffe'}
             container
-            spacing={5}
+            spacing={4}
             width={'40%'}
             padding={'50px'}
             borderRadius={'20px'}
+            overflow-y={'auto'}
           >
-            <Box marginBottom={'20px'}>
-              <Typography color="black" variant="h4" align="center">
-                Especificaciones de la solicitud
+            <Box marginBottom={'5px'}>
+              <button>
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <Typography variant="h5" align="center" color="#094067">
+                <strong>Especificaciones de la solicitud</strong>
               </Typography>
             </Box>
             {loading === 'pending' ? (

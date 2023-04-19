@@ -11,6 +11,7 @@ import RegisterUser from '../../routes/common/RegisterUser'
 import Unauthorized from '../../routes/common/Unauthorized'
 import RegisterVehicle from '../../routes/client/RegisterVehicle'
 import RequestList from '../../routes/admin/RequestList'
+import ReservationRequest from '../../routes/client/ReservationRequest'
 import UserList from '../../routes/admin/UserList'
 
 const Router = () => {
@@ -29,6 +30,7 @@ const Router = () => {
             </PrivateRoute>
           }
         />
+        <Route path="request" element={<ReservationRequest />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route

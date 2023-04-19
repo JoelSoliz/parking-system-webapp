@@ -58,12 +58,20 @@ const NavBar = () => {
               ) : (
                 <>
                   {user?.role === 'CUST' && (
-                    <Link
-                      style={{ color: '#fff', textDecoration: 'none' }}
-                      to={'/register-vehicle'}
-                    >
-                      Registrar Vehículo
-                    </Link>
+                    <>
+                      <Link
+                        style={{ color: '#fff', textDecoration: 'none' }}
+                        to={'/register-vehicle'}
+                      >
+                        Registrar Vehículo
+                      </Link>
+                      <Link
+                        style={{ color: '#fff', textDecoration: 'none' }}
+                        to={'/request'}
+                      >
+                        Solicitar Reserva
+                      </Link>
+                    </>
                   )}
                   {['ADMN', 'EMPL'].includes(user?.role) && (
                     <Link
@@ -155,6 +163,14 @@ const NavBar = () => {
                         </Link>
                       </MenuItem>
                     )}
+                    <MenuItem onClick={handleClose}>
+                      <Link
+                        style={{ color: '#333', textDecoration: 'none' }}
+                        to={'/request'}
+                      >
+                        Solicitar Reserva
+                      </Link>
+                    </MenuItem>
                     <MenuItem onClick={handleClose}>
                       <Button
                         style={{
