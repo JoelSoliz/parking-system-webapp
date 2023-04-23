@@ -349,7 +349,7 @@ const RegisterUser = () => {
         </Typography>
         <Controller
           control={control}
-          name="notification"
+          name="notification_type"
           rules={{
             required: { message: ERROR_MESSAGES.required, value: true },
           }}
@@ -358,15 +358,15 @@ const RegisterUser = () => {
               <RadioGroup
                 error={errors.notification?.message}
                 value={value}
-                onChange={(event) => onChange(event.target.checked)}
+                onChange={(event) => onChange(event.target.value)}
               >
                 <FormControlLabel
-                  value="email"
+                  value="Email"
                   control={<Radio />}
                   label="Email"
                 />
                 <FormControlLabel
-                  value="whatsaap"
+                  value="Whatsapp"
                   control={<Radio />}
                   label="WhatsApp"
                 />
@@ -394,7 +394,9 @@ const RegisterUser = () => {
             <Button
               variant="contained"
               color="secondary"
-              onClick={handleSubmit((data) => dispatch(registerUser(data)))}
+              onClick={handleSubmit((data) =>
+                dispatch(registerUser({ ...data, user_type: 'CUST' })),
+              )}
               disabled={!isValid}
             >
               Registrarse

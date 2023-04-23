@@ -7,6 +7,7 @@ import {
   TextField,
   Typography,
   Stack,
+  Box,
 } from '@mui/material'
 import Layout from '../../components/Layout/Layout'
 
@@ -17,6 +18,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import CalendarPicker from './CalendarPicker'
 import SelectSchedule from './SelectSchedule'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Checkbox from '@mui/material/Checkbox'
+import FormGroup from '@mui/material/FormGroup'
 
 const ERROR_MESSAGES = {
   maxLength: 'La longitud máxima es',
@@ -172,8 +176,109 @@ const ReservationRequest = (defaultValue = {}) => {
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <CalendarPicker />
-          <SelectSchedule />
         </LocalizationProvider>
+        <Typography gutterBottom variant="h8" component="div">
+          Seleccione los días://ocultar componente
+        </Typography>
+
+        <FormGroup sx={{ m: -4 }}>
+          <FormControlLabel
+            control={<Checkbox />}
+            label={
+              <Box
+                display="flex"
+                alignItems="center"
+                gap="12px"
+                paddingY={'15px'}
+              >
+                Lunes
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <SelectSchedule />
+                </LocalizationProvider>
+              </Box>
+            }
+          ></FormControlLabel>
+          <FormControlLabel
+            control={<Checkbox />}
+            label={
+              <Box
+                display="flex"
+                alignItems="center"
+                gap="12px"
+                paddingY={'15px'}
+              >
+                Martes
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <SelectSchedule />
+                </LocalizationProvider>
+              </Box>
+            }
+          ></FormControlLabel>
+          <FormControlLabel
+            control={<Checkbox />}
+            label={
+              <Box
+                display="flex"
+                alignItems="center"
+                gap="12px"
+                paddingY={'15px'}
+              >
+                Miércoles
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <SelectSchedule />
+                </LocalizationProvider>
+              </Box>
+            }
+          ></FormControlLabel>
+          <FormControlLabel
+            control={<Checkbox />}
+            label={
+              <Box
+                display="flex"
+                alignItems="center"
+                gap="12px"
+                paddingY={'15px'}
+              >
+                Jueves
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <SelectSchedule />
+                </LocalizationProvider>
+              </Box>
+            }
+          ></FormControlLabel>
+          <FormControlLabel
+            control={<Checkbox />}
+            label={
+              <Box
+                display="flex"
+                alignItems="center"
+                gap="12px"
+                paddingY={'15px'}
+              >
+                Viernes
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <SelectSchedule />
+                </LocalizationProvider>
+              </Box>
+            }
+          ></FormControlLabel>
+          <FormControlLabel
+            control={<Checkbox />}
+            label={
+              <Box
+                display="flex"
+                alignItems="center"
+                gap="12px"
+                paddingY={'15px'}
+              >
+                Sábado
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <SelectSchedule />
+                </LocalizationProvider>
+              </Box>
+            }
+          ></FormControlLabel>
+        </FormGroup>
 
         {loading === 'failed' && (
           <Typography color={'error'} textAlign={'center'}>
@@ -183,7 +288,12 @@ const ReservationRequest = (defaultValue = {}) => {
         {loading === 'pending' ? (
           <Typography>Iniciando sesión...</Typography>
         ) : (
-          <Stack direction="row" spacing={2}>
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ m: 2.5 }}
+            justifyContent={'center'}
+          >
             <Button
               variant="contained"
               color="secondary"
