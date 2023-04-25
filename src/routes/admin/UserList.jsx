@@ -105,7 +105,7 @@ const UserList = () => {
                           hover
                           role="checkbox"
                           tabIndex={-1}
-                          key={customer.id}
+                          key={customer.id_customer}
                           onClick={() => {
                             dispatch(getCustomer(customer.id_customer))
                             setOpenModal(true)

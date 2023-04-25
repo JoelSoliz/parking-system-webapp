@@ -37,7 +37,7 @@ const NavBar = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
           {isNonMobileDevice ? (
             <>
-              <Link style={{ color: '#fff', textDecoration: 'none' }} to={''}>
+              <Link style={{ color: '#fff', textDecoration: 'none' }} to={'/'}>
                 Inicio
               </Link>
               {!isAuthenticate ? (
@@ -63,6 +63,14 @@ const NavBar = () => {
                       to={'/register-vehicle'}
                     >
                       Registrar Vehículo
+                    </Link>
+                  )}
+                  {['ADMN', 'EMPL'].includes(user?.role) && (
+                    <Link
+                      style={{ color: '#fff', textDecoration: 'none' }}
+                      to={'/admin'}
+                    >
+                      Administración
                     </Link>
                   )}
                   <Button
@@ -103,7 +111,7 @@ const NavBar = () => {
                     <MenuItem onClick={handleClose}>
                       <Link
                         style={{ color: '#333', textDecoration: 'none' }}
-                        to={''}
+                        to={'/'}
                       >
                         Inicio
                       </Link>
@@ -127,13 +135,23 @@ const NavBar = () => {
                   </>
                 ) : (
                   <>
-                    {user?.role === 'CUST' && (
+                    {['ADMN', 'EMPL'].includes(user?.role) && (
                       <MenuItem onClick={handleClose}>
                         <Link
                           style={{ color: '#333', textDecoration: 'none' }}
                           to={'/register-vehicle'}
                         >
                           Registrar Vehículo
+                        </Link>
+                      </MenuItem>
+                    )}
+                    {user?.role === 'CUST' && (
+                      <MenuItem onClick={handleClose}>
+                        <Link
+                          style={{ color: '#333', textDecoration: 'none' }}
+                          to={'/admin'}
+                        >
+                          Adminitración
                         </Link>
                       </MenuItem>
                     )}
