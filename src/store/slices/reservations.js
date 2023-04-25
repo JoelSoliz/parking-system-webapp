@@ -23,7 +23,9 @@ export const getReservations = createAsyncThunk(
 const initialState = {
   loading: 'idle',
   reservations: [],
+  selectedReservation: undefined,
   total_pages: 1,
+  total: 0,
 }
 
 export const reservationsSlice = createSlice({
@@ -38,6 +40,7 @@ export const reservationsSlice = createSlice({
       state.loading = 'succeeded'
       state.reservations = [...payload.results]
       state.total_pages = payload.total_pages
+      state.total = payload.total_elements
     })
     builder.addCase(getReservations.rejected, (state) => {
       state.loading = 'failed'

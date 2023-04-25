@@ -10,6 +10,7 @@ import NotFound from '../../routes/common/NotFound'
 import RegisterUser from '../../routes/common/RegisterUser'
 import Unauthorized from '../../routes/common/Unauthorized'
 import RegisterVehicle from '../../routes/client/RegisterVehicle'
+import RequestList from '../../routes/admin/RequestList'
 import UserList from '../../routes/admin/UserList'
 
 const Router = () => {
@@ -39,10 +40,10 @@ const Router = () => {
           }
         />
         <Route
-          path="reservations"
+          path="requests"
           element={
             <PrivateRoute needed_permission={['EMPL', 'ADMN']}>
-              <UserList />
+              <RequestList />
             </PrivateRoute>
           }
         />
