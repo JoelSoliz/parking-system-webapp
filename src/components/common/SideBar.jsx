@@ -47,11 +47,11 @@ export default function SideBar({ children }) {
         value={value}
         onChange={handleChange}
         aria-label="Vertical tabs example"
-        sx={{ borderRight: 2, borderColor: 'divider', width: '20%' }}
-        style={{ fontWeight: 'bold', color: '#3da9fc' }}
+        sx={{ borderRight: 2, borderColor: 'divider', width: '20%', color: '#3da9fc' }}
+        style={{ fontWeight: 'bold', color: 'pink' }}
       >
         <LinkTab
-          label="Usuarios"
+          label="Clientes"
           {...a11yProps(0)}
           sx={{
             fontWeight: 'bold',
@@ -62,6 +62,7 @@ export default function SideBar({ children }) {
               fontWeight: 'bold',
             },
           }}
+          style={{ color: '#fff' }}
           to="/admin"
         />
         <LinkTab
@@ -76,7 +77,23 @@ export default function SideBar({ children }) {
               fontWeight: 'bold',
             },
           }}
+          style={{ color: '#fff' }}
           to="/admin/requests"
+        />
+        <LinkTab
+          label="Registrar Horario"
+          {...a11yProps(2)}
+          sx={{
+            fontWeight: 'bold',
+            color: '#3da9fc',
+            '&:hover': {
+              backgroundColor: '#3da9fc',
+              color: '#fff',
+              fontWeight: 'bold',
+            },
+          }}
+          style={{ color: '#fff' }}
+          to="/admin/schedule"
         />
       </Tabs>
       <Box sx={{ p: 1, bgcolor: '#fffffe', width: '100%' }}>{children}</Box>

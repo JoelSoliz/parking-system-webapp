@@ -16,12 +16,16 @@ import ReservationRequest from '../../routes/client/ReservationRequest'
 import CheckSite from '../../routes/client/CheckSite'
 import ErrorBoundary from './ErrorBoundary'
 import RegisterClaim from '../../routes/client/RegisterClaim'
+import Price from '../../routes/common/Price'
+import RegisterSchedule from '../../routes/admin/RegisterSchedule'
+
 const Router = () => {
   return (
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
+        <Route path="price" element={<Price />} />
         <Route path="register-user" element={<RegisterUser />} />
         <Route path="unauthorized" element={<Unauthorized />} />
         <Route
@@ -75,6 +79,14 @@ const Router = () => {
               <ErrorBoundary>
                 <RequestList />
               </ErrorBoundary>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="schedule"
+          element={
+            <PrivateRoute needed_permission={['EMPL', 'ADMN']}>
+              <RegisterSchedule />
             </PrivateRoute>
           }
         />

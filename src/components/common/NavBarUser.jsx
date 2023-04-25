@@ -52,7 +52,6 @@ const NavBarUser = () => {
               <Link style={{ color: '#fff', textDecoration: 'none' }} to={'/'}>
                 Inicio
               </Link>
-
               <Button
                 style={{
                   color: '#fff',
@@ -95,7 +94,6 @@ const NavBarUser = () => {
                     Inicio
                   </Link>
                 </MenuItem>
-
                 <MenuItem onClick={handleClose}>
                   <Button
                     style={{

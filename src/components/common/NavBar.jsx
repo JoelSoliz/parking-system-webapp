@@ -53,6 +53,12 @@ const NavBar = () => {
               <Link style={{ color: '#fff', textDecoration: 'none' }} to={'/'}>
                 Inicio
               </Link>
+              <Link
+                style={{ color: '#fff', textDecoration: 'none' }}
+                to={'/price'}
+              >
+                Precios
+              </Link>
               {!isAuthenticate ? (
                 <>
                   <Link
@@ -127,6 +133,22 @@ const NavBar = () => {
                 onClose={handleClose}
                 MenuListProps={{ 'aria-labelledby': 'basic.button' }}
               >
+                <MenuItem onClick={handleClose}>
+                  <Link
+                    style={{ color: '#333', textDecoration: 'none' }}
+                    to={''}
+                  >
+                    Inicio
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <Link
+                    style={{ color: '#333', textDecoration: 'none' }}
+                    to={'/price'}
+                  >
+                    Precios
+                  </Link>
+                </MenuItem>
                 {!isAuthenticate ? (
                   <>
                     <MenuItem onClick={handleClose}>
