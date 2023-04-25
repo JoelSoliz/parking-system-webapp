@@ -1,6 +1,7 @@
 import React from 'react'
 import { Typography } from '@mui/material'
 import Layout from '../../components/Layout/Layout'
+import Map from '../../components/map/Map'
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
       <Typography variant="body1">
         Welcome to Parking System frontend project.
       </Typography>
+      <Map />
     </Layout>
   )
 }
