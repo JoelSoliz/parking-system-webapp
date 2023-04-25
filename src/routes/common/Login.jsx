@@ -163,7 +163,7 @@ const Login = () => {
               </Typography>
             )}
             {loading === 'pending' ? (
-              <Typography>Iniciando sesión...</Typography>
+              <Typography textAlign={'center'}>Iniciando sesión...</Typography>
             ) : (
               <Button
                 variant="contained"

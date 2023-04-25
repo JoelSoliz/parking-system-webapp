@@ -11,9 +11,11 @@ import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+  getReservation,
   getReservations,
   reservationsSelector,
 } from '../../store/slices/reservations'
+import RequestDetail from './components/RequestDetail'
 
 const columns = [
   { id: 'cliente', label: 'Cliente', minWidth: 100 },
@@ -26,6 +28,7 @@ const RequestList = () => {
   const dispatch = useDispatch()
   const [page, setPage] = React.useState(1)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  const [openModal, setOpenModal] = React.useState(false)
 
   useEffect(() => {
     dispatch(getReservations(page))
@@ -42,6 +45,7 @@ const RequestList = () => {
 
   return (
     <Layout title="Lista de Solicitudes">
+      <RequestDetail open={openModal} onClose={() => setOpenModal(false)} />
       <Box
         alignItems="center"
         justifyContent="center"
@@ -100,7 +104,11 @@ const RequestList = () => {
                           hover
                           role="checkbox"
                           tabIndex={-1}
-                          key={reservation.id}
+                          key={reservation.id_reservation}
+                          onClick={() => {
+                            dispatch(getReservation(reservation.id_reservation))
+                            setOpenModal(true)
+                          }}
                         >
                           <TableCell>
                             {`${reservation.customer.name} ${reservation.customer.last_name}`}

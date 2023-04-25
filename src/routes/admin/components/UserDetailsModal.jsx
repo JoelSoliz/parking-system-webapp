@@ -20,7 +20,7 @@ const StyledModal = styled(Modal)(({ theme }) => ({
 }))
 
 const UserDetailsModal = ({ open, onClose }) => {
-  const { selectedCustomer } = useSelector(customersSelector)
+  const { loading, selectedCustomer } = useSelector(customersSelector)
 
   return (
     <>
@@ -39,27 +39,56 @@ const UserDetailsModal = ({ open, onClose }) => {
                 Detalles de usuario
               </Typography>
             </Box>
-            <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
+            {loading === 'pending' ? (
               <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>CI:</strong> {selectedCustomer?.ci}
+                Cargando detalles...
               </Typography>
+            ) : (
+              <>
+                <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
+                  <Typography
+                    color="black"
+                    variant="subtitle1"
+                    paddingLeft="100px"
+                  >
+                    <strong>CI:</strong> {selectedCustomer?.ci}
+                  </Typography>
 
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Nombre(s):</strong> {selectedCustomer?.name}
-              </Typography>
+                  <Typography
+                    color="black"
+                    variant="subtitle1"
+                    paddingLeft="100px"
+                  >
+                    <strong>Nombre(s):</strong> {selectedCustomer?.name}
+                  </Typography>
 
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Apellido(s):</strong> {selectedCustomer?.last_name}
-              </Typography>
+                  <Typography
+                    color="black"
+                    variant="subtitle1"
+                    paddingLeft="100px"
+                  >
+                    <strong>Apellido(s):</strong> {selectedCustomer?.last_name}
+                  </Typography>
 
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Correo electrónico:</strong> {selectedCustomer?.email}
-              </Typography>
+                  <Typography
+                    color="black"
+                    variant="subtitle1"
+                    paddingLeft="100px"
+                  >
+                    <strong>Correo electrónico:</strong>{' '}
+                    {selectedCustomer?.email}
+                  </Typography>
 
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Celular:</strong> {selectedCustomer?.phone}
-              </Typography>
-            </Box>
+                  <Typography
+                    color="black"
+                    variant="subtitle1"
+                    paddingLeft="100px"
+                  >
+                    <strong>Celular:</strong> {selectedCustomer?.phone}
+                  </Typography>
+                </Box>
+              </>
+            )}
           </Box>
         </Fade>
       </StyledModal>

@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles'
 
 import { Modal, Fade, Typography, Box } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { customersSelector } from '../../../store/slices/customers'
+import { reservationsSelector } from '../../../store/slices/reservations'
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
@@ -20,7 +20,7 @@ const StyledModal = styled(Modal)(({ theme }) => ({
 }))
 
 const RequestDetail = ({ open, onClose }) => {
-  const { selectedCustomer } = useSelector(customersSelector)
+  const { loading, selectedReservation } = useSelector(reservationsSelector)
 
   return (
     <>
@@ -31,7 +31,7 @@ const RequestDetail = ({ open, onClose }) => {
             container
             spacing={5}
             width={'40%'}
-            paddingY={'50px'}
+            padding={'50px'}
             borderRadius={'20px'}
           >
             <Box marginBottom={'20px'}>
@@ -39,50 +39,69 @@ const RequestDetail = ({ open, onClose }) => {
                 Especificaciones de la solicitud
               </Typography>
             </Box>
-            <Typography color="black" variant="h5" align="left">
-              Datos del solicitante
-            </Typography>
-            <Typography color="black" variant="subtitle1" paddingLeft="100px">
-              <strong>Nombre(s) y Apellido(s): </strong>{' '}
-              {selectedCustomer?.name}
-            </Typography>
+            {loading === 'pending' ? (
+              <Typography color="black" variant="subtitle1" paddingLeft="100px">
+                Cargando detalles...
+              </Typography>
+            ) : (
+              <>
+                <Typography color="black" variant="h5" align="left">
+                  Datos del solicitante
+                </Typography>
+                <Typography
+                  color="black"
+                  variant="subtitle1"
+                  paddingLeft="100px"
+                >
+                  <strong>Nombre(s) y Apellido(s): </strong>{' '}
+                  {`${selectedReservation?.customer.name} ${selectedReservation?.customer.last_name}`}
+                </Typography>
 
-            <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>CI: </strong> {selectedCustomer?.ci}
-              </Typography>
+                <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
+                  <Typography
+                    color="black"
+                    variant="subtitle1"
+                    paddingLeft="100px"
+                  >
+                    <strong>CI: </strong> {selectedReservation?.customer.ci}
+                  </Typography>
 
-              <Typography color="black" variant="h5" align="left">
-                Datos del vehículo
-              </Typography>
-
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Número de placa: </strong> {selectedCustomer?.last_name}
-              </Typography>
-
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Tipo: </strong> {selectedCustomer?.email}
-              </Typography>
-
-              <Typography color="black" variant="h5" align="left">
-                Detalle de solicitud
-              </Typography>
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Fecha y hora de la solicitud: </strong>{' '}
-                {selectedCustomer?.phone}
-              </Typography>
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Fecha de inicio y fin de la reserva:</strong>{' '}
-                {selectedCustomer?.phone}
-              </Typography>
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Horario de reserva solicitada: </strong>{' '}
-                {selectedCustomer?.phone}
-              </Typography>
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                <strong>Sitio del parqueo: </strong> {selectedCustomer?.phone}
-              </Typography>
-            </Box>
+                  <Typography color="black" variant="h5" align="left">
+                    Detalle de solicitud
+                  </Typography>
+                  <Typography
+                    color="black"
+                    variant="subtitle1"
+                    paddingLeft="100px"
+                  >
+                    <strong>Fecha y hora de la solicitud: </strong>{' '}
+                    {new Date(selectedReservation?.create_at).toLocaleString(
+                      'es-Es',
+                    )}
+                  </Typography>
+                  <Typography
+                    color="black"
+                    variant="subtitle1"
+                    paddingLeft="100px"
+                  >
+                    <strong>Fecha de inicio y fin de la reserva:</strong>{' '}
+                    {`${new Date(
+                      selectedReservation?.start_date,
+                    ).toLocaleDateString('es-ES')}-${new Date(
+                      selectedReservation?.end_date,
+                    ).toLocaleDateString('es-ES')}`}
+                  </Typography>
+                  <Typography
+                    color="black"
+                    variant="subtitle1"
+                    paddingLeft="100px"
+                  >
+                    <strong>Sitio del parqueo: </strong>{' '}
+                    {selectedReservation?.parking_spot?.name}
+                  </Typography>
+                </Box>
+              </>
+            )}
           </Box>
         </Fade>
       </StyledModal>

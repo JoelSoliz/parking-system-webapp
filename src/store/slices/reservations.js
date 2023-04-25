@@ -1,5 +1,27 @@
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
-import { getReservationsAsync } from '../../api/reservations'
+import {
+  getReservationAsync,
+  getReservationsAsync,
+} from '../../api/reservations'
+
+export const getReservation = createAsyncThunk(
+  'getReservation/getReservationAsync',
+  async (id) => {
+    let token = localStorage.getItem('token')
+    if (!token) {
+      console.error('Vuelve a iniciar sesión')
+      throw new Error('invalid credential')
+    }
+
+    const result = await getReservationAsync(id, token)
+    const { detail } = result
+    if (detail) {
+      console.error(detail)
+      throw Error(detail)
+    }
+    return result
+  },
+)
 
 export const getReservations = createAsyncThunk(
   'getReservations/getReservationsAsync',
@@ -33,6 +55,17 @@ export const reservationsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(getReservation.pending, (state) => {
+      state.loading = 'pending'
+    })
+    builder.addCase(getReservation.fulfilled, (state, { payload }) => {
+      state.loading = 'succeeded'
+      state.selectedReservation = payload
+    })
+    builder.addCase(getReservation.rejected, (state) => {
+      state.loading = 'failed'
+    })
+
     builder.addCase(getReservations.pending, (state) => {
       state.loading = 'pending'
     })
