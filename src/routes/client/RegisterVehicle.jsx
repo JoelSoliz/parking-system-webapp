@@ -84,7 +84,7 @@ const RegisterVehicle = () => {
         },
       )
     } else if (isError) {
-      toast.error(`Vehiculo no registrado. ${data?.detail || data}`)
+      toast.error(`Vehiculo no registrado. ${error.data?.detail || error.data}`)
     }
     resetState()
   }, [data, error])

@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logout, sessionSelector } from '../../store/slices/session'
 
 const NavBar = () => {
-  const { isAuthenticate } = useSelector(sessionSelector)
+  const { isAuthenticate, user } = useSelector(sessionSelector)
   const dispatch = useDispatch()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -57,12 +57,14 @@ const NavBar = () => {
                 </>
               ) : (
                 <>
-                  <Link
-                    style={{ color: '#fff', textDecoration: 'none' }}
-                    to={'/register-vehicle'}
-                  >
-                    Registrar Vehículo
-                  </Link>
+                  {user?.role === 'CUST' && (
+                    <Link
+                      style={{ color: '#fff', textDecoration: 'none' }}
+                      to={'/register-vehicle'}
+                    >
+                      Registrar Vehículo
+                    </Link>
+                  )}
                   <Button
                     style={{
                       color: '#fff',
@@ -125,14 +127,16 @@ const NavBar = () => {
                   </>
                 ) : (
                   <>
-                    <MenuItem onClick={handleClose}>
-                      <Link
-                        style={{ color: '#333', textDecoration: 'none' }}
-                        to={'/register-vehicle'}
-                      >
-                        Registrar Vehículo
-                      </Link>
-                    </MenuItem>
+                    {user?.role === 'CUST' && (
+                      <MenuItem onClick={handleClose}>
+                        <Link
+                          style={{ color: '#333', textDecoration: 'none' }}
+                          to={'/register-vehicle'}
+                        >
+                          Registrar Vehículo
+                        </Link>
+                      </MenuItem>
+                    )}
                     <MenuItem onClick={handleClose}>
                       <Button
                         style={{

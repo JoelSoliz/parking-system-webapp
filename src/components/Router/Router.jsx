@@ -20,13 +20,28 @@ const Router = () => {
         <Route path="login" element={<Login />} />
         <Route path="register-user" element={<RegisterUser />} />
         <Route path="unauthorized" element={<Unauthorized />} />
-        <Route path="register-vehicle" element={<RegisterVehicle />} />
+        <Route
+          path="register-vehicle"
+          element={
+            <PrivateRoute needed_permission={['CUST']}>
+              <RegisterVehicle />
+            </PrivateRoute>
+          }
+        />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route
           index
           element={
-            <PrivateRoute needed_permission="admin_view">
+            <PrivateRoute needed_permission={['EMPL', 'ADMN']}>
+              <UserList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="reservations"
+          element={
+            <PrivateRoute needed_permission={['EMPL', 'ADMN']}>
               <UserList />
             </PrivateRoute>
           }

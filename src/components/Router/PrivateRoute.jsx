@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router-dom'
+import { sessionSelector } from '../../store/slices/session'
 
 const PrivateRoute = ({ children, needed_permission }) => {
-  const [user] = useState({
-    authenticated: true,
-    permissions: ['admin_view'],
-  })
+  const { isAuthenticate, user } = useSelector(sessionSelector)
 
-  return user.authenticated && user.permissions.includes(needed_permission) ? (
+  return isAuthenticate && needed_permission.includes(user?.role) ? (
     children
   ) : (
     <Navigate to="/unauthorized" replace />
