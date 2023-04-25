@@ -18,7 +18,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <BrowserRouter>
-            <Toaster position="bottom-center" richColors />
+            <Toaster position="bottom-center" richColors duration={5000} />
             <Router />
           </BrowserRouter>
         </ThemeProvider>

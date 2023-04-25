@@ -9,6 +9,7 @@ import {
   REHYDRATE,
 } from 'redux-persist'
 import rootReducer from '.'
+import { vehicleAPI } from '../api/vehicle'
 
 const store = configureStore({
   reducer: rootReducer,
@@ -17,7 +18,7 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE],
       },
-    }),
+    }).concat(vehicleAPI.middleware),
 })
 
 export const persistor = persistStore(store)

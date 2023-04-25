@@ -1,5 +1,5 @@
+import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import React, { useState } from 'react'
 import {
   Button,
   Card,
@@ -12,6 +12,9 @@ import {
 import Layout from '../../components/Layout/Layout'
 import FormControl from '@mui/material/FormControl'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import { useRegisterVehicleMutation } from '../../api/vehicle'
+import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
 
 const ERROR_MESSAGES = {
   maxLength: 'La longitud máxima es',
@@ -23,10 +26,17 @@ const ERROR_MESSAGES = {
     'Tipo de archivo invalido. Solo archivos JPG, JPEG y PNG son permitidos.',
 }
 const RegisterVehicle = () => {
+  const navigate = useNavigate()
   const {
     control,
+    handleSubmit,
     formState: { errors, isValid },
+    reset,
   } = useForm({ mode: 'onChange' })
+  const [
+    registerVehicle,
+    { data, error, isLoading, isError, isSuccess, reset: resetState },
+  ] = useRegisterVehicleMutation()
   const [imageSrc, setImageSrc] = useState(null)
 
   const validateFile = (value) => {
@@ -50,6 +60,34 @@ const RegisterVehicle = () => {
 
     reader.readAsDataURL(file)
   }
+
+  const handleSubmitData = (data) => {
+    registerVehicle({ data, image: imageSrc })
+  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      reset({
+        color: '',
+        photo: [],
+        plate: '',
+        type: '',
+      })
+      setImageSrc(null)
+      toast.success(
+        `Vehiculo ${data?.license_plate} registrado correctamente.`,
+        {
+          action: {
+            label: 'Ir al Inicio',
+            onClick: () => navigate('/'),
+          },
+        },
+      )
+    } else if (isError) {
+      toast.error(`Vehiculo no registrado. ${data?.detail || data}`)
+    }
+    resetState()
+  }, [data, error])
 
   return (
     <Layout title="Registrar Vehiculo">
@@ -198,25 +236,39 @@ const RegisterVehicle = () => {
           <img
             src={imageSrc}
             alt="Preview"
-            style={{ maxWidth: '100%', marginTop: 10 }}
+            style={{
+              maxWidth: '270px',
+              maxHeight: '270px',
+              marginTop: 10,
+              objectFit: 'contain',
+            }}
           />
         )}
 
-        <Stack
-          direction="row"
-          spacing={3}
-          width={'100%'}
-          display="flex"
-          justifyContent={'center'}
-          gap={'20px'}
-        >
-          <Button variant="contained" color="secondary">
-            Cancelar
-          </Button>
-          <Button variant="contained" color="secondary" disabled={!isValid}>
-            Registrar
-          </Button>
-        </Stack>
+        {isLoading ? (
+          <Typography textAlign="center">Registrando Vehiculo...</Typography>
+        ) : (
+          <Stack
+            direction="row"
+            spacing={3}
+            width={'100%'}
+            display="flex"
+            justifyContent={'center'}
+            gap={'20px'}
+          >
+            <Button variant="contained" color="secondary">
+              Cancelar
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              disabled={!isValid}
+              onClick={handleSubmit((data) => handleSubmitData(data))}
+            >
+              Registrar
+            </Button>
+          </Stack>
+        )}
       </Card>
     </Layout>
   )
