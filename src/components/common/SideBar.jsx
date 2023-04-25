@@ -76,7 +76,7 @@ export default function SideBar({ children }) {
               fontWeight: 'bold',
             },
           }}
-          to="/admin/reservations"
+          to="/admin/requests"
         />
       </Tabs>
       <Box sx={{ p: 1, bgcolor: '#fffffe', width: '100%' }}>{children}</Box>
