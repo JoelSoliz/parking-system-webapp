@@ -1,4 +1,3 @@
-import { useForm } from 'react-hook-form'
 import React, { useState } from 'react'
 import {
   Button,
@@ -11,8 +10,8 @@ import {
 } from '@mui/material'
 import Layout from '../../components/Layout/Layout'
 
-import { useDispatch, useSelector } from 'react-redux'
-import { registerUser, sessionSelector } from '../../store/slices/session'
+import { useSelector } from 'react-redux'
+import { sessionSelector } from '../../store/slices/session'
 import { useNavigate } from 'react-router-dom'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
@@ -60,8 +59,7 @@ const ReservationRequest = () => {
   const { user } = useSelector(sessionSelector)
   const navigate = useNavigate()
   const { loading } = useSelector(sessionSelector)
-  const dispatch = useDispatch()
-  const { handleSubmit } = useForm({ mode: 'onChange' })
+
   return (
     <Layout title="Registrar Usuario">
       <Card
@@ -83,9 +81,7 @@ const ReservationRequest = () => {
             Solicitud de reserva
           </Typography>
         </CardContent>
-        <Typography color="black" variant="h6" marginTop={-4}>
-          <strong>Sitio:</strong>
-        </Typography>
+        <TextField label="Código de Sitio" variant="outlined" disabled={true} />
 
         <TextField
           value={user?.name}
@@ -284,12 +280,7 @@ const ReservationRequest = () => {
               Cancelar
             </Button>
 
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleSubmit((data) => dispatch(registerUser(data)))}
-              disabled={!isValid}
-            >
+            <Button variant="contained" color="secondary" disabled={!isValid}>
               Enviar Solicitud
             </Button>
           </Stack>
