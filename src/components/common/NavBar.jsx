@@ -172,6 +172,14 @@ const NavBar = () => {
                       </Link>
                     </MenuItem>
                     <MenuItem onClick={handleClose}>
+                      <Link
+                        style={{ color: '#333', textDecoration: 'none' }}
+                        to={'/request'}
+                      >
+                        Solicitar Reserva
+                      </Link>
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
                       <Button
                         style={{
                           color: '#333',

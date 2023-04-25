@@ -59,7 +59,6 @@ const ReservationRequest = () => {
   const { user } = useSelector(sessionSelector)
   const navigate = useNavigate()
   const { loading } = useSelector(sessionSelector)
-
   return (
     <Layout title="Registrar Usuario">
       <Card
@@ -279,10 +278,10 @@ const ReservationRequest = () => {
             >
               Cancelar
             </Button>
-
             <Button variant="contained" color="secondary" disabled={!isValid}>
               Enviar Solicitud
             </Button>
+            2a5dff65a19e9bb1c6afd1f50b6d309696ca90f5
           </Stack>
         )}
       </Card>
