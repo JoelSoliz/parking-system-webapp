@@ -1,19 +1,25 @@
-const HOST = 'https://parking-system-api-production.up.railway.app'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-export const registerVehicleAsync = async (vehicle) => {
-  const apiURL = `${HOST}/vehicle/`
+export const vehicleAPI = createApi({
+  reducerPath: 'vehicleApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'https://parking-system-api-production-f442.up.railway.app',
+  }),
+  endpoints: (builder) => ({
+    registerVehicle: builder.mutation({
+      query: ({ data }) => {
+        let token = localStorage.getItem('token')
+        const formData = new FormData()
+        formData.append('photo', data.photo[0])
+        return {
+          url: `/vehicle/?license_plate=${data.plate}&vehicle_type=${data.type}&color=${data.color}`,
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        }
+      },
+    }),
+  }),
+})
 
-  return fetch(apiURL, {
-    method: 'POST',
-    mode: 'cors',
-    headers: {
-      'Content-type': 'application/json',
-    },
-    body: JSON.stringify(vehicle),
-  })
-    .then((response) => response.json())
-    .catch((e) => {
-      console.error(e)
-      throw e
-    })
-}
+export const { useRegisterVehicleMutation } = vehicleAPI
