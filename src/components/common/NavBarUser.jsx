@@ -2,17 +2,22 @@ import React from 'react'
 import {
   AppBar,
   Box,
+  Button,
   IconButton,
   Toolbar,
   useMediaQuery,
   Typography,
 } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Menu as MenuIcon } from '@mui/icons-material'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import { useDispatch } from 'react-redux'
+import { logout } from '../../store/slices/session'
 
 const NavBarUser = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -41,19 +46,19 @@ const NavBarUser = () => {
               >
                 Perfil
               </Link>
-
-              <Link
-                style={{ color: '#fff', textDecoration: 'none' }}
-                to={'/register-vehicle'}
-              >
-                Registrar Vehículo
-              </Link>
-              <Link
-                style={{ color: '#fff', textDecoration: 'none' }}
-                to={'/logout'}
+              <Button
+                style={{
+                  color: '#fff',
+                  textTransform: 'none',
+                  zoom: 1.15,
+                }}
+                onClick={() => {
+                  navigate('/')
+                  dispatch(logout())
+                }}
               >
                 Cerrar Sesión
-              </Link>
+              </Button>
             </>
           ) : (
             <>
@@ -91,22 +96,20 @@ const NavBarUser = () => {
                     Perfil
                   </Link>
                 </MenuItem>
-
                 <MenuItem onClick={handleClose}>
-                  <Link
-                    style={{ color: '#333', textDecoration: 'none' }}
-                    to={'/register-vehicle'}
-                  >
-                    Registrar Vehículo
-                  </Link>
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <Link
-                    style={{ color: '#333', textDecoration: 'none' }}
-                    to={'/logout'}
+                  <Button
+                    style={{
+                      color: '#333',
+                      textTransform: 'none',
+                      zoom: 1.15,
+                    }}
+                    onClick={() => {
+                      navigate('/')
+                      dispatch(logout())
+                    }}
                   >
                     Cerrar Sesión
-                  </Link>
+                  </Button>
                 </MenuItem>
               </Menu>
             </>

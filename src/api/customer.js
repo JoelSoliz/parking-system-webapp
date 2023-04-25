@@ -1,4 +1,6 @@
-const HOST = 'https://parking-system-api-production.up.railway.app'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
+
+const HOST = 'https://parking-system-api-production-f442.up.railway.app'
 
 export const getUserByIdInfoAsync = async (id, token) => {
   const apiURL = `${HOST}/customer/${id}`
@@ -30,21 +32,24 @@ export const getUsersInfoAsync = async (page, token) => {
     })
 }
 
-export const registerUserAsync = async (user) => {
-  delete user['passwordConfirmation']
-  const apiURL = `${HOST}/customer/`
+export const customerAPI = createApi({
+  reducerPath: 'customerApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'https://parking-system-api-production-f442.up.railway.app',
+  }),
+  endpoints: (builder) => ({
+    registerUser: builder.mutation({
+      query: (data) => {
+        delete data['passwordConfirmation']
 
-  return fetch(apiURL, {
-    method: 'POST',
-    mode: 'cors',
-    headers: {
-      'Content-type': 'application/json',
-    },
-    body: JSON.stringify(user),
-  })
-    .then((response) => response.json())
-    .catch((e) => {
-      console.error(e)
-      throw e
-    })
-}
+        return {
+          url: '/customer/',
+          method: 'POST',
+          body: data,
+        }
+      },
+    }),
+  }),
+})
+
+export const { useRegisterUserMutation } = customerAPI

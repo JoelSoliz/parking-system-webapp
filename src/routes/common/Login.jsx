@@ -31,7 +31,7 @@ const ERROR_MESSAGES = {
 }
 
 const Login = () => {
-  const { isAuthenticate, loading } = useSelector(sessionSelector)
+  const { isAuthenticate, loading, user } = useSelector(sessionSelector)
   const dispatch = useDispatch()
   const {
     control,
@@ -43,133 +43,140 @@ const Login = () => {
 
   return (
     <Layout title="Login">
-      {isAuthenticate && <Navigate to={'/'} />}
-      <Box alignItems="center" justifyContent="center" marginY={8}>
-        <Card
-          sx={{
-            p: 4,
-            py: 5,
-            maxWidth: '50px auto',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 4,
-            borderRadius: '15px',
-            border: 5,
-          }}
-          style={{ borderColor: '#90b4ce' }}
-        >
-          <CardContent sx={{ m: 0 }}>
-            <Typography
-              gutterBottom
-              variant="h4"
-              component="div"
-              align="center"
-              sx={{ m: 0 }}
-            >
-              Bienvenido
-            </Typography>
-          </CardContent>
-          <Controller
-            control={control}
-            name="email"
-            rules={{
-              pattern: {
-                message: ERROR_MESSAGES.email,
-                value: /^[A-Z0-9._]+@[A-Z0-9.]+\.[com]{2,}$/i,
-              },
-              required: { message: ERROR_MESSAGES.required, value: true },
+      {isAuthenticate ? (
+        user?.role === 'CUST' ? (
+          <Navigate to={'/'} />
+        ) : (
+          <Navigate to={'/admin'} />
+        )
+      ) : (
+        <Box alignItems="center" justifyContent="center" marginY={8}>
+          <Card
+            sx={{
+              p: 4,
+              py: 5,
+              maxWidth: '50px auto',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4,
+              borderRadius: '15px',
+              border: 5,
             }}
-            render={({ field: { onBlur, onChange, value } }) => (
-              <>
-                <TextField
-                  id="outlined-basic"
-                  variant="outlined"
-                  label="Correo electrónico"
-                  type="emailAddress"
-                  value={value}
-                  onBlur={onBlur}
-                  onChange={(event) => onChange(event.target.value)}
-                  error={!!errors.email?.message}
-                  helperText={errors.email?.message}
-                />
-              </>
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="password"
-            rules={{
-              pattern: {
-                message: ERROR_MESSAGES.espacios,
-                value: /^[a-zA-Z0-9,.\-_!"#$%&/=?¡¿+~*{}()|°^¨]*$/i,
-              },
-              maxLength: {
-                message: `${ERROR_MESSAGES.maxLength} 8.`,
-                value: 8,
-              },
-              minLength: {
-                message: `${ERROR_MESSAGES.minLength} 5.`,
-                value: 5,
-              },
-              required: { message: ERROR_MESSAGES.required, value: true },
-            }}
-            render={({ field: { onChange, value } }) => (
-              <>
-                <FormControl variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">
-                    Contraseña
-                  </InputLabel>
-                  <OutlinedInput
-                    id="outlined-adornment-password"
-                    type={showPassword ? 'text' : 'password'}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          color="black"
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    error={!!errors.password?.message}
-                    value={value}
-                    onChange={(event) => onChange(event.target.value)}
-                    label="Contraseña"
+            style={{ borderColor: '#90b4ce' }}
+          >
+            <CardContent sx={{ m: 0 }}>
+              <Typography
+                gutterBottom
+                variant="h4"
+                component="div"
+                align="center"
+                sx={{ m: 0 }}
+              >
+                Bienvenido
+              </Typography>
+            </CardContent>
+            <Controller
+              control={control}
+              name="email"
+              rules={{
+                pattern: {
+                  message: ERROR_MESSAGES.email,
+                  value: /^[A-Z0-9._]+@[A-Z0-9.]+\.[com]{2,}$/i,
+                },
+                required: { message: ERROR_MESSAGES.required, value: true },
+              }}
+              render={({ field: { onBlur, onChange, value } }) => (
+                <>
+                  <TextField
+                    id="outlined-basic"
                     variant="outlined"
-                    helperText={errors.password?.message}
+                    label="Correo electrónico"
+                    type="emailAddress"
+                    value={value}
+                    onBlur={onBlur}
+                    onChange={(event) => onChange(event.target.value)}
+                    error={!!errors.email?.message}
+                    helperText={errors.email?.message}
                   />
-                  {!!errors.password?.message && (
-                    <FormHelperText error>
-                      {errors.password?.message}
-                    </FormHelperText>
-                  )}
-                </FormControl>
-              </>
+                </>
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="password"
+              rules={{
+                pattern: {
+                  message: ERROR_MESSAGES.espacios,
+                  value: /^[a-zA-Z0-9,.\-_!"#$%&/=?¡¿+~*{}()|°^¨]*$/i,
+                },
+                maxLength: {
+                  message: `${ERROR_MESSAGES.maxLength} 8.`,
+                  value: 8,
+                },
+                minLength: {
+                  message: `${ERROR_MESSAGES.minLength} 5.`,
+                  value: 5,
+                },
+                required: { message: ERROR_MESSAGES.required, value: true },
+              }}
+              render={({ field: { onChange, value } }) => (
+                <>
+                  <FormControl variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-password">
+                      Contraseña
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-password"
+                      type={showPassword ? 'text' : 'password'}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            color="black"
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      error={!!errors.password?.message}
+                      value={value}
+                      onChange={(event) => onChange(event.target.value)}
+                      label="Contraseña"
+                      variant="outlined"
+                      helperText={errors.password?.message}
+                    />
+                    {!!errors.password?.message && (
+                      <FormHelperText error>
+                        {errors.password?.message}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+                </>
+              )}
+            />
+            {loading === 'failed' && (
+              <Typography color={'error'} textAlign={'center'}>
+                Credenciales inválidas
+              </Typography>
             )}
-          />
-          {loading === 'failed' && (
-            <Typography color={'error'} textAlign={'center'}>
-              Credenciales inválidas
-            </Typography>
-          )}
-          {loading === 'pending' ? (
-            <Typography>Iniciando sesión...</Typography>
-          ) : (
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleSubmit((data) => dispatch(login(data)))}
-              disabled={!isValid}
-            >
-              Iniciar Sesión
-            </Button>
-          )}
-        </Card>
-      </Box>
+            {loading === 'pending' ? (
+              <Typography>Iniciando sesión...</Typography>
+            ) : (
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleSubmit((data) => dispatch(login(data)))}
+                disabled={!isValid}
+              >
+                Iniciar Sesión
+              </Button>
+            )}
+          </Card>
+        </Box>
+      )}
     </Layout>
   )
 }

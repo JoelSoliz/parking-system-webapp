@@ -1,5 +1,5 @@
 import { Controller, useForm } from 'react-hook-form'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Button,
   Card,
@@ -20,9 +20,11 @@ import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import { useDispatch, useSelector } from 'react-redux'
-import { registerUser, sessionSelector } from '../../store/slices/session'
-import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { toast } from 'sonner'
+import { sessionSelector } from '../../store/slices/session'
+import { Navigate, useNavigate } from 'react-router-dom'
+import { useRegisterUserMutation } from '../../api/customer'
 
 const ERROR_MESSAGES = {
   maxLength: 'La longitud máxima es',
@@ -43,8 +45,9 @@ const ERROR_MESSAGES = {
 
 const RegisterUser = () => {
   const navigate = useNavigate()
-  const { loading } = useSelector(sessionSelector)
-  const dispatch = useDispatch()
+  const { isAuthenticate } = useSelector(sessionSelector)
+  const [registerUser, { isLoading, isError, isSuccess, data, error, reset }] =
+    useRegisterUserMutation()
   const {
     control,
     formState: { errors, isValid },
@@ -55,353 +58,390 @@ const RegisterUser = () => {
   const handleClickShowPassword = () => setShowPassword((show) => !show)
   const [showPasswordC, setShowPasswordC] = useState(false)
   const handleClickShowPasswordC = () => setShowPasswordC((show) => !show)
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(`Fuiste registrado correctamente ${data?.name}.`)
+      navigate('/login')
+    } else if (isError) {
+      toast.error(
+        `No fuiste registrado correctamente: ${
+          error.data?.detail || error.data
+        }`,
+      )
+    }
+    reset()
+  }, [data, error])
+
   return (
     <Layout title="Registrar Usuario">
-      <Card
-        sx={{
-          p: 10,
-          py: 5,
-          maxWidth: '50px auto',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 4,
-          borderRadius: '15px',
-          marginY: 8,
-          border: 5,
-        }}
-        style={{ borderColor: '#90b4ce' }}
-      >
-        <CardContent sx={{ m: 0 }}>
-          <Typography
-            gutterBottom
-            variant="h4"
-            component="div"
-            align="center"
-            sx={{ m: 0 }}
-          >
-            Registrarse
-          </Typography>
-        </CardContent>
-        <Controller
-          control={control}
-          name="name"
-          rules={{
-            pattern: {
-              message: ERROR_MESSAGES.letters,
-              value: /^[a-zA-Z\s]*$/i,
-            },
-            maxLength: {
-              message: `${ERROR_MESSAGES.maxLength} 30.`,
-              value: 30,
-            },
-            minLength: { message: `${ERROR_MESSAGES.minLength} 3.`, value: 3 },
-            required: { message: ERROR_MESSAGES.required, value: true },
+      {isAuthenticate ? (
+        <Navigate to={'/'} />
+      ) : (
+        <Card
+          sx={{
+            p: 10,
+            py: 5,
+            maxWidth: '50px auto',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 4,
+            borderRadius: '15px',
+            marginY: 8,
+            border: 5,
           }}
-          render={({ field: { onChange, value } }) => (
-            <>
-              <TextField
-                error={!!errors.name?.message}
-                value={value}
-                onChange={(event) => onChange(event.target.value)}
-                label="Nombre(s)"
-                variant="outlined"
-                type={'text'}
-                helperText={errors.name?.message}
-              />
-            </>
-          )}
-        />
-        <Controller
-          control={control}
-          name="last_name"
-          rules={{
-            pattern: {
-              message: ERROR_MESSAGES.letters,
-              value: /^[a-zA-Z\s]*$/i,
-            },
-            maxLength: {
-              message: `${ERROR_MESSAGES.maxLength} 30.`,
-              value: 30,
-            },
-            minLength: { message: `${ERROR_MESSAGES.minLength} 3.`, value: 3 },
-            required: { message: ERROR_MESSAGES.required, value: true },
-          }}
-          render={({ field: { onChange, value } }) => (
-            <>
-              <TextField
-                error={!!errors.last_name?.message}
-                value={value}
-                onChange={(event) => onChange(event.target.value)}
-                label="Apellido(s)"
-                variant="outlined"
-                type={'text'}
-                helperText={errors.last_name?.message}
-              />
-            </>
-          )}
-        />
-        <Controller
-          control={control}
-          name="ci"
-          rules={{
-            required: { message: ERROR_MESSAGES.required, value: true },
-            validate: (value) => {
-              if (isNaN(parseInt(value))) {
-                return ERROR_MESSAGES.valido
-              }
-              if (parseFloat(value) % 1 != 0) {
-                return ERROR_MESSAGES.valido
-              }
-              if (parseInt(value) < 0) {
-                return ERROR_MESSAGES.valido
-              }
-              if (parseInt(value) <= 1000000) {
-                return ERROR_MESSAGES.quantityMin
-              }
-              if (parseInt(value) > 100000000) {
-                return ERROR_MESSAGES.quantityMax
-              }
-              return true
-            },
-          }}
-          render={({ field: { onChange, value } }) => (
-            <>
-              <TextField
-                error={!!errors.ci?.message}
-                value={value}
-                onChange={(event) => onChange(event.target.value)}
-                label="CI"
-                variant="outlined"
-                type={'number'}
-                helperText={errors.ci?.message}
-              />
-            </>
-          )}
-        />
-
-        <Controller
-          control={control}
-          name="email"
-          rules={{
-            maxLength: {
-              message: `${ERROR_MESSAGES.maxLength} 30.`,
-              value: 30,
-            },
-            minLength: { message: `${ERROR_MESSAGES.minLength} 6.`, value: 6 },
-            pattern: {
-              message: ERROR_MESSAGES.email,
-              value: /^[A-Z0-9._]+@[A-Z0-9.]+\.[com]{2,}$/i,
-            },
-            required: { message: ERROR_MESSAGES.required, value: true },
-          }}
-          render={({ field: { onChange, value } }) => (
-            <>
-              <TextField
-                error={!!errors.email?.message}
-                value={value}
-                onChange={(event) => onChange(event.target.value)}
-                label="Correo electrónico"
-                variant="outlined"
-                type={'emailAddress'}
-                helperText={errors.email?.message}
-              />
-            </>
-          )}
-        />
-
-        <Controller
-          control={control}
-          name="phone"
-          rules={{
-            required: { message: ERROR_MESSAGES.required, value: true },
-            validate: (value) => {
-              if (isNaN(parseInt(value))) {
-                return ERROR_MESSAGES.celularValido
-              }
-              if (parseFloat(value) % 1 != 0) {
-                return ERROR_MESSAGES.celularValido
-              }
-              if (parseInt(value) <= 0) {
-                return ERROR_MESSAGES.celularValido
-              }
-              if (parseInt(value) < 60000000) {
-                return ERROR_MESSAGES.celularValido
-              }
-              if (parseInt(value) >= 80000000) {
-                return ERROR_MESSAGES.celularValido
-              }
-              return true
-            },
-          }}
-          render={({ field: { onChange, value } }) => (
-            <>
-              <TextField
-                error={!!errors.phone?.message}
-                value={value}
-                onChange={(event) => onChange(event.target.value)}
-                label="Celular"
-                variant="outlined"
-                type={'number'}
-                helperText={errors.phone?.message}
-              />
-            </>
-          )}
-        />
-        <Controller
-          control={control}
-          name="password"
-          rules={{
-            pattern: {
-              message: ERROR_MESSAGES.espacios,
-              value: /^[a-zA-Z0-9,.\-_!"#$%&/=?¡¿+~*{}()|°^¨]*$/i,
-            },
-            maxLength: { message: `${ERROR_MESSAGES.maxLength} 8.`, value: 8 },
-            minLength: { message: `${ERROR_MESSAGES.minLength} 5.`, value: 5 },
-            required: { message: ERROR_MESSAGES.required, value: true },
-          }}
-          render={({ field: { onChange, value } }) => (
-            <>
-              <FormControl variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password">
-                  Contraseña
-                </InputLabel>
-                <OutlinedInput
-                  id="outlined-adornment-password"
-                  type={showPassword ? 'text' : 'password'}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        color="black"
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  error={!!errors.password?.message}
-                  value={value}
-                  onChange={(event) => onChange(event.target.value)}
-                  label="Contraseña"
-                  variant="outlined"
-                  helperText={errors.password?.message}
-                />
-                {!!errors.password?.message && (
-                  <FormHelperText error>
-                    {errors.password?.message}
-                  </FormHelperText>
-                )}
-              </FormControl>
-            </>
-          )}
-        />
-        <Controller
-          control={control}
-          name="passwordConfirmation"
-          rules={{
-            maxLength: { message: `${ERROR_MESSAGES.maxLength} 8.`, value: 8 },
-            minLength: { message: `${ERROR_MESSAGES.minLength} 5.`, value: 5 },
-            required: { message: ERROR_MESSAGES.required, value: true },
-            validate: (value) =>
-              value === watch('password') || 'La contraseña no coincide.',
-          }}
-          render={({ field: { onChange, value } }) => (
-            <>
-              <FormControl variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password">
-                  Confirmar contraseña
-                </InputLabel>
-                <OutlinedInput
-                  id="outlined-adornment-password"
-                  type={showPasswordC ? 'text' : 'password'}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        color="black"
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPasswordC}
-                        edge="end"
-                      >
-                        {showPasswordC ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  error={!!errors.passwordConfirmation?.message}
-                  value={value}
-                  onChange={(event) => onChange(event.target.value)}
-                  label="Confirmar contraseña"
-                  variant="outlined"
-                  helperText={errors.passwordConfirmation?.message}
-                />
-                {!!errors.passwordConfirmation?.message && (
-                  <FormHelperText error>
-                    {errors.passwordConfirmation?.message}
-                  </FormHelperText>
-                )}
-              </FormControl>
-            </>
-          )}
-        />
-
-        <Typography gutterBottom variant="h8" component="div" sx={{ m: 0 }}>
-          Recibir notificaciones por:
-        </Typography>
-        <Controller
-          control={control}
-          name="notification"
-          rules={{
-            required: { message: ERROR_MESSAGES.required, value: true },
-          }}
-          render={({ field: { onChange, value } }) => (
-            <>
-              <RadioGroup
-                error={errors.notification?.message}
-                value={value}
-                onChange={(event) => onChange(event.target.checked)}
-              >
-                <FormControlLabel
-                  value="email"
-                  control={<Radio />}
-                  label="Email"
-                />
-                <FormControlLabel
-                  value="whatsaap"
-                  control={<Radio />}
-                  label="WhatsApp"
-                />
-              </RadioGroup>
-            </>
-          )}
-        />
-        {loading === 'failed' && (
-          <Typography color={'error'} textAlign={'center'}>
-            Error, verifique los datos ingresados.
-          </Typography>
-        )}
-        {loading === 'pending' ? (
-          <Typography>Iniciando sesión...</Typography>
-        ) : (
-          <Stack direction="row" spacing={2}>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => navigate('/')}
-            >
-              Cancelar
-            </Button>
-
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleSubmit((data) => dispatch(registerUser(data)))}
-              disabled={!isValid}
+          style={{ borderColor: '#90b4ce' }}
+        >
+          <CardContent sx={{ m: 0 }}>
+            <Typography
+              gutterBottom
+              variant="h4"
+              component="div"
+              align="center"
+              sx={{ m: 0 }}
             >
               Registrarse
-            </Button>
-          </Stack>
-        )}
-      </Card>
+            </Typography>
+          </CardContent>
+          <Controller
+            control={control}
+            name="name"
+            rules={{
+              pattern: {
+                message: ERROR_MESSAGES.letters,
+                value: /^[a-zA-Z\s]*$/i,
+              },
+              maxLength: {
+                message: `${ERROR_MESSAGES.maxLength} 30.`,
+                value: 30,
+              },
+              minLength: {
+                message: `${ERROR_MESSAGES.minLength} 3.`,
+                value: 3,
+              },
+              required: { message: ERROR_MESSAGES.required, value: true },
+            }}
+            render={({ field: { onChange, value } }) => (
+              <>
+                <TextField
+                  error={!!errors.name?.message}
+                  value={value}
+                  onChange={(event) => onChange(event.target.value)}
+                  label="Nombre(s)"
+                  variant="outlined"
+                  type={'text'}
+                  helperText={errors.name?.message}
+                />
+              </>
+            )}
+          />
+          <Controller
+            control={control}
+            name="last_name"
+            rules={{
+              pattern: {
+                message: ERROR_MESSAGES.letters,
+                value: /^[a-zA-Z\s]*$/i,
+              },
+              maxLength: {
+                message: `${ERROR_MESSAGES.maxLength} 30.`,
+                value: 30,
+              },
+              minLength: {
+                message: `${ERROR_MESSAGES.minLength} 3.`,
+                value: 3,
+              },
+              required: { message: ERROR_MESSAGES.required, value: true },
+            }}
+            render={({ field: { onChange, value } }) => (
+              <>
+                <TextField
+                  error={!!errors.last_name?.message}
+                  value={value}
+                  onChange={(event) => onChange(event.target.value)}
+                  label="Apellido(s)"
+                  variant="outlined"
+                  type={'text'}
+                  helperText={errors.last_name?.message}
+                />
+              </>
+            )}
+          />
+          <Controller
+            control={control}
+            name="ci"
+            rules={{
+              required: { message: ERROR_MESSAGES.required, value: true },
+              validate: (value) => {
+                if (isNaN(parseInt(value))) {
+                  return ERROR_MESSAGES.valido
+                }
+                if (parseFloat(value) % 1 != 0) {
+                  return ERROR_MESSAGES.valido
+                }
+                if (parseInt(value) < 0) {
+                  return ERROR_MESSAGES.valido
+                }
+                if (parseInt(value) <= 1000000) {
+                  return ERROR_MESSAGES.quantityMin
+                }
+                if (parseInt(value) > 100000000) {
+                  return ERROR_MESSAGES.quantityMax
+                }
+                return true
+              },
+            }}
+            render={({ field: { onChange, value } }) => (
+              <>
+                <TextField
+                  error={!!errors.ci?.message}
+                  value={value}
+                  onChange={(event) => onChange(event.target.value)}
+                  label="CI"
+                  variant="outlined"
+                  type={'number'}
+                  helperText={errors.ci?.message}
+                />
+              </>
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="email"
+            rules={{
+              maxLength: {
+                message: `${ERROR_MESSAGES.maxLength} 30.`,
+                value: 30,
+              },
+              minLength: {
+                message: `${ERROR_MESSAGES.minLength} 6.`,
+                value: 6,
+              },
+              pattern: {
+                message: ERROR_MESSAGES.email,
+                value: /^[A-Z0-9._]+@[A-Z0-9.]+\.[com]{2,}$/i,
+              },
+              required: { message: ERROR_MESSAGES.required, value: true },
+            }}
+            render={({ field: { onChange, value } }) => (
+              <>
+                <TextField
+                  error={!!errors.email?.message}
+                  value={value}
+                  onChange={(event) => onChange(event.target.value)}
+                  label="Correo electrónico"
+                  variant="outlined"
+                  type={'emailAddress'}
+                  helperText={errors.email?.message}
+                />
+              </>
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="phone"
+            rules={{
+              required: { message: ERROR_MESSAGES.required, value: true },
+              validate: (value) => {
+                if (isNaN(parseInt(value))) {
+                  return ERROR_MESSAGES.celularValido
+                }
+                if (parseFloat(value) % 1 != 0) {
+                  return ERROR_MESSAGES.celularValido
+                }
+                if (parseInt(value) <= 0) {
+                  return ERROR_MESSAGES.celularValido
+                }
+                if (parseInt(value) < 60000000) {
+                  return ERROR_MESSAGES.celularValido
+                }
+                if (parseInt(value) >= 80000000) {
+                  return ERROR_MESSAGES.celularValido
+                }
+                return true
+              },
+            }}
+            render={({ field: { onChange, value } }) => (
+              <>
+                <TextField
+                  error={!!errors.phone?.message}
+                  value={value}
+                  onChange={(event) => onChange(event.target.value)}
+                  label="Celular"
+                  variant="outlined"
+                  type={'number'}
+                  helperText={errors.phone?.message}
+                />
+              </>
+            )}
+          />
+          <Controller
+            control={control}
+            name="password"
+            rules={{
+              pattern: {
+                message: ERROR_MESSAGES.espacios,
+                value: /^[a-zA-Z0-9,.\-_!"#$%&/=?¡¿+~*{}()|°^¨]*$/i,
+              },
+              maxLength: {
+                message: `${ERROR_MESSAGES.maxLength} 8.`,
+                value: 8,
+              },
+              minLength: {
+                message: `${ERROR_MESSAGES.minLength} 5.`,
+                value: 5,
+              },
+              required: { message: ERROR_MESSAGES.required, value: true },
+            }}
+            render={({ field: { onChange, value } }) => (
+              <>
+                <FormControl variant="outlined">
+                  <InputLabel htmlFor="outlined-adornment-password">
+                    Contraseña
+                  </InputLabel>
+                  <OutlinedInput
+                    id="outlined-adornment-password"
+                    type={showPassword ? 'text' : 'password'}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          color="black"
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    error={!!errors.password?.message}
+                    value={value}
+                    onChange={(event) => onChange(event.target.value)}
+                    label="Contraseña"
+                    variant="outlined"
+                    helperText={errors.password?.message}
+                  />
+                  {!!errors.password?.message && (
+                    <FormHelperText error>
+                      {errors.password?.message}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </>
+            )}
+          />
+          <Controller
+            control={control}
+            name="passwordConfirmation"
+            rules={{
+              maxLength: {
+                message: `${ERROR_MESSAGES.maxLength} 8.`,
+                value: 8,
+              },
+              minLength: {
+                message: `${ERROR_MESSAGES.minLength} 5.`,
+                value: 5,
+              },
+              required: { message: ERROR_MESSAGES.required, value: true },
+              validate: (value) =>
+                value === watch('password') || 'La contraseña no coincide.',
+            }}
+            render={({ field: { onChange, value } }) => (
+              <>
+                <FormControl variant="outlined">
+                  <InputLabel htmlFor="outlined-adornment-password">
+                    Confirmar contraseña
+                  </InputLabel>
+                  <OutlinedInput
+                    id="outlined-adornment-password"
+                    type={showPasswordC ? 'text' : 'password'}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          color="black"
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPasswordC}
+                          edge="end"
+                        >
+                          {showPasswordC ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    error={!!errors.passwordConfirmation?.message}
+                    value={value}
+                    onChange={(event) => onChange(event.target.value)}
+                    label="Confirmar contraseña"
+                    variant="outlined"
+                    helperText={errors.passwordConfirmation?.message}
+                  />
+                  {!!errors.passwordConfirmation?.message && (
+                    <FormHelperText error>
+                      {errors.passwordConfirmation?.message}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </>
+            )}
+          />
+
+          <Typography gutterBottom variant="h8" component="div" sx={{ m: 0 }}>
+            Recibir notificaciones por:
+          </Typography>
+          <Controller
+            control={control}
+            name="notification_type"
+            rules={{
+              required: { message: ERROR_MESSAGES.required, value: true },
+            }}
+            render={({ field: { onChange, value } }) => (
+              <>
+                <RadioGroup
+                  error={errors.notification?.message}
+                  value={value}
+                  onChange={(event) => onChange(event.target.value)}
+                >
+                  <FormControlLabel
+                    value="Email"
+                    control={<Radio />}
+                    label="Email"
+                  />
+                  <FormControlLabel
+                    value="Whatsapp"
+                    control={<Radio />}
+                    label="WhatsApp"
+                  />
+                </RadioGroup>
+              </>
+            )}
+          />
+          {isLoading ? (
+            <Typography>Registrandote...</Typography>
+          ) : (
+            <Stack direction="row" spacing={2}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => navigate('/')}
+              >
+                Cancelar
+              </Button>
+
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleSubmit((data) =>
+                  registerUser({ ...data, user_type: '' }),
+                )}
+                disabled={!isValid}
+              >
+                Registrarse
+              </Button>
+            </Stack>
+          )}
+        </Card>
+      )}
     </Layout>
   )
 }

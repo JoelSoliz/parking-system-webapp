@@ -1,4 +1,4 @@
-const HOST = 'https://parking-system-api-production.up.railway.app'
+const HOST = 'https://parking-system-api-production-f442.up.railway.app'
 
 export const getReservationsAsync = async (page, token) => {
   const apiURL = `${HOST}/reservation/?current_page=${page}`

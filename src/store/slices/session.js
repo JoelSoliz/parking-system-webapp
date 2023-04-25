@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
 import { getUserInfoAsync, loginAsync } from '../../api/user'
-import { registerUserAsync } from '../../api/customer'
 import { toast } from 'sonner'
 
 export const login = createAsyncThunk('login/loginAsync', async (userLogin) => {
@@ -16,22 +15,6 @@ export const login = createAsyncThunk('login/loginAsync', async (userLogin) => {
 
   return user
 })
-
-export const registerUser = createAsyncThunk(
-  'registerUser/registerUserAsync',
-  async (user) => {
-    const result = await registerUserAsync(user)
-    const { email, detail } = result
-
-    if (!email) {
-      toast.error(detail)
-      console.error(detail)
-      throw Error(detail)
-    }
-
-    return email
-  },
-)
 
 const initialState = {
   isAuthenticate: false,
@@ -52,19 +35,6 @@ export const sessionSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(registerUser.pending, (state) => {
-      state.loading = 'pending'
-    })
-    builder.addCase(registerUser.fulfilled, (state) => {
-      state.loading = 'succeeded'
-      toast.success('Su cuenta se registró exitosamente.')
-    })
-
-    builder.addCase(registerUser.rejected, (state) => {
-      state.isAuthenticate = false
-      state.loading = 'failed'
-    })
-
     builder.addCase(login.pending, (state) => {
       state.loading = 'pending'
     })
@@ -72,6 +42,7 @@ export const sessionSlice = createSlice({
       state.loading = 'succeeded'
       state.user = payload
       state.isAuthenticate = true
+      toast.success(`Bienvenido ${payload.name}!`)
     })
     builder.addCase(login.rejected, (state) => {
       state.isAuthenticate = false
