@@ -1,5 +1,5 @@
-import { Controller, useForm } from 'react-hook-form'
-import React from 'react'
+import { useForm } from 'react-hook-form'
+import React, { useState } from 'react'
 import {
   Button,
   Card,
@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { registerUser, sessionSelector } from '../../store/slices/session'
 import { useNavigate } from 'react-router-dom'
 import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import CalendarPicker from './CalendarPicker'
 import SelectSchedule from './SelectSchedule'
@@ -22,32 +23,45 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 
-const ERROR_MESSAGES = {
-  maxLength: 'La longitud máxima es',
-  minLength: 'La longitud mínima es',
-  required: 'Este campo es requerido.',
-  numbers: 'Solo se admiten números.',
-  valido: 'Ingrese un número de CI válido.',
-  quantityMin: 'Ingrese 7 dígitos como mínimo.',
-  quantityMax: 'Solo se admiten 8 dígitos como máximo.',
-  email: 'Correo electrónico inválido.',
-  letters: 'Solo se admiten letras.',
-  celularValido: 'Ingrese un número móvil válido.',
-  celularValidoInicia: 'Un número válido inicia con 6 o 7.',
-  celularValidoMin: 'El número movil debe tener 8 dígitos.',
-  celularValidoMax: 'Solo se admiten 8 dígitos como máximo.',
-  espacios: 'No se admiten espacios.',
-}
+const ReservationRequest = () => {
+  const [isCheckedMonday, setIsCheckedMonday] = useState(false)
+  const [isCheckedTuesday, setIsCheckedTuesday] = useState(false)
+  const [isCheckedWednesday, setIsCheckedWednesday] = useState(false)
+  const [isCheckedThursday, setIsCheckedThrusday] = useState(false)
+  const [isCheckedFriday, setIsCheckedFriday] = useState(false)
+  const [isCheckedSaturday, setIsCheckedSaturday] = useState(false)
 
-const ReservationRequest = (defaultValue = {}) => {
+  const [isValid, setIsChecked] = useState(false)
+  const handleCheckboxChangeMonday = (event) => {
+    setIsCheckedMonday(event.target.checked)
+    setIsChecked(event.target.checked)
+  }
+  const handleCheckboxChangeTuesday = (event) => {
+    setIsCheckedTuesday(event.target.checked)
+    setIsChecked(event.target.checked)
+  }
+  const handleCheckboxChangeWednesday = (event) => {
+    setIsCheckedWednesday(event.target.checked)
+    setIsChecked(event.target.checked)
+  }
+  const handleCheckboxChangeThrusday = (event) => {
+    setIsCheckedThrusday(event.target.checked)
+    setIsChecked(event.target.checked)
+  }
+  const handleCheckboxChangeFriday = (event) => {
+    setIsCheckedFriday(event.target.checked)
+    setIsChecked(event.target.checked)
+  }
+  const handleCheckboxChangeSaturday = (event) => {
+    setIsCheckedSaturday(event.target.checked)
+    setIsChecked(event.target.checked)
+  }
+
+  const { user } = useSelector(sessionSelector)
   const navigate = useNavigate()
   const { loading } = useSelector(sessionSelector)
   const dispatch = useDispatch()
-  const {
-    control,
-    formState: { errors, isValid },
-    handleSubmit,
-  } = useForm({ mode: 'onChange', defaultValues: defaultValue })
+  const { handleSubmit } = useForm({ mode: 'onChange' })
   return (
     <Layout title="Registrar Usuario">
       <Card
@@ -72,221 +86,189 @@ const ReservationRequest = (defaultValue = {}) => {
         <Typography color="black" variant="h6" marginTop={-4}>
           <strong>Sitio:</strong>
         </Typography>
-        <Controller
-          control={control}
-          name="name"
-          rules={{
-            pattern: {
-              message: ERROR_MESSAGES.letters,
-              value: /^[a-zA-Z\s]*$/i,
-            },
-            maxLength: {
-              message: `${ERROR_MESSAGES.maxLength} 30.`,
-              value: 30,
-            },
-            minLength: {
-              message: `${ERROR_MESSAGES.minLength} 3.`,
-              value: 3,
-            },
-            required: { message: ERROR_MESSAGES.required, value: true },
-          }}
-          render={({ field: { onChange, value } }) => (
-            <>
-              <TextField
-                error={!!errors.name?.message}
-                value={value}
-                onChange={(event) => onChange(event.target.value)}
-                label="Nombre(s)"
-                variant="outlined"
-                type={'text'}
-                helperText={errors.name?.message}
-              />
-            </>
-          )}
+
+        <TextField
+          value={user?.name}
+          label="Nombre(s)"
+          variant="outlined"
+          type={'text'}
         />
-        <Controller
-          control={control}
-          name="last_name"
-          rules={{
-            pattern: {
-              message: ERROR_MESSAGES.letters,
-              value: /^[a-zA-Z\s]*$/i,
-            },
-            maxLength: {
-              message: `${ERROR_MESSAGES.maxLength} 30.`,
-              value: 30,
-            },
-            minLength: {
-              message: `${ERROR_MESSAGES.minLength} 3.`,
-              value: 3,
-            },
-            required: { message: ERROR_MESSAGES.required, value: true },
-          }}
-          render={({ field: { onChange, value } }) => (
-            <>
-              <TextField
-                error={!!errors.last_name?.message}
-                value={value}
-                onChange={(event) => onChange(event.target.value)}
-                label="Apellido(s)"
-                variant="outlined"
-                type={'text'}
-                helperText={errors.last_name?.message}
-              />
-            </>
-          )}
+
+        <TextField
+          value={user?.last_name}
+          label="Apellido(s)"
+          variant="outlined"
+          type={'text'}
         />
-        <Controller
-          control={control}
-          name="ci"
-          rules={{
-            required: { message: ERROR_MESSAGES.required, value: true },
-            validate: (value) => {
-              if (isNaN(parseInt(value))) {
-                return ERROR_MESSAGES.valido
-              }
-              if (parseFloat(value) % 1 != 0) {
-                return ERROR_MESSAGES.valido
-              }
-              if (parseInt(value) < 0) {
-                return ERROR_MESSAGES.valido
-              }
-              if (parseInt(value) <= 1000000) {
-                return ERROR_MESSAGES.quantityMin
-              }
-              if (parseInt(value) > 100000000) {
-                return ERROR_MESSAGES.quantityMax
-              }
-              return true
-            },
-          }}
-          render={({ field: { onChange, value } }) => (
-            <>
-              <TextField
-                error={!!errors.ci?.message}
-                value={value}
-                onChange={(event) => onChange(event.target.value)}
-                label="CI"
-                variant="outlined"
-                type={'number'}
-                helperText={errors.ci?.message}
-              />
-            </>
-          )}
+
+        <TextField
+          value={user?.ci}
+          label="CI"
+          variant="outlined"
+          type={'number'}
         />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <CalendarPicker />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <CalendarPicker style={{ marginTop: '-8px' }} />
         </LocalizationProvider>
-        <Typography gutterBottom variant="h8" component="div">
-          Seleccione los días://ocultar componente
+
+        <Typography gutterBottom variant="h8" component="div" marginX={'-25px'}>
+          Seleccione día(s) y horario(s):
         </Typography>
-
-        <FormGroup sx={{ m: -4 }}>
-          <FormControlLabel
-            control={<Checkbox />}
-            label={
-              <Box
-                display="flex"
-                alignItems="center"
-                gap="12px"
-                paddingY={'15px'}
-              >
-                Lunes
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <SelectSchedule />
-                </LocalizationProvider>
-              </Box>
-            }
-          ></FormControlLabel>
-          <FormControlLabel
-            control={<Checkbox />}
-            label={
-              <Box
-                display="flex"
-                alignItems="center"
-                gap="12px"
-                paddingY={'15px'}
-              >
-                Martes
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <SelectSchedule />
-                </LocalizationProvider>
-              </Box>
-            }
-          ></FormControlLabel>
-          <FormControlLabel
-            control={<Checkbox />}
-            label={
-              <Box
-                display="flex"
-                alignItems="center"
-                gap="12px"
-                paddingY={'15px'}
-              >
-                Miércoles
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <SelectSchedule />
-                </LocalizationProvider>
-              </Box>
-            }
-          ></FormControlLabel>
-          <FormControlLabel
-            control={<Checkbox />}
-            label={
-              <Box
-                display="flex"
-                alignItems="center"
-                gap="12px"
-                paddingY={'15px'}
-              >
-                Jueves
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <SelectSchedule />
-                </LocalizationProvider>
-              </Box>
-            }
-          ></FormControlLabel>
-          <FormControlLabel
-            control={<Checkbox />}
-            label={
-              <Box
-                display="flex"
-                alignItems="center"
-                gap="12px"
-                paddingY={'15px'}
-              >
-                Viernes
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <SelectSchedule />
-                </LocalizationProvider>
-              </Box>
-            }
-          ></FormControlLabel>
-          <FormControlLabel
-            control={<Checkbox />}
-            label={
-              <Box
-                display="flex"
-                alignItems="center"
-                gap="12px"
-                paddingY={'15px'}
-              >
-                Sábado
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <SelectSchedule />
-                </LocalizationProvider>
-              </Box>
-            }
-          ></FormControlLabel>
-        </FormGroup>
-
+        <Box paddingLeft="-10px">
+          <FormGroup sx={{ m: -3 }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  type="checkbox"
+                  checked={isCheckedMonday}
+                  onChange={handleCheckboxChangeMonday}
+                />
+              }
+              label={
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  gap="12px"
+                  paddingY={'12px'}
+                >
+                  Lunes
+                  <Box paddingLeft="22px">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      {isCheckedMonday && <SelectSchedule />}
+                    </LocalizationProvider>
+                  </Box>
+                </Box>
+              }
+            ></FormControlLabel>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  type="checkbox"
+                  checked={isCheckedTuesday}
+                  onChange={handleCheckboxChangeTuesday}
+                />
+              }
+              label={
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  gap="12px"
+                  paddingY={'12px'}
+                >
+                  Martes
+                  <Box paddingLeft="17px">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      {isCheckedTuesday && <SelectSchedule />}
+                    </LocalizationProvider>
+                  </Box>
+                </Box>
+              }
+            ></FormControlLabel>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  type="checkbox"
+                  checked={isCheckedWednesday}
+                  onChange={handleCheckboxChangeWednesday}
+                />
+              }
+              label={
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  gap="12px"
+                  paddingY={'12px'}
+                >
+                  Miércoles
+                  <Box paddingLeft="0px">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      {isCheckedWednesday && <SelectSchedule />}
+                    </LocalizationProvider>
+                  </Box>
+                </Box>
+              }
+            ></FormControlLabel>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  type="checkbox"
+                  checked={isCheckedThursday}
+                  onChange={handleCheckboxChangeThrusday}
+                />
+              }
+              label={
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  gap="12px"
+                  paddingY={'12px'}
+                >
+                  Jueves
+                  <Box paddingLeft="16px">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      {isCheckedThursday && <SelectSchedule />}
+                    </LocalizationProvider>
+                  </Box>
+                </Box>
+              }
+            ></FormControlLabel>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  type="checkbox"
+                  checked={isCheckedFriday}
+                  onChange={handleCheckboxChangeFriday}
+                />
+              }
+              label={
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  gap="12px"
+                  paddingY={'12px'}
+                >
+                  Viernes
+                  <Box paddingLeft="13px">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      {isCheckedFriday && <SelectSchedule />}
+                    </LocalizationProvider>
+                  </Box>
+                </Box>
+              }
+            ></FormControlLabel>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  type="checkbox"
+                  checked={isCheckedSaturday}
+                  onChange={handleCheckboxChangeSaturday}
+                />
+              }
+              label={
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  gap="12px"
+                  paddingY={'12px'}
+                >
+                  Sábado
+                  <Box paddingLeft="12px">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      {isCheckedSaturday && <SelectSchedule />}
+                    </LocalizationProvider>
+                  </Box>
+                </Box>
+              }
+            ></FormControlLabel>
+          </FormGroup>
+        </Box>
         {loading === 'failed' && (
           <Typography color={'error'} textAlign={'center'}>
             Error, verifique los datos ingresados.
           </Typography>
         )}
         {loading === 'pending' ? (
-          <Typography>Iniciando sesión...</Typography>
+          <Typography>Enviando solicitud...</Typography>
         ) : (
           <Stack
             direction="row"
