@@ -256,7 +256,11 @@ const RegisterVehicle = () => {
             justifyContent={'center'}
             gap={'20px'}
           >
-            <Button variant="contained" color="secondary">
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => navigate('/')}
+            >
               Cancelar
             </Button>
             <Button
