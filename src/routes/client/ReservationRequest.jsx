@@ -85,6 +85,7 @@ const ReservationRequest = () => {
           label="Nombre(s)"
           variant="outlined"
           type={'text'}
+          disabled={true}
         />
 
         <TextField
@@ -92,6 +93,7 @@ const ReservationRequest = () => {
           label="Apellido(s)"
           variant="outlined"
           type={'text'}
+          disabled={true}
         />
 
         <TextField
@@ -99,6 +101,7 @@ const ReservationRequest = () => {
           label="CI"
           variant="outlined"
           type={'number'}
+          disabled={true}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <CalendarPicker style={{ marginTop: '-8px' }} />

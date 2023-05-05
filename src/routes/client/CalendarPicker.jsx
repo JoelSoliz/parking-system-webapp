@@ -30,16 +30,12 @@ const CalendarPicker = () => {
     if (newError) {
       setError(newError)
     } else if (
-      (selectedDateEnd < selectedDateStart ||
-        selectedDateEnd == selectedDateStart) &&
+      selectedDateStart &&
+      selectedDateEnd &&
+      selectedDateEnd < selectedDateStart &&
       !error?.includes('end-date-before-start-date')
     ) {
       setError('end-date-before-start-date')
-    } else if (
-      (selectedDateEnd == null || selectedDateStart == null) &&
-      !error?.includes('required')
-    ) {
-      setError('required')
     } else {
       setError(null)
     }
@@ -51,9 +47,12 @@ const CalendarPicker = () => {
   const errorMessage = React.useMemo(() => {
     function getError(error) {
       switch (error) {
-        case 'maxDate':
+        case 'maxDate': {
+          return 'Ingrese una fecha correspondiente a la gestion actual.'
+        }
+
         case 'minDate': {
-          return 'Seleccione una fecha correspondiente a la gestion actual.'
+          return 'Ingrese una fecha actual o futura.'
         }
 
         case 'invalidDate': {
@@ -66,6 +65,12 @@ const CalendarPicker = () => {
 
         case 'required': {
           return 'Esta campo es obligatorio.'
+        }
+        case 'shouldDisableDate': {
+          return 'Los domingos no hay atención en el estacionamiento.'
+        }
+        case 'onError': {
+          return 'La fecha de fin no puede ser anterior a .'
         }
         default: {
           return ''
@@ -93,7 +98,7 @@ const CalendarPicker = () => {
                 helperText: errorMessage(errorI),
               },
             }}
-            required={true}
+            required
           />
 
           <DesktopDatePicker
@@ -111,7 +116,7 @@ const CalendarPicker = () => {
                 helperText: errorMessage(error),
               },
             }}
-            required={true}
+            required
           />
         </DemoContainer>
       </FormControl>
