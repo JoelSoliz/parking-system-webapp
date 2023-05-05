@@ -4,7 +4,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs'
-import { FormControl } from '@mui/material'
+import { FormControl, Button, Stack } from '@mui/material'
 
 const CalendarPicker = () => {
   const today = dayjs()
@@ -84,6 +84,23 @@ const CalendarPicker = () => {
     return getError
   }, [error])
 
+  const handleGetDaysBetweenDates = () => {
+    const days = []
+    const start = dayjs(selectedDateStart)
+    const end = dayjs(selectedDateEnd)
+    let currentDate = start
+
+    while (currentDate <= end) {
+      const dayName = currentDate.format('dddd')
+      if (dayName !== 'Sunday' && !days.includes(dayName)) {
+        days.push(dayName)
+      }
+      currentDate = currentDate.add(1, 'day')
+    }
+
+    console.log(days)
+  }
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <FormControl error={error}>
@@ -126,6 +143,20 @@ const CalendarPicker = () => {
             />
           </DemoItem>
         </DemoContainer>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ m: 2.5 }}
+          justifyContent={'center'}
+        >
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleGetDaysBetweenDates}
+          >
+            Seleccionar dias
+          </Button>
+        </Stack>
       </FormControl>
     </LocalizationProvider>
   )
