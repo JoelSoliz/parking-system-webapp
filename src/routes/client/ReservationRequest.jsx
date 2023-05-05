@@ -18,7 +18,6 @@ import SelectSchedule from './SelectSchedule'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import CalendarPicker from './CalendarPicker'
 
 const ReservationRequest = () => {
@@ -101,7 +100,7 @@ const ReservationRequest = () => {
           variant="outlined"
           type={'number'}
         />
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
           <CalendarPicker style={{ marginTop: '-8px' }} />
         </LocalizationProvider>
         <Typography gutterBottom variant="h8" component="div" marginX={'-25px'}>

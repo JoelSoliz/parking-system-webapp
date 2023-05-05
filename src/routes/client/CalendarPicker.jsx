@@ -1,35 +1,30 @@
 import React from 'react'
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
-import { isBefore, subDays } from 'date-fns'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import dayjs from 'dayjs'
 import { FormControl } from '@mui/material'
 
 const CalendarPicker = () => {
-  const today = new Date()
-  const yesterday = subDays(today, 1)
+  const today = dayjs()
   const fechaMax = () => {
-    if (today.getMonth() <= 5) {
-      return new Date(today.getFullYear(), 5, 30)
+    const gestion1 = dayjs('2023-06-30T00:00:00.000')
+    const gestion2 = dayjs('2023-12-31T00:00:00.000')
+
+    if (dayjs().month() < 6) {
+      return gestion1
     } else {
-      return new Date(today.getFullYear(), 11, 31)
+      return gestion2
     }
   }
-  const fechaMin = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    yesterday.getDate(),
-  )
-
+  const isWeekend = (date) => {
+    const day = date.day()
+    return day === 0
+  }
   const [selectedDateStart, setSelectedDateStart] = React.useState(null)
-  const handleStartDateChange = (date) => {
-    setSelectedDateStart(date)
-  }
+
   const [selectedDateEnd, setSelectedDateEnd] = React.useState(null)
-  const handleEndtDateChange = (date) => {
-    setSelectedDateEnd(date)
-  }
 
   const handleSetError = (newError) => {
     if (newError) {
@@ -81,16 +76,16 @@ const CalendarPicker = () => {
   }, [error])
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <FormControl error={error}>
         <DemoContainer components={['DesktopDatePicker', 'DesktopDatePicker']}>
           <DesktopDatePicker
             label="Fecha de inicio"
-            format="dd/MM/yyyy"
+            format="DD/MM/YYYY"
             value={selectedDateStart}
-            onChange={handleStartDateChange}
-            shouldDisableDate={(date) => isBefore(date, yesterday)}
-            minDate={fechaMin}
+            onChange={(newValue) => setSelectedDateStart(newValue)}
+            shouldDisableDate={isWeekend}
+            minDate={today}
             maxDate={fechaMax()}
             onError={(newError) => setErrorI(newError)}
             slotProps={{
@@ -98,15 +93,16 @@ const CalendarPicker = () => {
                 helperText: errorMessage(errorI),
               },
             }}
+            required={true}
           />
 
           <DesktopDatePicker
             label="Fecha fin"
-            format="dd/MM/yyyy"
+            format="DD/MM/YYYY"
             value={selectedDateEnd}
-            onChange={handleEndtDateChange}
-            shouldDisableDate={(date) => isBefore(date, yesterday)}
-            minDate={fechaMin}
+            onChange={(newValue) => setSelectedDateEnd(newValue)}
+            shouldDisableDate={isWeekend}
+            minDate={today}
             maxDate={fechaMax()}
             onError={(newError) => handleSetError(newError)}
             slotProps={{
