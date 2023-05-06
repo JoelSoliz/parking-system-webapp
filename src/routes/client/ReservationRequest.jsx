@@ -19,7 +19,31 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 import CalendarPicker from './CalendarPicker'
-import dayjs from 'dayjs'
+
+function daysBetweenDates(date1, date2) {
+  const oneDayMs = 24 * 60 * 60 * 1000
+  const diffMs = Math.abs(date2 - date1)
+  return Math.floor(diffMs / oneDayMs)
+}
+function getUniqueDaysInRange(startDate, endDate) {
+  if (!startDate || !endDate) {
+    return []
+  }
+  const days = new Set() // eslint-disable-line no-undef
+  let currentDate = new Date(startDate)
+  endDate = new Date(endDate)
+  endDate =
+    daysBetweenDates(currentDate, endDate) > 7
+      ? new Date(startDate).setDate(currentDate.getDate() + 7)
+      : endDate
+  while (currentDate <= endDate) {
+    const day = currentDate.toLocaleDateString('en-US', { weekday: 'long' })
+    days.add(day)
+    currentDate.setDate(currentDate.getDate() + 1)
+  }
+
+  return Array.from(days)
+}
 const ReservationRequest = () => {
   const [isCheckedMonday, setIsCheckedMonday] = useState(false)
   const [isCheckedTuesday, setIsCheckedTuesday] = useState(false)
@@ -31,8 +55,13 @@ const ReservationRequest = () => {
   const [isValid, setIsChecked] = useState(false)
 
   const [selectedDateStart, setSelectedDateStart] = React.useState(null)
-
   const [selectedDateEnd, setSelectedDateEnd] = React.useState(null)
+
+  const weekdays = React.useMemo(
+    () => getUniqueDaysInRange(selectedDateStart, selectedDateEnd),
+    [selectedDateStart, selectedDateEnd],
+  )
+
   function handleDateChangeStart(date) {
     setSelectedDateStart(date)
   }
@@ -64,26 +93,6 @@ const ReservationRequest = () => {
   const handleCheckboxChangeSaturday = (event) => {
     setIsCheckedSaturday(event.target.checked)
     setIsChecked(event.target.checked)
-  }
-  const handleGetDaysBetweenDates = () => {
-    const days = []
-    const start = dayjs(selectedDateStart)
-    const end = dayjs(selectedDateEnd)
-    let currentDate = start
-
-    while (currentDate <= end) {
-      const dayName = currentDate.format('dddd')
-      if (dayName !== 'Sunday' && !days.includes(dayName)) {
-        days.push(dayName)
-      }
-      currentDate = currentDate.add(1, 'day')
-    }
-    setIsCheckedMonday(days.includes('Monday'))
-    setIsCheckedTuesday(days.includes('Tuesday'))
-    setIsCheckedWednesday(days.includes('Wednesday'))
-    setIsCheckedThrusday(days.includes('Thursday'))
-    setIsCheckedFriday(days.includes('Friday'))
-    setIsCheckedSaturday(days.includes('Saturday'))
   }
 
   const { user } = useSelector(sessionSelector)
@@ -144,169 +153,176 @@ const ReservationRequest = () => {
             onDateChangeEnd={handleDateChangeEnd}
           />
         </LocalizationProvider>
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{ m: 2.5 }}
-          justifyContent={'center'}
-        >
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleGetDaysBetweenDates}
+
+        {((weekdays.includes('Sunday') && weekdays.length > 1) ||
+          weekdays.length > 0) && (
+          <Typography
+            gutterBottom
+            variant="h8"
+            component="div"
+            marginX={'-25px'}
           >
-            Seleccionar dias
-          </Button>
-        </Stack>
-        <Typography gutterBottom variant="h8" component="div" marginX={'-25px'}>
-          Seleccione día(s) y horario(s):
-        </Typography>
+            Seleccione día(s) y horario(s):
+          </Typography>
+        )}
         <Box paddingLeft="-10px">
           <FormGroup sx={{ m: -3 }}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  type="checkbox"
-                  checked={isCheckedMonday}
-                  onChange={handleCheckboxChangeMonday}
-                />
-              }
-              label={
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  gap="12px"
-                  paddingY={'12px'}
-                >
-                  Lunes
-                  <Box paddingLeft="22px">
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      {isCheckedMonday && <SelectSchedule />}
-                    </LocalizationProvider>
+            {weekdays.includes('Monday') && (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    type="checkbox"
+                    checked={isCheckedMonday}
+                    onChange={handleCheckboxChangeMonday}
+                  />
+                }
+                label={
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gap="12px"
+                    paddingY={'12px'}
+                  >
+                    Lunes
+                    <Box paddingLeft="22px">
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        {isCheckedMonday && <SelectSchedule />}
+                      </LocalizationProvider>
+                    </Box>
                   </Box>
-                </Box>
-              }
-            ></FormControlLabel>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  type="checkbox"
-                  checked={isCheckedTuesday}
-                  onChange={handleCheckboxChangeTuesday}
-                />
-              }
-              label={
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  gap="12px"
-                  paddingY={'12px'}
-                >
-                  Martes
-                  <Box paddingLeft="17px">
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      {isCheckedTuesday && <SelectSchedule />}
-                    </LocalizationProvider>
+                }
+              ></FormControlLabel>
+            )}
+            {weekdays.includes('Tuesday') && (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    type="checkbox"
+                    checked={isCheckedTuesday}
+                    onChange={handleCheckboxChangeTuesday}
+                  />
+                }
+                label={
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gap="12px"
+                    paddingY={'12px'}
+                  >
+                    Martes
+                    <Box paddingLeft="17px">
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        {isCheckedTuesday && <SelectSchedule />}
+                      </LocalizationProvider>
+                    </Box>
                   </Box>
-                </Box>
-              }
-            ></FormControlLabel>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  type="checkbox"
-                  checked={isCheckedWednesday}
-                  onChange={handleCheckboxChangeWednesday}
-                />
-              }
-              label={
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  gap="12px"
-                  paddingY={'12px'}
-                >
-                  Miércoles
-                  <Box paddingLeft="0px">
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      {isCheckedWednesday && <SelectSchedule />}
-                    </LocalizationProvider>
+                }
+              ></FormControlLabel>
+            )}
+            {weekdays.includes('Wednesday') && (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    type="checkbox"
+                    checked={isCheckedWednesday}
+                    onChange={handleCheckboxChangeWednesday}
+                  />
+                }
+                label={
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gap="12px"
+                    paddingY={'12px'}
+                  >
+                    Miércoles
+                    <Box paddingLeft="0px">
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        {isCheckedWednesday && <SelectSchedule />}
+                      </LocalizationProvider>
+                    </Box>
                   </Box>
-                </Box>
-              }
-            ></FormControlLabel>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  type="checkbox"
-                  checked={isCheckedThursday}
-                  onChange={handleCheckboxChangeThrusday}
-                />
-              }
-              label={
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  gap="12px"
-                  paddingY={'12px'}
-                >
-                  Jueves
-                  <Box paddingLeft="16px">
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      {isCheckedThursday && <SelectSchedule />}
-                    </LocalizationProvider>
+                }
+              ></FormControlLabel>
+            )}
+            {weekdays.includes('Thursday') && (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    type="checkbox"
+                    checked={isCheckedThursday}
+                    onChange={handleCheckboxChangeThrusday}
+                  />
+                }
+                label={
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gap="12px"
+                    paddingY={'12px'}
+                  >
+                    Jueves
+                    <Box paddingLeft="16px">
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        {isCheckedThursday && <SelectSchedule />}
+                      </LocalizationProvider>
+                    </Box>
                   </Box>
-                </Box>
-              }
-            ></FormControlLabel>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  type="checkbox"
-                  checked={isCheckedFriday}
-                  onChange={handleCheckboxChangeFriday}
-                />
-              }
-              label={
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  gap="12px"
-                  paddingY={'12px'}
-                >
-                  Viernes
-                  <Box paddingLeft="13px">
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      {isCheckedFriday && <SelectSchedule />}
-                    </LocalizationProvider>
+                }
+              ></FormControlLabel>
+            )}
+            {weekdays.includes('Friday') && (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    type="checkbox"
+                    checked={isCheckedFriday}
+                    onChange={handleCheckboxChangeFriday}
+                  />
+                }
+                label={
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gap="12px"
+                    paddingY={'12px'}
+                  >
+                    Viernes
+                    <Box paddingLeft="13px">
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        {isCheckedFriday && <SelectSchedule />}
+                      </LocalizationProvider>
+                    </Box>
                   </Box>
-                </Box>
-              }
-            ></FormControlLabel>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  type="checkbox"
-                  checked={isCheckedSaturday}
-                  onChange={handleCheckboxChangeSaturday}
-                />
-              }
-              label={
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  gap="12px"
-                  paddingY={'12px'}
-                >
-                  Sábado
-                  <Box paddingLeft="12px">
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      {isCheckedSaturday && <SelectSchedule />}
-                    </LocalizationProvider>
+                }
+              ></FormControlLabel>
+            )}
+            {weekdays.includes('Saturday') && (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    type="checkbox"
+                    checked={isCheckedSaturday}
+                    onChange={handleCheckboxChangeSaturday}
+                  />
+                }
+                label={
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gap="12px"
+                    paddingY={'12px'}
+                  >
+                    Sábado
+                    <Box paddingLeft="12px">
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        {isCheckedSaturday && <SelectSchedule />}
+                      </LocalizationProvider>
+                    </Box>
                   </Box>
-                </Box>
-              }
-            ></FormControlLabel>
+                }
+              ></FormControlLabel>
+            )}
           </FormGroup>
         </Box>
         {loading === 'failed' && (

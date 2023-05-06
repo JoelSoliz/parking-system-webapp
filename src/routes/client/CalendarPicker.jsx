@@ -1,8 +1,6 @@
 import React from 'react'
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs'
 import { FormControl } from '@mui/material'
 
@@ -88,49 +86,47 @@ const CalendarPicker = (props) => {
   }, [error])
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <FormControl error={error}>
-        <DemoContainer components={['DesktopDatePicker', 'DesktopDatePicker']}>
-          <DemoItem>
-            <DesktopDatePicker
-              label="Fecha de inicio"
-              format="DD/MM/YYYY"
-              value={selectedDateStart}
-              onChange={onDateChangeStart}
-              shouldDisableDate={isWeekend}
-              minDate={today}
-              maxDate={fechaMax()}
-              onError={(newError) => setErrorI(newError)}
-              slotProps={{
-                textField: {
-                  helperText: errorMessage(errorI),
-                },
-              }}
-              required
-            />
-          </DemoItem>
-          <DemoItem>
-            <DesktopDatePicker
-              label="Fecha fin"
-              format="DD/MM/YYYY"
-              value={selectedDateEnd}
-              onChange={onDateChangeEnd}
-              shouldDisableDate={isWeekend}
-              minDate={isDateMin()}
-              maxDate={fechaMax()}
-              onError={(newError) => handleSetError(newError)}
-              slotProps={{
-                textField: {
-                  error: !!error,
-                  helperText: errorMessage(error),
-                },
-              }}
-              required
-            />
-          </DemoItem>
-        </DemoContainer>
-      </FormControl>
-    </LocalizationProvider>
+    <FormControl error={error}>
+      <DemoContainer components={['DesktopDatePicker', 'DesktopDatePicker']}>
+        <DemoItem>
+          <DesktopDatePicker
+            label="Fecha de inicio"
+            format="DD/MM/YYYY"
+            value={selectedDateStart}
+            onChange={onDateChangeStart}
+            shouldDisableDate={isWeekend}
+            minDate={today}
+            maxDate={fechaMax()}
+            onError={(newError) => setErrorI(newError)}
+            slotProps={{
+              textField: {
+                helperText: errorMessage(errorI),
+              },
+            }}
+            required
+          />
+        </DemoItem>
+        <DemoItem>
+          <DesktopDatePicker
+            label="Fecha fin"
+            format="DD/MM/YYYY"
+            value={selectedDateEnd}
+            onChange={onDateChangeEnd}
+            shouldDisableDate={isWeekend}
+            minDate={isDateMin()}
+            maxDate={fechaMax()}
+            onError={(newError) => handleSetError(newError)}
+            slotProps={{
+              textField: {
+                error: !!error,
+                helperText: errorMessage(error),
+              },
+            }}
+            required
+          />
+        </DemoItem>
+      </DemoContainer>
+    </FormControl>
   )
 }
 
