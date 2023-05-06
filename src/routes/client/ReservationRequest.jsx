@@ -19,7 +19,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 import CalendarPicker from './CalendarPicker'
-
+import dayjs from 'dayjs'
 const ReservationRequest = () => {
   const [isCheckedMonday, setIsCheckedMonday] = useState(false)
   const [isCheckedTuesday, setIsCheckedTuesday] = useState(false)
@@ -29,6 +29,18 @@ const ReservationRequest = () => {
   const [isCheckedSaturday, setIsCheckedSaturday] = useState(false)
 
   const [isValid, setIsChecked] = useState(false)
+
+  const [selectedDateStart, setSelectedDateStart] = React.useState(null)
+
+  const [selectedDateEnd, setSelectedDateEnd] = React.useState(null)
+  function handleDateChangeStart(date) {
+    setSelectedDateStart(date)
+  }
+
+  function handleDateChangeEnd(date) {
+    setSelectedDateEnd(date)
+  }
+
   const handleCheckboxChangeMonday = (event) => {
     setIsCheckedMonday(event.target.checked)
     setIsChecked(event.target.checked)
@@ -52,6 +64,26 @@ const ReservationRequest = () => {
   const handleCheckboxChangeSaturday = (event) => {
     setIsCheckedSaturday(event.target.checked)
     setIsChecked(event.target.checked)
+  }
+  const handleGetDaysBetweenDates = () => {
+    const days = []
+    const start = dayjs(selectedDateStart)
+    const end = dayjs(selectedDateEnd)
+    let currentDate = start
+
+    while (currentDate <= end) {
+      const dayName = currentDate.format('dddd')
+      if (dayName !== 'Sunday' && !days.includes(dayName)) {
+        days.push(dayName)
+      }
+      currentDate = currentDate.add(1, 'day')
+    }
+    setIsCheckedMonday(days.includes('Monday'))
+    setIsCheckedTuesday(days.includes('Tuesday'))
+    setIsCheckedWednesday(days.includes('Wednesday'))
+    setIsCheckedThrusday(days.includes('Thursday'))
+    setIsCheckedFriday(days.includes('Friday'))
+    setIsCheckedSaturday(days.includes('Saturday'))
   }
 
   const { user } = useSelector(sessionSelector)
@@ -104,8 +136,28 @@ const ReservationRequest = () => {
           disabled={true}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <CalendarPicker style={{ marginTop: '-8px' }} />
+          <CalendarPicker
+            style={{ marginTop: '-8px' }}
+            selectedDateStart={selectedDateStart}
+            selectedDateEnd={selectedDateEnd}
+            onDateChangeStart={handleDateChangeStart}
+            onDateChangeEnd={handleDateChangeEnd}
+          />
         </LocalizationProvider>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ m: 2.5 }}
+          justifyContent={'center'}
+        >
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleGetDaysBetweenDates}
+          >
+            Seleccionar dias
+          </Button>
+        </Stack>
         <Typography gutterBottom variant="h8" component="div" marginX={'-25px'}>
           Seleccione día(s) y horario(s):
         </Typography>

@@ -4,9 +4,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs'
-import { FormControl, Button, Stack } from '@mui/material'
+import { FormControl } from '@mui/material'
 
-const CalendarPicker = () => {
+const CalendarPicker = (props) => {
   const today = dayjs()
   const fechaMax = () => {
     const gestion1 = dayjs('2023-06-30T00:00:00.000')
@@ -29,9 +29,12 @@ const CalendarPicker = () => {
       return selectedDateStart
     }
   }
-  const [selectedDateStart, setSelectedDateStart] = React.useState(null)
-
-  const [selectedDateEnd, setSelectedDateEnd] = React.useState(null)
+  const {
+    selectedDateStart,
+    selectedDateEnd,
+    onDateChangeStart,
+    onDateChangeEnd,
+  } = props
 
   const handleSetError = (newError) => {
     if (newError) {
@@ -84,23 +87,6 @@ const CalendarPicker = () => {
     return getError
   }, [error])
 
-  const handleGetDaysBetweenDates = () => {
-    const days = []
-    const start = dayjs(selectedDateStart)
-    const end = dayjs(selectedDateEnd)
-    let currentDate = start
-
-    while (currentDate <= end) {
-      const dayName = currentDate.format('dddd')
-      if (dayName !== 'Sunday' && !days.includes(dayName)) {
-        days.push(dayName)
-      }
-      currentDate = currentDate.add(1, 'day')
-    }
-
-    console.log(days)
-  }
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <FormControl error={error}>
@@ -110,7 +96,7 @@ const CalendarPicker = () => {
               label="Fecha de inicio"
               format="DD/MM/YYYY"
               value={selectedDateStart}
-              onChange={(newValue) => setSelectedDateStart(newValue)}
+              onChange={onDateChangeStart}
               shouldDisableDate={isWeekend}
               minDate={today}
               maxDate={fechaMax()}
@@ -128,7 +114,7 @@ const CalendarPicker = () => {
               label="Fecha fin"
               format="DD/MM/YYYY"
               value={selectedDateEnd}
-              onChange={(newValue) => setSelectedDateEnd(newValue)}
+              onChange={onDateChangeEnd}
               shouldDisableDate={isWeekend}
               minDate={isDateMin()}
               maxDate={fechaMax()}
@@ -143,20 +129,6 @@ const CalendarPicker = () => {
             />
           </DemoItem>
         </DemoContainer>
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{ m: 2.5 }}
-          justifyContent={'center'}
-        >
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleGetDaysBetweenDates}
-          >
-            Seleccionar dias
-          </Button>
-        </Stack>
       </FormControl>
     </LocalizationProvider>
   )
