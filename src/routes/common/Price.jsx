@@ -16,11 +16,15 @@ const MenuProps = {
     },
 };
 const Price = () => {
+    const [type, setType] = React.useState('');
     const [hour, setHour] = React.useState('');
     const [day, setDay] = React.useState('');
     const [month, setMonth] = React.useState('');
     const handleHour = (event) => {
         setHour(event.target.value);
+    };
+    const handleType = (event) => {
+        setType(event.target.value);
     };
     const handleDay = (event) => {
         setDay(event.target.value);
@@ -28,19 +32,33 @@ const Price = () => {
     const handleMonth = (event) => {
         setMonth(event.target.value);
     };
-    function precio(hora, dia, mes) {
+    function total(hora, dia, mes, cost) {
         let costo
         if (hora != '' && dia == '' && mes == '') {
-            costo = hora * 3
+            costo = hora * cost
         } else {
-            costo = hora * dia * mes * 3
-
+            if (hora != '' && dia != '' && mes == '') {
+                costo = hora * dia * cost
+            } else {
+                costo = hora * dia * mes * cost
+            }
         }
-
-
         return costo
     }
-    const total = precio(hour, day, month)
+    function precio(hour, day, month, type) {
+        let costo
+        if (type == 'privilegiado') {
+            costo = total(hour, day, month, 6)
+        }
+        if (type == 'regular') {
+            costo = total(hour, day, month, 4)
+        }
+        if (type == 'comun') {
+            costo = total(hour, day, month, 2)
+        }
+        return costo
+    }
+    //const total = precio()
     return (
         <Layout title="price">
             <Box alignItems="center"
@@ -57,18 +75,52 @@ const Price = () => {
                         variant="h6"
                         component="div"
                         align='left'
-                        sx={{ m: 0 }}
+                        sx={{ m: 0, marginY: 2 }}
                     >
-                        Averigue el costo de estacionamiento en los parqueos de San Simon
+                        Actualmente los precios del estacionamiento varia según las siguientes categorias:
                     </Typography>
                     <Typography
                         gutterBottom
-                        variant="h5"
+                        variant="h6"
                         component="div"
                         align='left'
-                        sx={{ m: 0, marginTop: 1 }}
+                        sx={{ m: 0 }}
                     >
-                        1 Hora: 3 bs.
+                        <Typography gutterBottom
+                            variant="h6"
+                            component="div"
+                            align='left'
+                            sx={{ m: 0 }} style={{ fontWeight: 'bold' }}>Categoria Privilegiada:</Typography>
+                        Zona especial, ubicada cerca de la entrada/salida del estacionamiento.
+                        Precio: 6 bs/hrs
+                    </Typography>
+                    <Typography
+                        gutterBottom
+                        variant="h6"
+                        component="div"
+                        align='left'
+                        sx={{ m: 0 }}
+                    ><Typography gutterBottom
+                        variant="h6"
+                        component="div"
+                        align='left'
+                        sx={{ m: 0 }} style={{ fontWeight: 'bold' }}>Categoria Regular: </Typography>
+                        Zona disponible para todos los usuarios del estacionamiento de la institución.
+                        Precio: 4bs/hrs
+                    </Typography>
+                    <Typography
+                        gutterBottom
+                        variant="h6"
+                        component="div"
+                        align='left'
+                        sx={{ m: 0 }}
+                    ><Typography gutterBottom
+                        variant="h6"
+                        component="div"
+                        align='left'
+                        sx={{ m: 0 }} style={{ fontWeight: 'bold' }}>Categoria Común:</Typography>
+                        Categoria Común: Zona diaponible para cualquier usuario, ubicada en la parte final del estacionamiento, sin ningun tipo de beneficio.
+                        Pecio: 3 bs/hrs
                     </Typography>
                     <Box
                         component="form"
@@ -82,6 +134,22 @@ const Price = () => {
                         justifyContent="center"
                     >
                         <div>
+                            <FormControl sx={{ m: 1, minWidth: 200 }}>
+                                <InputLabel id="demo-simple-select-helper-label">Categoria</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-helper-label"
+                                    id="demo-simple-select-helper"
+                                    value={type}
+                                    label="Catregoria"
+                                    onChange={handleType}
+                                    MenuProps={MenuProps}
+                                >
+                                    <MenuItem value={'privilegiado'}>Privilegiado</MenuItem>
+                                    <MenuItem value={'regular'}>Regular</MenuItem>
+                                    <MenuItem value={'comun'}>Comun</MenuItem>
+                                </Select>
+                                <FormHelperText></FormHelperText>
+                            </FormControl>
                             <FormControl sx={{ m: 1, minWidth: 200 }}>
                                 <InputLabel id="demo-simple-select-helper-label">Horas</InputLabel>
                                 <Select
@@ -192,7 +260,7 @@ const Price = () => {
                             fontSize: '0.875rem',
                             fontWeight: '700',
                         }} >
-                            TOTAL Bs. {total}
+                            TOTAL Bs. {precio(hour, day, month, type)}
                         </Typography>
                     </Box>
                 </CardContent>
