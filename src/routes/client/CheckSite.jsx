@@ -61,7 +61,7 @@ const CheckSite = () => {
               <Box>
                 <Typography
                   gutterBottom
-                  variant="h6"
+                  variant="h5"
                   component="div"
                   align="center"
                   fontWeight="bold"
@@ -96,24 +96,34 @@ const CheckSite = () => {
                   plugins={[dayGridPlugin, timeGridPlugin]}
                   initialView="timeGridWeek"
                   hiddenDays={[0]}
-                  height={'600px'}
+                  height={'auto'}
+                  contentHeight={2.5 * 50}
                   locale={esLocale}
-                  headerToolbar={{
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay',
-                  }}
                   fixedWeekCount={false}
-                  contentHeight={5 * 50}
-                  slotMinTime="08:00:00"
-                  slotMaxTime="18:00:00"
-                  slotDuration="00:30:00"
+                  headerToolbar={{
+                    end: 'title',
+                    start:
+                      'dayGridMonth,timeGridWeek,timeGridDay prev,next today',
+                  }}
+                  navLinks={true}
+                  slotMinTime="06:30:00"
+                  slotMaxTime="22:00:00"
+                  slotDuration="1:00:00"
                   slotLabelFormat={{
                     hour: 'numeric',
                     minute: '2-digit',
-                    omitZeroMinute: true,
+                    meridiem: 'short',
+                    omitZeroMinute: false,
                     hour12: false,
                   }}
+                  validRange={() => ({
+                    start: new Date(
+                      new Date().getFullYear(),
+                      new Date().getMonth(),
+                      1,
+                    ),
+                    end: new Date(new Date().getFullYear(), 6, 32),
+                  })}
                   events={[
                     {
                       title: 'Event 1',
