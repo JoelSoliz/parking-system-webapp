@@ -58,23 +58,12 @@ const CheckSite = () => {
     setIsChecked(event.target.checked)
   }
   const { selectedReservation } = useSelector(reservationsSelector)
-  console.log(
-    generateEvents(
-      selectedReservation.days,
-      selectedReservation.reservations.start_date,
-      selectedReservation.reservations.end_date,
-      'Reserva Cliente',
-      'blue',
-    ),
-  )
-  console.log(selectedReservation.days)
 
   const { data } = useGetDaysBySpotQuery({
     id: selectedReservation.parkings_spots.id_spot,
     startDate: selectedReservation.reservations.start_date,
     endDate: selectedReservation.reservations.end_date,
   })
-  console.log()
 
   const otherEvents = useMemo(
     () =>
@@ -89,8 +78,6 @@ const CheckSite = () => {
         : [],
     [data],
   )
-  console.log(data)
-  console.log(otherEvents)
 
   return (
     <Box width="55%" paddingX="60px" margin={'15px'}>

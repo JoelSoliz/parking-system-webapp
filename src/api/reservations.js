@@ -39,7 +39,6 @@ export const reservationAPI = createApi({
   endpoints: (builder) => ({
     getDaysBySpot: builder.query({
       query: ({ id, startDate, endDate }) => {
-        console.log('Hola Joel')
         let token = localStorage.getItem('token')
 
         return {
