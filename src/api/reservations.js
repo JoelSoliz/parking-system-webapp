@@ -1,3 +1,4 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 const HOST = 'https://parking-system-api-production-f442.up.railway.app'
 
 export const getReservationAsync = async (id, token) => {
@@ -29,3 +30,25 @@ export const getReservationsAsync = async (page, token) => {
       throw e
     })
 }
+
+export const reservationAPI = createApi({
+  reducerPath: 'reservationAPI',
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'https://parking-system-api-production-f442.up.railway.app',
+  }),
+  endpoints: (builder) => ({
+    getDaysBySpot: builder.query({
+      query: ({ id, startDate, endDate }) => {
+        let token = localStorage.getItem('token')
+
+        return {
+          url: `/reservation/spot/${id}?start_date=${startDate}&end_date=${endDate}`,
+          method: 'GET',
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      },
+    }),
+  }),
+})
+
+export const { useGetDaysBySpotQuery } = reservationAPI
