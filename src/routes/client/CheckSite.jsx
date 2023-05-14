@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Card, Button, TextField, Typography, Box, Stack } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import FullCalendar from '@fullcalendar/react'
@@ -7,6 +7,49 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import esLocale from '@fullcalendar/core/locales/es.js'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
+import { useSelector } from 'react-redux'
+import { reservationsSelector } from '../../store/slices/reservations'
+import { useGetDaysBySpotQuery } from '../../api/reservations'
+
+function generateEvents(dayList, startDate, endDate, title, backgroundColor) {
+  const dateTimeList = []
+  const dayMap = {
+    sunday: 0,
+    monday: 1,
+    tuesday: 2,
+    wednesday: 3,
+    thursday: 4,
+    friday: 5,
+    saturday: 6,
+  }
+
+  const start = new Date(startDate + ' EST')
+  const end = new Date(endDate + 'EST')
+
+  for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+    const dayOfWeek = d.getDay()
+    const dayName =
+      Object.keys(dayMap)[Object.values(dayMap).indexOf(dayOfWeek)]
+    const day = dayList.find((item) => item.day.toLowerCase() === dayName)
+
+    if (day) {
+      const startDateTime = new Date(d)
+      const [startHour, startMin, startSec] = day.start_time.split(':')
+      startDateTime.setHours(startHour, startMin, startSec)
+      const endDateTime = new Date(d)
+      const [endHour, endMin, endSec] = day.end_time.split(':')
+      endDateTime.setHours(endHour, endMin, endSec)
+      dateTimeList.push({
+        title,
+        start: startDateTime,
+        end: endDateTime,
+        backgroundColor,
+      })
+    }
+  }
+
+  return dateTimeList
+}
 
 const CheckSite = () => {
   const navigate = useNavigate()
@@ -14,6 +57,41 @@ const CheckSite = () => {
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked)
   }
+  const { selectedReservation } = useSelector(reservationsSelector)
+  console.log(
+    generateEvents(
+      selectedReservation.days,
+      selectedReservation.reservations.start_date,
+      selectedReservation.reservations.end_date,
+      'Reserva Cliente',
+      'blue',
+    ),
+  )
+  console.log(selectedReservation.days)
+
+  const { data } = useGetDaysBySpotQuery({
+    id: selectedReservation.parkings_spots.id_spot,
+    startDate: selectedReservation.reservations.start_date,
+    endDate: selectedReservation.reservations.end_date,
+  })
+  console.log()
+
+  const otherEvents = useMemo(
+    () =>
+      data
+        ? generateEvents(
+            data?.week_days || [],
+            selectedReservation.reservations.start_date,
+            selectedReservation.reservations.end_date,
+            'Reservado',
+            'red',
+          )
+        : [],
+    [data],
+  )
+  console.log(data)
+  console.log(otherEvents)
+
   return (
     <Box width="55%" paddingX="60px" margin={'15px'}>
       <Card
@@ -39,23 +117,28 @@ const CheckSite = () => {
             Verificar sitio
           </Typography>
         </Box>
+
         <TextField
           label="Código de espacio"
-          value={'DOC117'}
+          value={`${selectedReservation?.parkings_spots?.name}`}
           variant="outlined"
           disabled={true}
         />
         <Box display="flex" direction="row" letterSpacing={1}>
           <TextField
             label="Fecha de inicio"
-            value={'9/May/2023'}
+            value={`${new Date(
+              selectedReservation?.reservations.start_date + ' EST',
+            ).toLocaleDateString('es-ES')}`}
             type={'text'}
             disabled={true}
             style={{ flexGrow: 1, flexShrink: 1, marginRight: '10px' }}
           />
           <TextField
             label="Fecha fin"
-            value={'16/May/2023'}
+            value={`${new Date(
+              selectedReservation?.reservations.end_date + ' EST',
+            ).toLocaleDateString('es-ES')}`}
             type={'text'}
             disabled={true}
             style={{ flexGrow: 1, flexShrink: 1 }}
@@ -97,38 +180,13 @@ const CheckSite = () => {
               ),
               end: new Date(new Date().getFullYear(), 11, 32),
             })}
-            events={[
-              {
-                title: 'Reserva 1',
-                start: '2023-05-01T09:00:00',
-                end: '2023-05-01T11:00:00',
-                backgroundColor: 'green',
-              },
-              {
-                title: 'Reserva 1',
-                start: '2023-05-08T09:00:00',
-                end: '2023-05-08T11:00:00',
-                backgroundColor: 'green',
-              },
-              {
-                title: 'Reserva 1',
-                start: '2023-05-15T09:00:00',
-                end: '2023-05-15T11:00:00',
-                backgroundColor: 'green',
-              },
-              {
-                title: 'Event 10',
-                start: '2023-06-01T10:00:00',
-                end: '2023-06-01T12:00:00',
-                backgroundColor: 'blue',
-              },
-              {
-                title: 'Event 3',
-                start: '2023-05-11T14:00:00',
-                end: '2023-05-11T16:00:00',
-                backgroundColor: 'red',
-              },
-            ]}
+            events={generateEvents(
+              selectedReservation.days,
+              selectedReservation.reservations.start_date,
+              selectedReservation.reservations.end_date,
+              'Reserva Cliente',
+              'blue',
+            ).concat(otherEvents)}
           />
         </Card>
         <FormControlLabel
@@ -144,13 +202,18 @@ const CheckSite = () => {
               solicitadas."
         />
         <Stack direction="row" spacing={2} justifyContent={'center'}>
-          <Button variant="contained" color="secondary" disabled={!isValid}>
+          <Button
+            variant="contained"
+            color="secondary"
+            disabled={!isValid}
+            onClick={() => alert('Asignar sitio')}
+          >
             Asignar sitio
           </Button>
           <Button
             variant="contained"
             color="secondary"
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/admin/requests')}
           >
             Volver a solicitud
           </Button>

@@ -7,6 +7,7 @@ import reservationsReducer from './slices/reservations'
 import sessionReducer from './slices/session'
 import { vehicleAPI } from '../api/vehicle'
 import { customerAPI } from '../api/customer'
+import { reservationAPI } from '../api/reservations'
 
 const sessionPersistConfig = {
   key: 'session',
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   session: persistReducer(sessionPersistConfig, sessionReducer),
   [vehicleAPI.reducerPath]: vehicleAPI.reducer,
   [customerAPI.reducerPath]: customerAPI.reducer,
+  [reservationAPI.reducerPath]: reservationAPI.reducer,
 })
 
 export default rootReducer

@@ -115,13 +115,13 @@ const RequestList = () => {
                           </TableCell>
                           <TableCell>
                             {new Date(
-                              reservation.start_date,
+                              reservation.start_date + ' EST',
                             ).toLocaleDateString('es-ES')}
                           </TableCell>
                           <TableCell>
-                            {new Date(reservation.end_date).toLocaleDateString(
-                              'es-ES',
-                            )}
+                            {new Date(
+                              reservation.end_date + ' EST',
+                            ).toLocaleDateString('es-ES')}
                           </TableCell>
                         </TableRow>
                       )
