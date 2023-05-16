@@ -65,18 +65,6 @@ const NavBar = () => {
                       >
                         Registrar Vehículo
                       </Link>
-                      <Link
-                        style={{ color: '#fff', textDecoration: 'none' }}
-                        to={'/request'}
-                      >
-                        Solicitar Reserva
-                      </Link>
-                      <Link
-                        style={{ color: '#fff', textDecoration: 'none' }}
-                        to={'/check'}
-                      >
-                        Verificar Sitio
-                      </Link>
                     </>
                   )}
                   {['ADMN', 'EMPL'].includes(user?.role) && (
@@ -169,22 +157,7 @@ const NavBar = () => {
                         </Link>
                       </MenuItem>
                     )}
-                    <MenuItem onClick={handleClose}>
-                      <Link
-                        style={{ color: '#333', textDecoration: 'none' }}
-                        to={'/request'}
-                      >
-                        Solicitar Reserva
-                      </Link>
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                      <Link
-                        style={{ color: '#333', textDecoration: 'none' }}
-                        to={'/check'}
-                      >
-                        Verificar Sitio
-                      </Link>
-                    </MenuItem>
+
                     <MenuItem onClick={handleClose}>
                       <Button
                         style={{

@@ -1,8 +1,10 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Button } from '@mui/material'
 import React from 'react'
 import { FeatureGroup, Polygon, Popup } from 'react-leaflet'
+import { useNavigate } from 'react-router-dom'
 
 const Spot = ({ value }) => {
+  const navigate = useNavigate()
   const getFeatureStyle = (feature) => {
     const { properties } = feature
 
@@ -36,6 +38,23 @@ const Spot = ({ value }) => {
           <Typography>
             <strong>Estado:</strong> {getStatus(value.properties.status)}
           </Typography>
+
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginTop: 1,
+              paddingLeft: '5px',
+            }}
+          >
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => navigate('/request')}
+            >
+              Solicitar
+            </Button>
+          </Box>
         </Box>
       </Popup>
       <Polygon

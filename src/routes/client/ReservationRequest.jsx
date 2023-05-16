@@ -19,6 +19,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 import CalendarPicker from './CalendarPicker'
+import { reservationsSelector } from '../../store/slices/reservations'
 
 function daysBetweenDates(date1, date2) {
   const oneDayMs = 24 * 60 * 60 * 1000
@@ -96,6 +97,7 @@ const ReservationRequest = () => {
   }
 
   const { user } = useSelector(sessionSelector)
+  const { selectedReservation } = useSelector(reservationsSelector)
   const navigate = useNavigate()
   const { loading } = useSelector(sessionSelector)
   return (
@@ -119,7 +121,13 @@ const ReservationRequest = () => {
             Solicitud de reserva
           </Typography>
         </CardContent>
-        <TextField label="Código de Sitio" variant="outlined" disabled={true} />
+        <TextField
+          label="Id del espacio"
+          variant="outlined"
+          type={'text'}
+          disabled={true}
+          value={`${selectedReservation?.parkings_spots?.id_spot}`}
+        />
 
         <TextField
           value={user?.name}
