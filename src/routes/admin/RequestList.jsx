@@ -29,7 +29,7 @@ const RequestList = () => {
   const [page, setPage] = React.useState(1)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [openModal, setOpenModal] = React.useState(false)
-
+  console.log(reservations)
   useEffect(() => {
     dispatch(getReservations(page))
   }, [page])
@@ -98,7 +98,7 @@ const RequestList = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {reservations.map((reservation) => {
+                    {reservations.map(({ reservation }) => {
                       return (
                         <TableRow
                           hover

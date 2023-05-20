@@ -14,7 +14,7 @@ import RequestList from '../../routes/admin/RequestList'
 import UserList from '../../routes/admin/UserList'
 import ReservationRequest from '../../routes/client/ReservationRequest'
 import CheckSite from '../../routes/client/CheckSite'
-
+import ErrorBoundary from './ErrorBoundary'
 const Router = () => {
   return (
     <Routes>
@@ -47,7 +47,9 @@ const Router = () => {
           path="requests"
           element={
             <PrivateRoute needed_permission={['EMPL', 'ADMN']}>
-              <RequestList />
+              <ErrorBoundary>
+                <RequestList />
+              </ErrorBoundary>
             </PrivateRoute>
           }
         />
