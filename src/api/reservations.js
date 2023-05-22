@@ -74,6 +74,17 @@ export const reservationAPI = createApi({
         }
       },
     }),
+    rejectReservation: builder.mutation({
+      query: ({ id }) => {
+        let token = localStorage.getItem('token')
+
+        return {
+          url: `/reservation/rejected/${id}`,
+          method: 'PUT',
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      },
+    }),
   }),
 })
 
@@ -81,4 +92,5 @@ export const {
   useGetDaysBySpotQuery,
   useAcceptReservationMutation,
   useRegisterReservationMutation,
+  useRejectReservationMutation,
 } = reservationAPI
