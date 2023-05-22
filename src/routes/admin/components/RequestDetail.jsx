@@ -20,6 +20,12 @@ import DateRangeIcon from '@mui/icons-material/DateRange'
 import EventIcon from '@mui/icons-material/Event'
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded'
 import { useNavigate } from 'react-router-dom'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
+import CancelIcon from '@mui/icons-material/Cancel'
+import InfoIcon from '@mui/icons-material/Info'
+import TaskAltIcon from '@mui/icons-material/TaskAlt'
+import HighlightOffIcon from '@mui/icons-material/HighlightOff'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
@@ -56,10 +62,10 @@ const RequestDetail = ({ open, onClose }) => {
             <Fade in={open}>
               <Card>
                 <Box display="flex" flexDirection="row">
-                  <CardContent style={{ padding: 40 }} sx={{ height: 430 }}>
-                    <Box marginBottom={'10px'}>
-                      <Typography color="black" variant="h4" align="center">
-                        Detalles
+                  <CardContent style={{ padding: 40 }}>
+                    <Box marginBottom={'15px'}>
+                      <Typography color="black" variant="h5" align="center">
+                        <strong>DETALLES</strong>
                       </Typography>
                     </Box>
 
@@ -169,26 +175,35 @@ const RequestDetail = ({ open, onClose }) => {
                         {`${selectedReservation?.parkings_spots?.name}`}
                       </Typography>
                     </Box>
-                    <Stack
-                      direction="row"
-                      sx={{ m: 2.5 }}
-                      justifyContent={'center'}
+                    <Box
+                      justifyContent="center"
+                      display={'flex'}
+                      paddingTop={'20px'}
                     >
                       <Button
+                        sx={{
+                          width: '200px',
+                          height: '40px',
+                          paddingTop: '5px',
+                          paddingLeft: '20px',
+                        }}
                         variant="contained"
                         color="secondary"
                         onClick={() => navigate('/check')}
+                        startIcon={
+                          <CheckCircleOutlineIcon style={{ color: 'white' }} />
+                        }
                       >
                         Verificar sitio
                       </Button>
-                    </Stack>
+                    </Box>
                   </CardContent>
                   <Box>
                     <CardContent
-                      style={{ padding: 20 }}
+                      style={{ padding: 40 }}
                       sx={{
-                        width: 270,
-                        height: 430,
+                        width: 290,
+                        height: 440,
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'center',
@@ -196,29 +211,95 @@ const RequestDetail = ({ open, onClose }) => {
                         background: '#f0f5ff',
                       }}
                     >
-                      <Box marginBottom={'20px'}>
-                        <Typography color="black" variant="h5" align="center">
-                          ¿Desea aceptar/rechazar la solicitud?
-                        </Typography>
-                      </Box>
-                      <Stack justifyContent="center" container spacing={2}>
-                        <Button
-                          sx={{ width: '200px', height: '40px' }}
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => alert('Se aceptó la solicitud')}
-                        >
-                          Aceptar
-                        </Button>
-                        <Button
-                          sx={{ width: '200px', height: '40px' }}
-                          variant="contained"
-                          color="secondary"
-                          onClick={onClose}
-                        >
-                          Rechazar
-                        </Button>
-                      </Stack>
+                      {selectedReservation?.status == 'Occupied' && (
+                        <>
+                          <TaskAltIcon
+                            sx={{ fontSize: 100, color: '#00CC00' }}
+                          />
+                          <Typography
+                            color="black"
+                            variant="h5"
+                            align="center"
+                            paddingLeft="10px"
+                            paddingTop={'10px'}
+                            style={{ fontSize: '1.2rem', fontWeight: 'bold' }}
+                          >
+                            La solicitud fue aceptada
+                          </Typography>
+                        </>
+                      )}
+                      {selectedReservation?.status == 'Available' && (
+                        <>
+                          <HighlightOffIcon
+                            sx={{ fontSize: 100, color: '#FF3333' }}
+                          />
+                          <Typography
+                            color="black"
+                            variant="h6"
+                            align="center"
+                            paddingLeft="10px"
+                            paddingTop={'10px'}
+                            style={{ fontSize: '1.2rem', fontWeight: 'bold' }}
+                          >
+                            La solitud fue rechazada
+                          </Typography>
+                        </>
+                      )}
+                      {selectedReservation?.status == 'Reserved' && (
+                        <>
+                          <Box marginBottom={'15px'}>
+                            <Typography
+                              color="black"
+                              variant="h5"
+                              align="center"
+                            >
+                              <strong>SOLICITUD</strong>
+                            </Typography>
+                          </Box>
+                          <Box display="flex">
+                            <InfoIcon />
+                            <Typography
+                              color="black"
+                              variant="h7"
+                              paddingLeft={'5px'}
+                              marginBottom={'13px'}
+                            >
+                              Para aceptar la solicitud, es necesario verificar
+                              el sitio.
+                            </Typography>
+                          </Box>
+                          <Stack justifyContent="center" container spacing={3}>
+                            <Button
+                              sx={{
+                                width: '190px',
+                                height: '40px',
+                                paddingTop: '5px',
+                              }}
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => navigate('/check')}
+                              startIcon={
+                                <CheckCircleIcon style={{ color: 'white' }} />
+                              }
+                            >
+                              Aceptar
+                            </Button>
+                            <Button
+                              sx={{
+                                width: '190px',
+                                height: '40px',
+                                paddingTop: '5px',
+                              }}
+                              variant="contained"
+                              color="secondary"
+                              onClick={onClose}
+                              startIcon={<CancelIcon />}
+                            >
+                              Rechazar
+                            </Button>
+                          </Stack>
+                        </>
+                      )}
                     </CardContent>
                   </Box>
                 </Box>

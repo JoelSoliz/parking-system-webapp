@@ -32,7 +32,14 @@ const Router = () => {
           }
         />
         <Route path="request" element={<ReservationRequest />} />
-        <Route path="check" element={<CheckSite />} />
+        <Route
+          path="check"
+          element={
+            <ErrorBoundary>
+              <CheckSite />
+            </ErrorBoundary>
+          }
+        />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route

@@ -1,15 +1,18 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { Card, Button, TextField, Typography, Box, Stack } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import esLocale from '@fullcalendar/core/locales/es.js'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { reservationsSelector } from '../../store/slices/reservations'
-import { useGetDaysBySpotQuery } from '../../api/reservations'
+import {
+  useAcceptReservationMutation,
+  useGetDaysBySpotQuery,
+} from '../../api/reservations'
+import { toast } from 'sonner'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 
 function generateEvents(dayList, startDate, endDate, title, backgroundColor) {
   const dateTimeList = []
@@ -52,11 +55,10 @@ function generateEvents(dayList, startDate, endDate, title, backgroundColor) {
 }
 
 const CheckSite = () => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [isValid, setIsChecked] = useState(false)
-  const handleCheckboxChange = (event) => {
-    setIsChecked(event.target.checked)
-  }
+  const [isValid, setIsValid] = useState(false)
+
   const { selectedReservation } = useSelector(reservationsSelector)
 
   const { data } = useGetDaysBySpotQuery({
@@ -64,7 +66,10 @@ const CheckSite = () => {
     startDate: selectedReservation.reservations.start_date,
     endDate: selectedReservation.reservations.end_date,
   })
-
+  const [
+    acceptReservation,
+    { data: dataAR, isLoading, error, isSuccess, reset, isError },
+  ] = useAcceptReservationMutation()
   const otherEvents = useMemo(
     () =>
       data
@@ -72,12 +77,52 @@ const CheckSite = () => {
             data?.week_days || [],
             selectedReservation.reservations.start_date,
             selectedReservation.reservations.end_date,
-            'Reservado',
+            'Ocupado',
             'red',
           )
         : [],
     [data],
   )
+
+  const reservationEvents = generateEvents(
+    selectedReservation.days,
+    selectedReservation.reservations.start_date,
+    selectedReservation.reservations.end_date,
+    'Reserva Cliente',
+    'blue',
+  )
+
+  const hasCollision = useMemo(() => {
+    for (const reservationEvent of reservationEvents) {
+      for (const otherEvent of otherEvents) {
+        if (
+          reservationEvent.start < otherEvent.end &&
+          reservationEvent.end > otherEvent.start
+        ) {
+          return true
+        }
+      }
+    }
+    return false
+  }, [reservationEvents, otherEvents])
+
+  if (hasCollision && isValid) {
+    setIsValid(false)
+  } else if (!hasCollision && !isValid) {
+    setIsValid(true)
+  }
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(`El sitio fue asignado correctamente.`)
+    } else if (isError) {
+      toast.error(
+        `Los datos no se guardaron correctamente. ${
+          error.data?.detail || error.data
+        }`,
+      )
+    }
+    return () => reset()
+  }, [dataAR, error])
 
   return (
     <Box width="55%" paddingX="60px" margin={'15px'}>
@@ -90,6 +135,7 @@ const CheckSite = () => {
           gap: 3,
           borderRadius: '15px',
           border: 5,
+          marginBottom: '100px',
         }}
         style={{ borderColor: '#90b4ce' }}
       >
@@ -167,44 +213,55 @@ const CheckSite = () => {
               ),
               end: new Date(new Date().getFullYear(), 11, 32),
             })}
-            events={generateEvents(
-              selectedReservation.days,
-              selectedReservation.reservations.start_date,
-              selectedReservation.reservations.end_date,
-              'Reserva Cliente',
-              'blue',
-            ).concat(otherEvents)}
+            events={reservationEvents.concat(otherEvents)}
           />
         </Card>
-        <FormControlLabel
-          control={
-            <Checkbox
-              type="checkbox"
-              checked={isValid}
-              onChange={handleCheckboxChange}
-              color="primary"
-            />
-          }
-          label="El sitio está disponible los días y las horas
-              solicitadas."
-        />
-        <Stack direction="row" spacing={2} justifyContent={'center'}>
-          <Button
-            variant="contained"
-            color="secondary"
-            disabled={!isValid}
-            onClick={() => alert('Asignar sitio')}
-          >
-            Asignar sitio
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => navigate('/admin/requests')}
-          >
-            Volver a solicitud
-          </Button>
-        </Stack>
+        {hasCollision ? (
+          <Typography variant="body1" color="error" align="center">
+            El sitio está ocupado en el horario solicitado.
+          </Typography>
+        ) : (
+          <Typography variant="body1" color="success" align="center">
+            El sitio está disponible en el horario solicitado.
+          </Typography>
+        )}
+        {isLoading ? (
+          <Typography textAlign="center">Realizando accion...</Typography>
+        ) : (
+          <Stack direction="row" spacing={2} justifyContent={'center'}>
+            {(selectedReservation?.status == 'Reserved' ||
+              dataAR?.status != 'Occupied') && (
+              <Button
+                variant="contained"
+                color="secondary"
+                disabled={!isValid}
+                onClick={() =>
+                  dispatch(
+                    acceptReservation({
+                      id: selectedReservation?.reservations?.id_reservation,
+                    }),
+                  )
+                }
+                startIcon={
+                  <CheckCircleOutlineIcon style={{ color: 'white' }} />
+                }
+              >
+                Asignar sitio
+              </Button>
+            )}
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() =>
+                navigate(
+                  `/admin/requests?modal=open&reservation-id=${selectedReservation?.reservations?.id_reservation}`,
+                )
+              }
+            >
+              Volver a solicitud
+            </Button>
+          </Stack>
+        )}
       </Card>
     </Box>
   )
