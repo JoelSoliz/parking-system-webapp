@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { styled } from '@mui/material/styles'
 
 import {
@@ -12,7 +12,7 @@ import {
   CardContent,
   CircularProgress,
 } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { reservationsSelector } from '../../../store/slices/reservations'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import BadgeIcon from '@mui/icons-material/Badge'
@@ -26,6 +26,7 @@ import InfoIcon from '@mui/icons-material/Info'
 import TaskAltIcon from '@mui/icons-material/TaskAlt'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import { useRejectReservationMutation } from '../../../api/reservations'
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
@@ -42,9 +43,24 @@ const StyledModal = styled(Modal)(({ theme }) => ({
 }))
 
 const RequestDetail = ({ open, onClose }) => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const { loading, selectedReservation } = useSelector(reservationsSelector)
+  const [showRejectionMessage, setShowRejectionMessage] = React.useState(false)
+  const [hideRequests, sethideRequests] = React.useState(true)
+  //const [acceptRequests, setAcceptRequests] = React.useState(false)
 
+  const [
+    rejectReservation,
+    { data: dataAR, isLoading, error, isSuccess, reset },
+  ] = useRejectReservationMutation()
+  useEffect(() => {
+    if (isSuccess) {
+      setShowRejectionMessage(true)
+      sethideRequests(false)
+    }
+    return () => reset()
+  }, [dataAR, error])
   return (
     <>
       {loading === 'pending' ? (
@@ -211,93 +227,126 @@ const RequestDetail = ({ open, onClose }) => {
                         background: '#f0f5ff',
                       }}
                     >
-                      {selectedReservation?.status == 'Occupied' && (
+                      {isLoading ? (
+                        <Typography textAlign="center">
+                          Realizando accion...
+                        </Typography>
+                      ) : (
                         <>
-                          <TaskAltIcon
-                            sx={{ fontSize: 100, color: '#00CC00' }}
-                          />
-                          <Typography
-                            color="black"
-                            variant="h5"
-                            align="center"
-                            paddingLeft="10px"
-                            paddingTop={'10px'}
-                            style={{ fontSize: '1.2rem', fontWeight: 'bold' }}
-                          >
-                            La solicitud fue aceptada
-                          </Typography>
-                        </>
-                      )}
-                      {selectedReservation?.status == 'Available' && (
-                        <>
-                          <HighlightOffIcon
-                            sx={{ fontSize: 100, color: '#FF3333' }}
-                          />
-                          <Typography
-                            color="black"
-                            variant="h6"
-                            align="center"
-                            paddingLeft="10px"
-                            paddingTop={'10px'}
-                            style={{ fontSize: '1.2rem', fontWeight: 'bold' }}
-                          >
-                            La solitud fue rechazada
-                          </Typography>
-                        </>
-                      )}
-                      {selectedReservation?.status == 'Reserved' && (
-                        <>
-                          <Box marginBottom={'15px'}>
-                            <Typography
-                              color="black"
-                              variant="h5"
-                              align="center"
-                            >
-                              <strong>SOLICITUD</strong>
-                            </Typography>
-                          </Box>
-                          <Box display="flex">
-                            <InfoIcon />
-                            <Typography
-                              color="black"
-                              variant="h7"
-                              paddingLeft={'5px'}
-                              marginBottom={'13px'}
-                            >
-                              Para aceptar la solicitud, es necesario verificar
-                              el sitio.
-                            </Typography>
-                          </Box>
-                          <Stack justifyContent="center" container spacing={3}>
-                            <Button
-                              sx={{
-                                width: '190px',
-                                height: '40px',
-                                paddingTop: '5px',
-                              }}
-                              variant="contained"
-                              color="secondary"
-                              onClick={() => navigate('/check')}
-                              startIcon={
-                                <CheckCircleIcon style={{ color: 'white' }} />
-                              }
-                            >
-                              Aceptar
-                            </Button>
-                            <Button
-                              sx={{
-                                width: '190px',
-                                height: '40px',
-                                paddingTop: '5px',
-                              }}
-                              variant="contained"
-                              color="secondary"
-                              onClick={onClose}
-                              startIcon={<CancelIcon />}
-                            >
-                              Rechazar
-                            </Button>
-                          </Stack>
+                          {selectedReservation?.status == 'Occupied' && (
+                            <>
+                              <TaskAltIcon
+                                sx={{ fontSize: 100, color: '#00CC00' }}
+                              />
+                              <Typography
+                                color="black"
+                                variant="h5"
+                                align="center"
+                                paddingLeft="10px"
+                                paddingTop={'10px'}
+                                style={{
+                                  fontSize: '1.2rem',
+                                  fontWeight: 'bold',
+                                }}
+                              >
+                                La solicitud fue aceptada
+                              </Typography>
+                            </>
+                          )}
+
+                          {(showRejectionMessage ||
+                            selectedReservation?.status == 'Available') && (
+                            <>
+                              <HighlightOffIcon
+                                sx={{ fontSize: 100, color: '#FF3333' }}
+                              />
+                              <Typography
+                                color="black"
+                                variant="h6"
+                                align="center"
+                                paddingLeft="10px"
+                                paddingTop={'10px'}
+                                style={{
+                                  fontSize: '1.2rem',
+                                  fontWeight: 'bold',
+                                }}
+                              >
+                                La solitud fue rechazada
+                              </Typography>
+                            </>
+                          )}
+
+                          {hideRequests &&
+                            selectedReservation?.status == 'Reserved' && (
+                              <>
+                                <Box marginBottom={'15px'}>
+                                  <Typography
+                                    color="black"
+                                    variant="h5"
+                                    align="center"
+                                  >
+                                    <strong>SOLICITUD</strong>
+                                  </Typography>
+                                </Box>
+                                <Box display="flex">
+                                  <InfoIcon />
+                                  <Typography
+                                    color="black"
+                                    variant="h7"
+                                    paddingLeft={'5px'}
+                                    marginBottom={'13px'}
+                                  >
+                                    Para aceptar la solicitud, es necesario
+                                    verificar el sitio.
+                                  </Typography>
+                                </Box>
+                                <Stack
+                                  justifyContent="center"
+                                  container
+                                  spacing={3}
+                                >
+                                  <Button
+                                    sx={{
+                                      width: '190px',
+                                      height: '40px',
+                                      paddingTop: '5px',
+                                    }}
+                                    variant="contained"
+                                    color="secondary"
+                                    //disabled={!acceptRequests}
+                                    onClick={() => navigate('/check')}
+                                    startIcon={
+                                      <CheckCircleIcon
+                                        style={{ color: 'white' }}
+                                      />
+                                    }
+                                  >
+                                    Aceptar
+                                  </Button>
+
+                                  <Button
+                                    sx={{
+                                      width: '190px',
+                                      height: '40px',
+                                      paddingTop: '5px',
+                                    }}
+                                    variant="contained"
+                                    color="secondary"
+                                    startIcon={<CancelIcon />}
+                                    onClick={() =>
+                                      dispatch(
+                                        rejectReservation({
+                                          id: selectedReservation?.reservations
+                                            ?.id_reservation,
+                                        }),
+                                      )
+                                    }
+                                  >
+                                    Rechazar
+                                  </Button>
+                                </Stack>
+                              </>
+                            )}
                         </>
                       )}
                     </CardContent>
