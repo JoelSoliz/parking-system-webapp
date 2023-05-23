@@ -59,8 +59,26 @@ export const reservationAPI = createApi({
         }
       },
     }),
+    registerReservation: builder.mutation({
+      query: (data) => {
+        let token = localStorage.getItem('token')
+
+        return {
+          url: `/reservation/reservation`,
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-type': 'application/json',
+          },
+        }
+      },
+    }),
   }),
 })
 
-export const { useGetDaysBySpotQuery, useAcceptReservationMutation } =
-  reservationAPI
+export const {
+  useGetDaysBySpotQuery,
+  useAcceptReservationMutation,
+  useRegisterReservationMutation,
+} = reservationAPI

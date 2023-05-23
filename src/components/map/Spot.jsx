@@ -50,7 +50,7 @@ const Spot = ({ value }) => {
             <Button
               variant="contained"
               color="secondary"
-              onClick={() => navigate('/request')}
+              onClick={() => navigate(`/request/${'OVEF'}`)}
             >
               Solicitar
             </Button>

@@ -31,13 +31,22 @@ const Router = () => {
             </PrivateRoute>
           }
         />
-        <Route path="request" element={<ReservationRequest />} />
         <Route
           path="check"
           element={
-            <ErrorBoundary>
-              <CheckSite />
-            </ErrorBoundary>
+            <PrivateRoute needed_permission={['EMPL', 'ADMN']}>
+              <ErrorBoundary>
+                <CheckSite />
+              </ErrorBoundary>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="request/:spotId"
+          element={
+            <PrivateRoute needed_permission={['CUST']}>
+              <ReservationRequest />
+            </PrivateRoute>
           }
         />
       </Route>
