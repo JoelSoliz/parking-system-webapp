@@ -1,4 +1,4 @@
-const HOST = 'https://parking-system-api-production-f442.up.railway.app'
+const HOST = 'http://localhost:8000'
 
 export const getUserInfoAsync = async (token) => {
   const apiURL = `${HOST}/me`

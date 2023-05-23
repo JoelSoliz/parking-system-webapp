@@ -16,8 +16,10 @@ import {
   reservationsSelector,
 } from '../../store/slices/reservations'
 import RequestDetail from './components/RequestDetail'
+import { StringParam, useQueryParam } from 'use-query-params'
 
 const columns = [
+  { id: 'id', label: 'Reservación', minWidth: 100 },
   { id: 'cliente', label: 'Cliente', minWidth: 100 },
   { id: 'start_date', label: 'Fecha de Inicio', minWidth: 100 },
   { id: 'end_date', label: 'Fecha de Fin', minWidth: 100 },
@@ -26,14 +28,22 @@ const columns = [
 const RequestList = () => {
   const { reservations, total, loading } = useSelector(reservationsSelector)
   const dispatch = useDispatch()
+  const [modal] = useQueryParam('modal', StringParam)
+  const [reservationId] = useQueryParam('reservation-id', StringParam)
+
   const [page, setPage] = React.useState(1)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [openModal, setOpenModal] = React.useState(false)
+  useEffect(() => {
+    if (reservationId) {
+      dispatch(getReservation(reservationId))
+      setOpenModal(modal === 'open')
+    }
+  }, [])
 
   useEffect(() => {
     dispatch(getReservations(page))
   }, [page])
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
   }
@@ -45,7 +55,12 @@ const RequestList = () => {
 
   return (
     <Layout title="Lista de Solicitudes">
-      <RequestDetail open={openModal} onClose={() => setOpenModal(false)} />
+      <RequestDetail
+        open={openModal}
+        onClose={() => {
+          setOpenModal(false)
+        }}
+      />
       <Box
         alignItems="center"
         justifyContent="center"
@@ -98,7 +113,7 @@ const RequestList = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {reservations.map((reservation) => {
+                    {reservations.map(({ reservation }) => {
                       return (
                         <TableRow
                           hover
@@ -110,6 +125,7 @@ const RequestList = () => {
                             setOpenModal(true)
                           }}
                         >
+                          <TableCell>{reservation.id_reservation}</TableCell>
                           <TableCell>
                             {`${reservation.customer.name} ${reservation.customer.last_name}`}
                           </TableCell>

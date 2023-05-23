@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Button,
   Card,
@@ -11,20 +11,21 @@ import {
 import Layout from '../../components/Layout/Layout'
 import { useSelector } from 'react-redux'
 import { sessionSelector } from '../../store/slices/session'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import SelectSchedule from './SelectSchedule'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
+import SelectSchedule from './components/SelectSchedule'
 import FormGroup from '@mui/material/FormGroup'
-import CalendarPicker from './CalendarPicker'
+import CalendarPicker from './components/CalendarPicker'
+import { useRegisterReservationMutation } from '../../api/reservations'
+import { toast } from 'sonner'
 
 function daysBetweenDates(date1, date2) {
   const oneDayMs = 24 * 60 * 60 * 1000
   const diffMs = Math.abs(date2 - date1)
   return Math.floor(diffMs / oneDayMs)
 }
+
 function getUniqueDaysInRange(startDate, endDate) {
   if (!startDate || !endDate) {
     return []
@@ -44,22 +45,59 @@ function getUniqueDaysInRange(startDate, endDate) {
 
   return Array.from(days)
 }
+
+function toLists(schedule) {
+  const days = []
+  const startTimes = []
+  const endTimes = []
+
+  for (const key in schedule) {
+    const day = schedule[key]
+    if (day !== null) {
+      days.push(day.day)
+      startTimes.push(day.start_time.toISOString().split('T')[1].split('.')[0])
+      endTimes.push(day.end_time.toISOString().split('T')[1].split('.')[0])
+    }
+  }
+
+  return { day: days, start_time: startTimes, end_time: endTimes }
+}
+
 const ReservationRequest = () => {
-  const [isCheckedMonday, setIsCheckedMonday] = useState(false)
-  const [isCheckedTuesday, setIsCheckedTuesday] = useState(false)
-  const [isCheckedWednesday, setIsCheckedWednesday] = useState(false)
-  const [isCheckedThursday, setIsCheckedThrusday] = useState(false)
-  const [isCheckedFriday, setIsCheckedFriday] = useState(false)
-  const [isCheckedSaturday, setIsCheckedSaturday] = useState(false)
-
-  const [isValid, setIsChecked] = useState(false)
-
+  const { spotId } = useParams()
+  const [error, setError] = useState({
+    monday: null,
+    tuesday: null,
+    wednesday: null,
+    thursday: null,
+    friday: null,
+    saturday: null,
+  })
+  const [days, setDays] = useState({
+    monday: null,
+    tuesday: null,
+    wednesday: null,
+    thursday: null,
+    friday: null,
+    saturday: null,
+  })
   const [selectedDateStart, setSelectedDateStart] = React.useState(null)
   const [selectedDateEnd, setSelectedDateEnd] = React.useState(null)
 
   const weekdays = React.useMemo(
     () => getUniqueDaysInRange(selectedDateStart, selectedDateEnd),
     [selectedDateStart, selectedDateEnd],
+  )
+  const isValid = React.useMemo(
+    () =>
+      !error.monday &&
+      !error.tuesday &&
+      !error.wednesday &&
+      !error.thursday &&
+      !error.friday &&
+      !error.saturday &&
+      toLists(days).day.length > 0,
+    [error],
   )
 
   function handleDateChangeStart(date) {
@@ -69,37 +107,38 @@ const ReservationRequest = () => {
   function handleDateChangeEnd(date) {
     setSelectedDateEnd(date)
   }
-
-  const handleCheckboxChangeMonday = (event) => {
-    setIsCheckedMonday(event.target.checked)
-    setIsChecked(event.target.checked)
-  }
-  const handleCheckboxChangeTuesday = (event) => {
-    setIsCheckedTuesday(event.target.checked)
-    setIsChecked(event.target.checked)
-  }
-  const handleCheckboxChangeWednesday = (event) => {
-    setIsCheckedWednesday(event.target.checked)
-    setIsChecked(event.target.checked)
-  }
-  const handleCheckboxChangeThrusday = (event) => {
-    setIsCheckedThrusday(event.target.checked)
-    setIsChecked(event.target.checked)
-  }
-  const handleCheckboxChangeFriday = (event) => {
-    setIsCheckedFriday(event.target.checked)
-    setIsChecked(event.target.checked)
-  }
-  const handleCheckboxChangeSaturday = (event) => {
-    setIsCheckedSaturday(event.target.checked)
-    setIsChecked(event.target.checked)
-  }
+  const [
+    registerReservation,
+    { data, error: errorRR, isLoading, isError, isSuccess, reset },
+  ] = useRegisterReservationMutation()
 
   const { user } = useSelector(sessionSelector)
   const navigate = useNavigate()
-  const { loading } = useSelector(sessionSelector)
+
+  const handleSubmit = () => {
+    registerReservation({
+      start_date: selectedDateStart.toISOString().split('T')[0],
+      end_date: selectedDateEnd.toISOString().split('T')[0],
+      id_price: 'PRIC',
+      id_spot: spotId,
+      ...toLists(days),
+    })
+  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(`La solicitud fue registrada correctamente.`)
+      navigate('/')
+    } else if (isError) {
+      toast.error(
+        `Solicitud no registrado. ${errorRR.data?.detail || errorRR.data}`,
+      )
+    }
+    return () => reset()
+  }, [data, errorRR])
+
   return (
-    <Layout title="Registrar Usuario">
+    <Layout title="Solicitud de reserva">
       <Card
         sx={{
           p: 10,
@@ -119,8 +158,12 @@ const ReservationRequest = () => {
             Solicitud de reserva
           </Typography>
         </CardContent>
-        <TextField label="Código de Sitio" variant="outlined" disabled={true} />
-
+        <TextField
+          label="Código de Sitio"
+          variant="outlined"
+          value={spotId}
+          disabled={true}
+        />
         <TextField
           value={user?.name}
           label="Nombre(s)"
@@ -128,7 +171,6 @@ const ReservationRequest = () => {
           type={'text'}
           disabled={true}
         />
-
         <TextField
           value={user?.last_name}
           label="Apellido(s)"
@@ -136,7 +178,6 @@ const ReservationRequest = () => {
           type={'text'}
           disabled={true}
         />
-
         <TextField
           value={user?.ci}
           label="CI"
@@ -168,169 +209,67 @@ const ReservationRequest = () => {
         <Box paddingLeft="-10px">
           <FormGroup sx={{ m: -3 }}>
             {weekdays.includes('Monday') && (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    type="checkbox"
-                    checked={isCheckedMonday}
-                    onChange={handleCheckboxChangeMonday}
-                  />
-                }
-                label={
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    gap="12px"
-                    paddingY={'12px'}
-                  >
-                    Lunes
-                    <Box paddingLeft="22px">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        {isCheckedMonday && <SelectSchedule />}
-                      </LocalizationProvider>
-                    </Box>
-                  </Box>
-                }
-              ></FormControlLabel>
+              <SelectSchedule
+                id="monday"
+                label="Lunes"
+                onChange={setDays}
+                onError={setError}
+                value={days.monday}
+              />
             )}
             {weekdays.includes('Tuesday') && (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    type="checkbox"
-                    checked={isCheckedTuesday}
-                    onChange={handleCheckboxChangeTuesday}
-                  />
-                }
-                label={
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    gap="12px"
-                    paddingY={'12px'}
-                  >
-                    Martes
-                    <Box paddingLeft="17px">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        {isCheckedTuesday && <SelectSchedule />}
-                      </LocalizationProvider>
-                    </Box>
-                  </Box>
-                }
-              ></FormControlLabel>
+              <SelectSchedule
+                id="tuesday"
+                label="Martes"
+                onChange={setDays}
+                onError={setError}
+                value={days.tuesday}
+              />
             )}
             {weekdays.includes('Wednesday') && (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    type="checkbox"
-                    checked={isCheckedWednesday}
-                    onChange={handleCheckboxChangeWednesday}
-                  />
-                }
-                label={
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    gap="12px"
-                    paddingY={'12px'}
-                  >
-                    Miércoles
-                    <Box paddingLeft="0px">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        {isCheckedWednesday && <SelectSchedule />}
-                      </LocalizationProvider>
-                    </Box>
-                  </Box>
-                }
-              ></FormControlLabel>
+              <SelectSchedule
+                id="wednesday"
+                label="Miércoles"
+                onChange={setDays}
+                onError={setError}
+                value={days.wednesday}
+              />
             )}
             {weekdays.includes('Thursday') && (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    type="checkbox"
-                    checked={isCheckedThursday}
-                    onChange={handleCheckboxChangeThrusday}
-                  />
-                }
-                label={
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    gap="12px"
-                    paddingY={'12px'}
-                  >
-                    Jueves
-                    <Box paddingLeft="16px">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        {isCheckedThursday && <SelectSchedule />}
-                      </LocalizationProvider>
-                    </Box>
-                  </Box>
-                }
-              ></FormControlLabel>
+              <SelectSchedule
+                id="thursday"
+                label="Jueves"
+                onChange={setDays}
+                onError={setError}
+                value={days.thursday}
+              />
             )}
             {weekdays.includes('Friday') && (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    type="checkbox"
-                    checked={isCheckedFriday}
-                    onChange={handleCheckboxChangeFriday}
-                  />
-                }
-                label={
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    gap="12px"
-                    paddingY={'12px'}
-                  >
-                    Viernes
-                    <Box paddingLeft="13px">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        {isCheckedFriday && <SelectSchedule />}
-                      </LocalizationProvider>
-                    </Box>
-                  </Box>
-                }
-              ></FormControlLabel>
+              <SelectSchedule
+                id="friday"
+                label="Viernes"
+                onChange={setDays}
+                onError={setError}
+                value={days.friday}
+              />
             )}
             {weekdays.includes('Saturday') && (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    type="checkbox"
-                    checked={isCheckedSaturday}
-                    onChange={handleCheckboxChangeSaturday}
-                  />
-                }
-                label={
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    gap="12px"
-                    paddingY={'12px'}
-                  >
-                    Sábado
-                    <Box paddingLeft="12px">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        {isCheckedSaturday && <SelectSchedule />}
-                      </LocalizationProvider>
-                    </Box>
-                  </Box>
-                }
-              ></FormControlLabel>
+              <SelectSchedule
+                id="saturday"
+                label="Sábado"
+                onChange={setDays}
+                onError={setError}
+                value={days.saturday}
+              />
             )}
           </FormGroup>
         </Box>
-        {loading === 'failed' && (
+        {isError && (
           <Typography color={'error'} textAlign={'center'}>
             Error, verifique los datos ingresados.
           </Typography>
         )}
-        {loading === 'pending' ? (
+        {isLoading ? (
           <Typography>Enviando solicitud...</Typography>
         ) : (
           <Stack
@@ -346,7 +285,12 @@ const ReservationRequest = () => {
             >
               Cancelar
             </Button>
-            <Button variant="contained" color="secondary" disabled={!isValid}>
+            <Button
+              variant="contained"
+              color="secondary"
+              disabled={!isValid}
+              onClick={() => handleSubmit()}
+            >
               Enviar Solicitud
             </Button>
           </Stack>
