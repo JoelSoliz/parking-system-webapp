@@ -60,6 +60,7 @@ const CheckSite = () => {
   const [isValid, setIsValid] = useState(false)
 
   const { selectedReservation } = useSelector(reservationsSelector)
+  const [hideAssign, setHideAssign] = React.useState(true)
 
   const { data } = useGetDaysBySpotQuery({
     id: selectedReservation.parkings_spots.id_spot,
@@ -114,6 +115,7 @@ const CheckSite = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success(`El sitio fue asignado correctamente.`)
+      setHideAssign(false)
     } else if (isError) {
       toast.error(
         `Los datos no se guardaron correctamente. ${
@@ -229,7 +231,7 @@ const CheckSite = () => {
           <Typography textAlign="center">Realizando accion...</Typography>
         ) : (
           <Stack direction="row" spacing={2} justifyContent={'center'}>
-            {(selectedReservation?.status == 'Reserved' ||
+            {((hideAssign && selectedReservation?.status == 'Reserved') ||
               dataAR?.status != 'Occupied') && (
               <Button
                 variant="contained"
