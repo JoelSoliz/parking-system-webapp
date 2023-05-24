@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const vehicleAPI = createApi({
   reducerPath: 'vehicleApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8000',
+    baseUrl: 'https://parking-system-api-production.up.railway.app',
   }),
   endpoints: (builder) => ({
     registerVehicle: builder.mutation({
