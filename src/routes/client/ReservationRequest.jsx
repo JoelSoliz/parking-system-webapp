@@ -50,13 +50,13 @@ function toLists(schedule) {
   const days = []
   const startTimes = []
   const endTimes = []
-
+  const options = { timeZone: 'America/La_Paz', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
   for (const key in schedule) {
     const day = schedule[key]
-    if (day !== null) {
+    if (day !== null && !!day.day && !!day.start_time && !!day.end_time) {
       days.push(day.day)
-      startTimes.push(day.start_time.toISOString().split('T')[1].split('.')[0])
-      endTimes.push(day.end_time.toISOString().split('T')[1].split('.')[0])
+      startTimes.push(new Date(day.start_time).toLocaleString('en-US', options))
+      endTimes.push(new Date(day.end_time).toLocaleString('en-US', options))
     }
   }
 
@@ -97,7 +97,7 @@ const ReservationRequest = () => {
       !error.friday &&
       !error.saturday &&
       toLists(days).day.length > 0,
-    [error],
+    [error, days],
   )
 
   function handleDateChangeStart(date) {
@@ -117,8 +117,8 @@ const ReservationRequest = () => {
 
   const handleSubmit = () => {
     registerReservation({
-      start_date: selectedDateStart.toISOString().split('T')[0],
-      end_date: selectedDateEnd.toISOString().split('T')[0],
+      start_date: `${new Date(selectedDateStart)?.getFullYear()}-${String(new Date(selectedDateStart)?.getMonth() + 1).padStart(2, '0')}-${String(new Date(selectedDateStart)?.getDate()).padStart(2, '0')}`,
+      end_date: `${new Date(selectedDateEnd)?.getFullYear()}-${String(new Date(selectedDateEnd)?.getMonth() + 1).padStart(2, '0')}-${String(new Date(selectedDateEnd)?.getDate()).padStart(2, '0')}`,
       id_price: 'PRIC',
       id_spot: spotId,
       ...toLists(days),
@@ -197,15 +197,15 @@ const ReservationRequest = () => {
 
         {((weekdays.includes('Sunday') && weekdays.length > 1) ||
           weekdays.length > 0) && (
-          <Typography
-            gutterBottom
-            variant="h8"
-            component="div"
-            marginX={'-25px'}
-          >
-            Seleccione día(s) y horario(s):
-          </Typography>
-        )}
+            <Typography
+              gutterBottom
+              variant="h8"
+              component="div"
+              marginX={'-25px'}
+            >
+              Seleccione día(s) y horario(s):
+            </Typography>
+          )}
         <Box paddingLeft="-10px">
           <FormGroup sx={{ m: -3 }}>
             {weekdays.includes('Monday') && (
