@@ -124,11 +124,11 @@ const CheckSite = () => {
   }
   useEffect(() => {
     if (isSuccess) {
-      toast.success(`El sitio fue asignado correctamente.`)
+      toast.success(`La solicitud fue aceptada.`)
       dispatch(updateStatus(dataAR.status))
     } else if (isError) {
       toast.error(
-        `Los datos no se guardaron correctamente. ${
+        `Hubo un error al rechazar la solicitud. ${
           error.data?.detail || error.data
         }`,
       )
@@ -203,7 +203,7 @@ const CheckSite = () => {
             <Card sx={{ width: '100%' }}>
               <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin]}
-                initialView="timeGridWeek"
+                initialView="dayGridMonth"
                 hiddenDays={[0]}
                 height={'auto'}
                 contentHeight={2.5 * 50}
@@ -269,7 +269,7 @@ const CheckSite = () => {
                       <CheckCircleOutlineIcon style={{ color: 'white' }} />
                     }
                   >
-                    Asignar sitio
+                    Aceptar solicitud
                   </Button>
                 )}
                 <Button
@@ -281,7 +281,7 @@ const CheckSite = () => {
                     )
                   }
                 >
-                  Volver a solicitud
+                  Volver a detalle
                 </Button>
               </Stack>
             )}

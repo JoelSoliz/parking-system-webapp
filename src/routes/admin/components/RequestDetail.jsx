@@ -205,7 +205,7 @@ const RequestDetail = ({ open, onClose }) => {
                       style={{ padding: 40 }}
                       sx={{
                         width: 290,
-                        height: 440,
+                        height: 385,
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'center',
