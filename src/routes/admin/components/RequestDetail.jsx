@@ -13,20 +13,23 @@ import {
   CircularProgress,
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { reservationsSelector } from '../../../store/slices/reservations'
+import {
+  reservationsSelector,
+  updateStatus,
+} from '../../../store/slices/reservations'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import BadgeIcon from '@mui/icons-material/Badge'
 import DateRangeIcon from '@mui/icons-material/DateRange'
 import EventIcon from '@mui/icons-material/Event'
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded'
 import { useNavigate } from 'react-router-dom'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import CancelIcon from '@mui/icons-material/Cancel'
 import InfoIcon from '@mui/icons-material/Info'
 import TaskAltIcon from '@mui/icons-material/TaskAlt'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { useRejectReservationMutation } from '../../../api/reservations'
+import { toast } from 'sonner'
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
@@ -45,22 +48,27 @@ const StyledModal = styled(Modal)(({ theme }) => ({
 const RequestDetail = ({ open, onClose }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
   const { loading, selectedReservation } = useSelector(reservationsSelector)
-  const [showRejectionMessage, setShowRejectionMessage] = React.useState(false)
-  const [hideRequests, sethideRequests] = React.useState(true)
-  //const [acceptRequests, setAcceptRequests] = React.useState(false)
 
   const [
     rejectReservation,
-    { data: dataAR, isLoading, error, isSuccess, reset },
+    { data: dataAR, isLoading, error, isSuccess, reset, isError },
   ] = useRejectReservationMutation()
   useEffect(() => {
     if (isSuccess) {
-      setShowRejectionMessage(true)
-      sethideRequests(false)
+      toast.success(`La solicitud fue rechazada.`)
+      dispatch(updateStatus(dataAR.status))
+    } else if (isError) {
+      toast.error(
+        `Hubo un error al rechazar la solicitud. ${
+          error.data?.detail || error.data
+        }`,
+      )
     }
     return () => reset()
   }, [dataAR, error])
+
   return (
     <>
       {loading === 'pending' ? (
@@ -191,28 +199,6 @@ const RequestDetail = ({ open, onClose }) => {
                         {`${selectedReservation?.parkings_spots?.name}`}
                       </Typography>
                     </Box>
-                    <Box
-                      justifyContent="center"
-                      display={'flex'}
-                      paddingTop={'20px'}
-                    >
-                      <Button
-                        sx={{
-                          width: '200px',
-                          height: '40px',
-                          paddingTop: '5px',
-                          paddingLeft: '20px',
-                        }}
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => navigate('/check')}
-                        startIcon={
-                          <CheckCircleOutlineIcon style={{ color: 'white' }} />
-                        }
-                      >
-                        Verificar sitio
-                      </Button>
-                    </Box>
                   </CardContent>
                   <Box>
                     <CardContent
@@ -229,11 +215,11 @@ const RequestDetail = ({ open, onClose }) => {
                     >
                       {isLoading ? (
                         <Typography textAlign="center">
-                          Realizando accion...
+                          Realizando acción...
                         </Typography>
                       ) : (
                         <>
-                          {selectedReservation?.status == 'Occupied' && (
+                          {selectedReservation?.status === 'Occupied' && (
                             <>
                               <TaskAltIcon
                                 sx={{ fontSize: 100, color: '#00CC00' }}
@@ -254,8 +240,7 @@ const RequestDetail = ({ open, onClose }) => {
                             </>
                           )}
 
-                          {(showRejectionMessage ||
-                            selectedReservation?.status == 'Available') && (
+                          {selectedReservation?.status === 'Available' && (
                             <>
                               <HighlightOffIcon
                                 sx={{ fontSize: 100, color: '#FF3333' }}
@@ -276,77 +261,75 @@ const RequestDetail = ({ open, onClose }) => {
                             </>
                           )}
 
-                          {hideRequests &&
-                            selectedReservation?.status == 'Reserved' && (
-                              <>
-                                <Box marginBottom={'15px'}>
-                                  <Typography
-                                    color="black"
-                                    variant="h5"
-                                    align="center"
-                                  >
-                                    <strong>SOLICITUD</strong>
-                                  </Typography>
-                                </Box>
-                                <Box display="flex">
-                                  <InfoIcon />
-                                  <Typography
-                                    color="black"
-                                    variant="h7"
-                                    paddingLeft={'5px'}
-                                    marginBottom={'13px'}
-                                  >
-                                    Para aceptar la solicitud, es necesario
-                                    verificar el sitio.
-                                  </Typography>
-                                </Box>
-                                <Stack
-                                  justifyContent="center"
-                                  container
-                                  spacing={3}
+                          {selectedReservation?.status === 'Reserved' && (
+                            <>
+                              <Box marginBottom={'15px'}>
+                                <Typography
+                                  color="black"
+                                  variant="h5"
+                                  align="center"
                                 >
-                                  <Button
-                                    sx={{
-                                      width: '190px',
-                                      height: '40px',
-                                      paddingTop: '5px',
-                                    }}
-                                    variant="contained"
-                                    color="secondary"
-                                    //disabled={!acceptRequests}
-                                    onClick={() => navigate('/check')}
-                                    startIcon={
-                                      <CheckCircleIcon
-                                        style={{ color: 'white' }}
-                                      />
-                                    }
-                                  >
-                                    Aceptar
-                                  </Button>
+                                  <strong>SOLICITUD</strong>
+                                </Typography>
+                              </Box>
+                              <Box display="flex">
+                                <InfoIcon />
+                                <Typography
+                                  color="black"
+                                  variant="h7"
+                                  paddingLeft={'5px'}
+                                  marginBottom={'13px'}
+                                >
+                                  Para aceptar la solicitud, es necesario
+                                  verificar el sitio.
+                                </Typography>
+                              </Box>
+                              <Stack
+                                justifyContent="center"
+                                container
+                                spacing={3}
+                              >
+                                <Button
+                                  sx={{
+                                    width: '190px',
+                                    height: '40px',
+                                    paddingTop: '5px',
+                                  }}
+                                  variant="contained"
+                                  color="secondary"
+                                  onClick={() => navigate('/check')}
+                                  startIcon={
+                                    <CheckCircleIcon
+                                      style={{ color: 'white' }}
+                                    />
+                                  }
+                                >
+                                  Verificar
+                                </Button>
 
-                                  <Button
-                                    sx={{
-                                      width: '190px',
-                                      height: '40px',
-                                      paddingTop: '5px',
-                                    }}
-                                    variant="contained"
-                                    color="secondary"
-                                    startIcon={<CancelIcon />}
-                                    onClick={() =>
-                                      dispatch(
-                                        rejectReservation({
-                                          id: selectedReservation?.reservations
-                                            ?.id_reservation,
-                                        }),
-                                      )
-                                    }
-                                  >
-                                    Rechazar
-                                  </Button>
-                                </Stack>
-                              </>
-                            )}
+                                <Button
+                                  sx={{
+                                    width: '190px',
+                                    height: '40px',
+                                    paddingTop: '5px',
+                                  }}
+                                  variant="contained"
+                                  color="secondary"
+                                  startIcon={<CancelIcon />}
+                                  onClick={() =>
+                                    dispatch(
+                                      rejectReservation({
+                                        id: selectedReservation?.reservations
+                                          ?.id_reservation,
+                                      }),
+                                    )
+                                  }
+                                >
+                                  Rechazar
+                                </Button>
+                              </Stack>
+                            </>
+                          )}
                         </>
                       )}
                     </CardContent>
