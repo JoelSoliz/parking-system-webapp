@@ -15,6 +15,7 @@ import UserList from '../../routes/admin/UserList'
 import ReservationRequest from '../../routes/client/ReservationRequest'
 import CheckSite from '../../routes/client/CheckSite'
 import ErrorBoundary from './ErrorBoundary'
+import RegisterClaim from '../../routes/client/RegisterClaim'
 const Router = () => {
   return (
     <Routes>
@@ -28,6 +29,14 @@ const Router = () => {
           element={
             <PrivateRoute needed_permission={['CUST']}>
               <RegisterVehicle />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="register-claim"
+          element={
+            <PrivateRoute needed_permission={['CUST']}>
+              <RegisterClaim />
             </PrivateRoute>
           }
         />
