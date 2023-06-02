@@ -114,6 +114,10 @@ const RequestList = () => {
                   </TableHead>
                   <TableBody>
                     {reservations.map(({ reservation }) => {
+                      const rowStyle =
+                        reservation.id_reservation === 'VIIA'
+                          ? { backgroundColor: 'darkgrey' }
+                          : {}
                       return (
                         <TableRow
                           hover
@@ -124,6 +128,7 @@ const RequestList = () => {
                             dispatch(getReservation(reservation.id_reservation))
                             setOpenModal(true)
                           }}
+                          style={rowStyle}
                         >
                           <TableCell>{reservation.id_reservation}</TableCell>
                           <TableCell>

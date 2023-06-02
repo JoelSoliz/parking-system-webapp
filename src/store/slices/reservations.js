@@ -53,7 +53,11 @@ const initialState = {
 export const reservationsSlice = createSlice({
   name: 'reservations',
   initialState,
-  reducers: {},
+  reducers: {
+    updateStatus: (state, { payload }) => {
+      state.selectedReservation.status = payload
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getReservation.pending, (state) => {
       state.loading = 'pending'
@@ -88,6 +92,6 @@ export const reservationsSelector = createSelector(
   (state) => state,
 )
 
-export const { a = {} } = reservationsSlice.actions
+export const { updateStatus } = reservationsSlice.actions
 
 export default reservationsSlice.reducer
