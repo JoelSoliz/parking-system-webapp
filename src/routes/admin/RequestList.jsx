@@ -113,10 +113,10 @@ const RequestList = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {reservations.map(({ reservation }) => {
+                    {reservations.map(({ reservation, status }) => {
                       const rowStyle =
-                        reservation.id_reservation === 'VIIA'
-                          ? { backgroundColor: 'darkgrey' }
+                        status === 'Occupied' || status === 'Available'
+                          ? { backgroundColor: '#CCCCCC' }
                           : {}
                       return (
                         <TableRow
