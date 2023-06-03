@@ -31,9 +31,21 @@ const NavBar = () => {
   return (
     <AppBar sx={{ p: '0 5%' }} style={{ background: '#094067' }}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography variant="h5" color="#fffffe" style={{ fontWeight: 'bold' }}>
-          Parqueo San Simón
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <img
+            src="https://www.umss.edu.bo/wp-content/uploads/2019/04/escudo-01.png"
+            alt="Logo"
+            style={{ width: '50px', height: '50px', marginRight: '2px' }}
+          />
+          <Typography
+            variant="h5"
+            color="#fffffe"
+            style={{ fontWeight: 'bold' }}
+          >
+            Parqueo San Simón
+          </Typography>
+        </Box>
+
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
           {isNonMobileDevice ? (
             <>

@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import {
   Button,
   Card,
-  CardContent,
   TextField,
   Typography,
   Box,
@@ -53,28 +52,28 @@ const Login = () => {
         <Box alignItems="center" justifyContent="center" marginY={8}>
           <Card
             sx={{
-              p: 4,
-              py: 5,
-              maxWidth: '50px auto',
+              p: 6,
+              py: 4,
+              width: '110%',
               display: 'flex',
               flexDirection: 'column',
               gap: 4,
               borderRadius: '15px',
               border: 5,
+              marginY: -2,
             }}
             style={{ borderColor: '#90b4ce' }}
           >
-            <CardContent sx={{ m: 0 }}>
-              <Typography
-                gutterBottom
-                variant="h4"
-                component="div"
-                align="center"
-                sx={{ m: 0 }}
-              >
-                Bienvenido
-              </Typography>
-            </CardContent>
+            <Typography
+              gutterBottom
+              variant="h4"
+              component="div"
+              align="center"
+              sx={{ m: 0 }}
+            >
+              Bienvenido
+            </Typography>
+
             <Controller
               control={control}
               name="email"
@@ -166,6 +165,10 @@ const Login = () => {
               <Typography textAlign={'center'}>Iniciando sesión...</Typography>
             ) : (
               <Button
+                sx={{
+                  height: '38px',
+                  fontSize: '13px',
+                }}
                 variant="contained"
                 color="secondary"
                 onClick={handleSubmit((data) => dispatch(login(data)))}
@@ -174,6 +177,7 @@ const Login = () => {
                 Iniciar Sesión
               </Button>
             )}
+            <div style={{ marginBottom: '1px' }}></div>
           </Card>
         </Box>
       )}

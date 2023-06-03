@@ -93,15 +93,16 @@ const RegisterVehicle = () => {
     <Layout title="Registrar Vehiculo">
       <Card
         sx={{
-          p: 10,
-          py: 5,
-          maxWidth: '50px auto',
+          p: 9,
+          py: 3,
+          minWidth: '40%',
           display: 'flex',
           flexDirection: 'column',
           gap: 4,
           borderRadius: '15px',
           border: 5,
-          marginY: 8,
+          marginY: 1,
+          marginBottom: '70px',
         }}
         style={{ borderColor: '#90b4ce' }}
       >
@@ -233,16 +234,24 @@ const RegisterVehicle = () => {
           )}
         />
         {!errors.photo?.message && imageSrc && (
-          <img
-            src={imageSrc}
-            alt="Preview"
+          <div
             style={{
-              maxWidth: '270px',
-              maxHeight: '270px',
-              marginTop: 10,
-              objectFit: 'contain',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
-          />
+          >
+            <img
+              src={imageSrc}
+              alt="Preview"
+              style={{
+                maxWidth: '380px',
+                maxHeight: '380px',
+                marginTop: 3,
+                objectFit: 'contain',
+              }}
+            />
+          </div>
         )}
 
         {isLoading ? (
@@ -250,13 +259,18 @@ const RegisterVehicle = () => {
         ) : (
           <Stack
             direction="row"
-            spacing={3}
+            spacing={2}
             width={'100%'}
             display="flex"
             justifyContent={'center'}
             gap={'20px'}
           >
             <Button
+              sx={{
+                width: '180px',
+                height: '38px',
+                fontSize: '12px',
+              }}
               variant="contained"
               color="secondary"
               onClick={() => navigate('/')}
@@ -264,6 +278,11 @@ const RegisterVehicle = () => {
               Cancelar
             </Button>
             <Button
+              sx={{
+                width: '180px',
+                height: '38px',
+                fontSize: '12px',
+              }}
               variant="contained"
               color="secondary"
               disabled={!isValid}
@@ -273,6 +292,7 @@ const RegisterVehicle = () => {
             </Button>
           </Stack>
         )}
+        <div style={{ marginBottom: '3px' }}></div>
       </Card>
     </Layout>
   )

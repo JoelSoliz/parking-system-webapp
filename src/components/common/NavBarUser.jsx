@@ -31,21 +31,27 @@ const NavBarUser = () => {
   return (
     <AppBar sx={{ p: '0 5%' }} style={{ background: '#094067' }}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography variant="h5" color="#fffffe" style={{ fontWeight: 'bold' }}>
-          Parqueo San Simón
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <img
+            src="https://www.umss.edu.bo/wp-content/uploads/2019/04/escudo-01.png"
+            alt="Logo"
+            style={{ width: '50px', height: '50px', marginRight: '2px' }}
+          />
+          <Typography
+            variant="h5"
+            color="#fffffe"
+            style={{ fontWeight: 'bold' }}
+          >
+            Parqueo San Simón
+          </Typography>
+        </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
           {isNonMobileDevice ? (
             <>
-              <Link style={{ color: '#fff', textDecoration: 'none' }} to={''}>
+              <Link style={{ color: '#fff', textDecoration: 'none' }} to={'/'}>
                 Inicio
               </Link>
-              <Link
-                style={{ color: '#fff', textDecoration: 'none' }}
-                to={'/perfil'}
-              >
-                Perfil
-              </Link>
+
               <Button
                 style={{
                   color: '#fff',
@@ -83,19 +89,12 @@ const NavBarUser = () => {
                 <MenuItem onClick={handleClose}>
                   <Link
                     style={{ color: '#333', textDecoration: 'none' }}
-                    to={''}
+                    to={'/'}
                   >
                     Inicio
                   </Link>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <Link
-                    style={{ color: '#333', textDecoration: 'none' }}
-                    to={'/perfil'}
-                  >
-                    Perfil
-                  </Link>
-                </MenuItem>
+
                 <MenuItem onClick={handleClose}>
                   <Button
                     style={{

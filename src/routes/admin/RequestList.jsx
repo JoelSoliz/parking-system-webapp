@@ -69,9 +69,17 @@ const RequestList = () => {
         marginTop={3}
         marginLeft={3}
       >
-        <Typography variant="h3" color={'black'}>
-          Lista de Solicitudes
-        </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            paddingLeft: '39px',
+            alignItems: 'center',
+          }}
+        >
+          <Typography variant="h3" color={'black'}>
+            Lista de Solicitudes
+          </Typography>
+        </Box>
 
         <Paper
           sx={{

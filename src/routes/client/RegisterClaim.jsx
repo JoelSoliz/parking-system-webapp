@@ -7,6 +7,7 @@ import {
   TextField,
   Typography,
   Stack,
+  Box,
 } from '@mui/material'
 import Layout from '../../components/Layout/Layout'
 import { useRegisterVehicleMutation } from '../../api/vehicle'
@@ -66,15 +67,16 @@ const RegisterClaim = () => {
     <Layout title="Presentar Reclamo">
       <Card
         sx={{
-          p: 10,
-          py: 5,
-          minWidth: '60%',
-          display: 'row',
+          p: 9,
+          py: 3,
+          minWidth: '48%',
+          display: 'flex',
           flexDirection: 'column',
           gap: 4,
           borderRadius: '15px',
           border: 5,
-          marginY: 8,
+          marginY: 1,
+          marginBottom: '70px',
         }}
         style={{ borderColor: '#90b4ce' }}
       >
@@ -89,20 +91,42 @@ const RegisterClaim = () => {
             Formulario de Reclamo
           </Typography>
         </CardContent>
-        <TextField
-          value={user?.name + ' ' + user?.last_name}
-          label="Nombre(s) y Apellido(s)"
-          variant="outlined"
-          type={'text'}
-          disabled={true}
-        />
-        <TextField
-          value={user?.ci}
-          label="CI"
-          variant="outlined"
-          type={'number'}
-        />
-
+        <Box display="flex" direction="row" letterSpacing={1}>
+          <TextField
+            value={user?.name}
+            label="Nombre(s)"
+            variant="outlined"
+            type={'text'}
+            disabled={true}
+            style={{ flexGrow: 1, flexShrink: 1, marginRight: '15px' }}
+          />
+          <TextField
+            value={user?.last_name}
+            label="Apellido(s)"
+            variant="outlined"
+            type={'text'}
+            disabled={true}
+            style={{ flexGrow: 1, flexShrink: 1 }}
+          />
+        </Box>
+        <Box display="flex" direction="row" letterSpacing={1}>
+          <TextField
+            value={user?.ci}
+            label="CI"
+            variant="outlined"
+            type={'number'}
+            disabled={true}
+            style={{ flexGrow: 1, flexShrink: 1, marginRight: '15px' }}
+          />
+          <TextField
+            value={user?.phone}
+            label="Número de celular"
+            variant="outlined"
+            type={'text'}
+            disabled={true}
+            style={{ flexGrow: 1, flexShrink: 1 }}
+          />
+        </Box>
         <Controller
           control={control}
           name="affair"
@@ -159,11 +183,10 @@ const RegisterClaim = () => {
                 error={!!errors.description?.message}
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
-                label="Descripción"
-                placeholder="Descripción de los hechos que son objeto del reclamo"
+                label="Descripción de los hechos que son objeto del reclamo"
                 variant="outlined"
                 multiline
-                rows={5}
+                rows={3}
                 type={'text'}
                 helperText={errors.description?.message}
               />
@@ -197,7 +220,7 @@ const RegisterClaim = () => {
                 label="Sugerencia para la mejora de la funcionalidad"
                 variant="outlined"
                 multiline
-                rows={3}
+                rows={2}
                 type={'text'}
                 helperText={errors.suggestion?.message}
               />
@@ -209,7 +232,7 @@ const RegisterClaim = () => {
         ) : (
           <Stack
             direction="row"
-            spacing={3}
+            spacing={2}
             width={'100%'}
             display="flex"
             justifyContent={'center'}
@@ -217,7 +240,9 @@ const RegisterClaim = () => {
           >
             <Button
               sx={{
-                width: '150px',
+                width: '180px',
+                height: '38px',
+                fontSize: '12px',
               }}
               variant="contained"
               color="secondary"
@@ -227,7 +252,9 @@ const RegisterClaim = () => {
             </Button>
             <Button
               sx={{
-                width: '150px',
+                width: '180px',
+                height: '38px',
+                fontSize: '12px',
               }}
               variant="contained"
               color="secondary"
@@ -238,6 +265,7 @@ const RegisterClaim = () => {
             </Button>
           </Stack>
         )}
+        <div style={{ marginBottom: '2px' }}></div>
       </Card>
     </Layout>
   )

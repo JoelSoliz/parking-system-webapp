@@ -1,17 +1,21 @@
 import React from 'react'
-import { Typography } from '@mui/material'
+import { Typography, Box } from '@mui/material'
 import Layout from '../../components/Layout/Layout'
 import Map from '../../components/map/Map'
 
 const Home = () => {
   return (
     <Layout title="Home">
-      <Typography variant="h1" color="Highlight">
-        Parking System
-      </Typography>
-      <Typography variant="body1">
-        Welcome to Parking System frontend project.
-      </Typography>
+      <Box
+        sx={{
+          marginY: -2,
+          marginBottom: '20px',
+        }}
+      >
+        <Typography variant="h1" color="Highlight">
+          Parking System
+        </Typography>
+      </Box>
       <Map />
     </Layout>
   )

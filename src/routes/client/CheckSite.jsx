@@ -151,18 +151,23 @@ const CheckSite = () => {
         <>
           <Card
             sx={{
-              paddingY: 5,
-              paddingX: '60px',
+              p: 9,
+              py: 5,
               display: 'flex',
               flexDirection: 'column',
-              gap: 3,
+              gap: 4,
               borderRadius: '15px',
               border: 5,
-              marginBottom: '100px',
+              marginY: 1,
+              marginBottom: '70px',
             }}
             style={{ borderColor: '#90b4ce' }}
           >
-            <Box>
+            <Box
+              sx={{
+                marginBottom: '-12px',
+              }}
+            >
               <Typography
                 gutterBottom
                 variant="h4"
@@ -251,10 +256,16 @@ const CheckSite = () => {
             {isLoading ? (
               <Typography textAlign="center">Realizando accion...</Typography>
             ) : (
-              <Stack direction="row" spacing={2} justifyContent={'center'}>
+              <Stack direction="row" spacing={4} justifyContent={'center'}>
                 {(selectedReservation?.status == 'Reserved' ||
                   dataAR?.status != 'Occupied') && (
                   <Button
+                    sx={{
+                      width: '180px',
+                      height: '38px',
+                      fontSize: '12px',
+                      marginBottom: '15px',
+                    }}
                     variant="contained"
                     color="secondary"
                     disabled={!isValid}
@@ -271,6 +282,11 @@ const CheckSite = () => {
                   </Button>
                 )}
                 <Button
+                  sx={{
+                    width: '180px',
+                    height: '38px',
+                    fontSize: '12px',
+                  }}
                   variant="contained"
                   color="secondary"
                   onClick={() =>

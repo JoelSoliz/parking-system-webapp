@@ -53,9 +53,17 @@ const UserList = () => {
         marginTop={3}
         marginLeft={3}
       >
-        <Typography variant="h3" color={'black'}>
-          Lista de Clientes
-        </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            paddingLeft: '39px',
+            alignItems: 'center',
+          }}
+        >
+          <Typography variant="h3" color={'black'}>
+            Lista de Clientes
+          </Typography>
+        </Box>
 
         <Paper
           sx={{
