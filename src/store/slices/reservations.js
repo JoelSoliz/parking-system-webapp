@@ -56,6 +56,15 @@ export const reservationsSlice = createSlice({
   reducers: {
     updateStatus: (state, { payload }) => {
       state.selectedReservation.status = payload
+      state.reservations = state.reservations.map((reservation) => {
+        if (
+          state.selectedReservation.reservations.id_reservation ==
+          reservation.reservation.id_reservation
+        )
+          reservation.status = payload
+
+        return reservation
+      })
     },
   },
   extraReducers: (builder) => {

@@ -14,6 +14,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout, sessionSelector } from '../../store/slices/session'
+import logo from '../../assets/logo.webp'
 
 const NavBar = () => {
   const { isAuthenticate, user } = useSelector(sessionSelector)
@@ -31,9 +32,21 @@ const NavBar = () => {
   return (
     <AppBar sx={{ p: '0 5%' }} style={{ background: '#094067' }}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography variant="h5" color="#fffffe" style={{ fontWeight: 'bold' }}>
-          Parqueo San Simón
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <img
+            src={logo}
+            alt="Logo"
+            style={{ width: '50px', height: '50px', marginRight: '2px' }}
+          />
+          <Typography
+            variant="h5"
+            color="#fffffe"
+            style={{ fontWeight: 'bold' }}
+          >
+            Parqueo San Simón
+          </Typography>
+        </Box>
+
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
           {isNonMobileDevice ? (
             <>
@@ -64,6 +77,12 @@ const NavBar = () => {
                         to={'/register-vehicle'}
                       >
                         Registrar Vehículo
+                      </Link>
+                      <Link
+                        style={{ color: '#fff', textDecoration: 'none' }}
+                        to={'/register-claim'}
+                      >
+                        Presentar Reclamo
                       </Link>
                     </>
                   )}
@@ -138,14 +157,25 @@ const NavBar = () => {
                 ) : (
                   <>
                     {['ADMN', 'EMPL'].includes(user?.role) && (
-                      <MenuItem onClick={handleClose}>
-                        <Link
-                          style={{ color: '#333', textDecoration: 'none' }}
-                          to={'/register-vehicle'}
-                        >
-                          Registrar Vehículo
-                        </Link>
-                      </MenuItem>
+                      <>
+                        <MenuItem onClick={handleClose}>
+                          <Link
+                            style={{ color: '#333', textDecoration: 'none' }}
+                            to={'/register-vehicle'}
+                          >
+                            Registrar Vehículo
+                          </Link>
+                        </MenuItem>
+
+                        <MenuItem onClick={handleClose}>
+                          <Link
+                            style={{ color: '#333', textDecoration: 'none' }}
+                            to={'/register-claim'}
+                          >
+                            Presentar Reclamo
+                          </Link>
+                        </MenuItem>
+                      </>
                     )}
                     {user?.role === 'CUST' && (
                       <MenuItem onClick={handleClose}>

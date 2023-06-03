@@ -50,7 +50,13 @@ function toLists(schedule) {
   const days = []
   const startTimes = []
   const endTimes = []
-  const options = { timeZone: 'America/La_Paz', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
+  const options = {
+    timeZone: 'America/La_Paz',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: false,
+  }
   for (const key in schedule) {
     const day = schedule[key]
     if (day !== null && !!day.day && !!day.start_time && !!day.end_time) {
@@ -117,8 +123,16 @@ const ReservationRequest = () => {
 
   const handleSubmit = () => {
     registerReservation({
-      start_date: `${new Date(selectedDateStart)?.getFullYear()}-${String(new Date(selectedDateStart)?.getMonth() + 1).padStart(2, '0')}-${String(new Date(selectedDateStart)?.getDate()).padStart(2, '0')}`,
-      end_date: `${new Date(selectedDateEnd)?.getFullYear()}-${String(new Date(selectedDateEnd)?.getMonth() + 1).padStart(2, '0')}-${String(new Date(selectedDateEnd)?.getDate()).padStart(2, '0')}`,
+      start_date: `${new Date(selectedDateStart)?.getFullYear()}-${String(
+        new Date(selectedDateStart)?.getMonth() + 1,
+      ).padStart(2, '0')}-${String(
+        new Date(selectedDateStart)?.getDate(),
+      ).padStart(2, '0')}`,
+      end_date: `${new Date(selectedDateEnd)?.getFullYear()}-${String(
+        new Date(selectedDateEnd)?.getMonth() + 1,
+      ).padStart(2, '0')}-${String(
+        new Date(selectedDateEnd)?.getDate(),
+      ).padStart(2, '0')}`,
       id_price: 'PRIC',
       id_spot: spotId,
       ...toLists(days),
@@ -142,52 +156,65 @@ const ReservationRequest = () => {
       <Card
         sx={{
           p: 10,
-          py: 5,
-          maxWidth: '50px auto',
+          py: 3,
+          width: '48%',
           display: 'flex',
           flexDirection: 'column',
           gap: 4,
           borderRadius: '15px',
-          marginY: 8,
+          marginY: 1,
           border: 5,
+          marginBottom: '70px',
         }}
         style={{ borderColor: '#90b4ce' }}
       >
-        <CardContent>
+        <CardContent
+          sx={{
+            marginBottom: '-20px',
+          }}
+        >
           <Typography gutterBottom variant="h4" component="div" align="center">
             Solicitud de reserva
           </Typography>
         </CardContent>
-        <TextField
-          label="Código de Sitio"
-          variant="outlined"
-          value={spotId}
-          disabled={true}
-        />
-        <TextField
-          value={user?.name}
-          label="Nombre(s)"
-          variant="outlined"
-          type={'text'}
-          disabled={true}
-        />
-        <TextField
-          value={user?.last_name}
-          label="Apellido(s)"
-          variant="outlined"
-          type={'text'}
-          disabled={true}
-        />
-        <TextField
-          value={user?.ci}
-          label="CI"
-          variant="outlined"
-          type={'number'}
-          disabled={true}
-        />
+        <Box display="flex" direction="row">
+          <TextField
+            label="Código de Sitio"
+            variant="outlined"
+            value={spotId}
+            disabled={true}
+            style={{ flexGrow: 1, flexShrink: 1, marginRight: '15px' }}
+          />
+          <TextField
+            value={user?.ci}
+            label="CI"
+            variant="outlined"
+            type={'number'}
+            disabled={true}
+            style={{ flexGrow: 1, flexShrink: 1 }}
+          />
+        </Box>
+        <Box display="flex" direction="row" letterSpacing={1}>
+          <TextField
+            value={user?.name}
+            label="Nombre(s)"
+            variant="outlined"
+            type={'text'}
+            disabled={true}
+            style={{ flexGrow: 1, flexShrink: 1, marginRight: '15px' }}
+          />
+          <TextField
+            value={user?.last_name}
+            label="Apellido(s)"
+            variant="outlined"
+            type={'text'}
+            disabled={true}
+            style={{ flexGrow: 1, flexShrink: 1 }}
+          />
+        </Box>
+
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <CalendarPicker
-            style={{ marginTop: '-8px' }}
             selectedDateStart={selectedDateStart}
             selectedDateEnd={selectedDateEnd}
             onDateChangeStart={handleDateChangeStart}
@@ -197,16 +224,11 @@ const ReservationRequest = () => {
 
         {((weekdays.includes('Sunday') && weekdays.length > 1) ||
           weekdays.length > 0) && (
-            <Typography
-              gutterBottom
-              variant="h8"
-              component="div"
-              marginX={'-25px'}
-            >
-              Seleccione día(s) y horario(s):
-            </Typography>
-          )}
-        <Box paddingLeft="-10px">
+          <Typography gutterBottom variant="h8" component="div">
+            Seleccione día(s) y horario(s):
+          </Typography>
+        )}
+        <Box sx={{ paddingLeft: '24px', width: '98.5%' }}>
           <FormGroup sx={{ m: -3 }}>
             {weekdays.includes('Monday') && (
               <SelectSchedule
@@ -274,11 +296,16 @@ const ReservationRequest = () => {
         ) : (
           <Stack
             direction="row"
-            spacing={2}
+            spacing={5}
             sx={{ m: 2.5 }}
             justifyContent={'center'}
           >
             <Button
+              sx={{
+                width: '180px',
+                height: '38px',
+                fontSize: '12px',
+              }}
               variant="contained"
               color="secondary"
               onClick={() => navigate('/')}
@@ -286,6 +313,11 @@ const ReservationRequest = () => {
               Cancelar
             </Button>
             <Button
+              sx={{
+                width: '180px',
+                height: '38px',
+                fontSize: '12px',
+              }}
               variant="contained"
               color="secondary"
               disabled={!isValid}

@@ -14,6 +14,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useDispatch } from 'react-redux'
 import { logout } from '../../store/slices/session'
+import logo from '../../assets/logo.webp'
 
 const NavBarUser = () => {
   const dispatch = useDispatch()
@@ -31,21 +32,27 @@ const NavBarUser = () => {
   return (
     <AppBar sx={{ p: '0 5%' }} style={{ background: '#094067' }}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography variant="h5" color="#fffffe" style={{ fontWeight: 'bold' }}>
-          Parqueo San Simón
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <img
+            src={logo}
+            alt="Logo"
+            style={{ width: '50px', height: '50px', marginRight: '2px' }}
+          />
+          <Typography
+            variant="h5"
+            color="#fffffe"
+            style={{ fontWeight: 'bold' }}
+          >
+            Parqueo San Simón
+          </Typography>
+        </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
           {isNonMobileDevice ? (
             <>
-              <Link style={{ color: '#fff', textDecoration: 'none' }} to={''}>
+              <Link style={{ color: '#fff', textDecoration: 'none' }} to={'/'}>
                 Inicio
               </Link>
-              <Link
-                style={{ color: '#fff', textDecoration: 'none' }}
-                to={'/perfil'}
-              >
-                Perfil
-              </Link>
+
               <Button
                 style={{
                   color: '#fff',
@@ -83,19 +90,12 @@ const NavBarUser = () => {
                 <MenuItem onClick={handleClose}>
                   <Link
                     style={{ color: '#333', textDecoration: 'none' }}
-                    to={''}
+                    to={'/'}
                   >
                     Inicio
                   </Link>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <Link
-                    style={{ color: '#333', textDecoration: 'none' }}
-                    to={'/perfil'}
-                  >
-                    Perfil
-                  </Link>
-                </MenuItem>
+
                 <MenuItem onClick={handleClose}>
                   <Button
                     style={{

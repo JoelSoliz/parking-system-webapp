@@ -7,30 +7,27 @@ import {
   TextField,
   Typography,
   Stack,
-  FormHelperText,
   Box,
 } from '@mui/material'
 import Layout from '../../components/Layout/Layout'
-import FormControl from '@mui/material/FormControl'
-import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { useRegisterVehicleMutation } from '../../api/vehicle'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
+import { sessionSelector } from '../../store/slices/session'
+import { useSelector } from 'react-redux'
 
 const ERROR_MESSAGES = {
   maxLength: 'La longitud máxima es',
   minLength: 'La longitud mínima es',
   required: 'Este campo es requerido.',
-  letters: 'Solo se admiten letras.',
-  espacios: 'Ingrese un número de placa válido.',
-  fileExtension:
-    'Tipo de archivo invalido. Solo archivos JPG, JPEG y PNG son permitidos.',
+  numbers: 'No se permiten números, símbolos o caracteres especiales.',
+  symbols: 'No se permiten símbolos o caracteres especiales.',
 }
-const RegisterVehicle = () => {
+const RegisterClaim = () => {
+  const { user } = useSelector(sessionSelector)
   const navigate = useNavigate()
   const {
     control,
-    handleSubmit,
     formState: { errors, isValid },
     reset,
   } = useForm({ mode: 'onChange' })
@@ -39,33 +36,9 @@ const RegisterVehicle = () => {
     { data, error, isLoading, isError, isSuccess, reset: resetState },
   ] = useRegisterVehicleMutation()
   const [imageSrc, setImageSrc] = useState(null)
-
-  const validateFile = (value) => {
-    const validExtensions = ['.jpg', '.jpeg', '.png']
-    const fileExtension = value[0].name.split('.').pop()
-
-    if (!validExtensions.includes(`.${fileExtension.toLowerCase()}`)) {
-      return ERROR_MESSAGES.fileExtension
-    }
-
-    return true
-  }
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0]
-    const reader = new FileReader()
-
-    reader.onload = () => {
-      setImageSrc(reader.result)
-    }
-
-    reader.readAsDataURL(file)
-  }
-
   const handleSubmitData = (data) => {
     registerVehicle({ data, image: imageSrc })
   }
-
   useEffect(() => {
     if (isSuccess) {
       reset({
@@ -91,12 +64,12 @@ const RegisterVehicle = () => {
   }, [data, error])
 
   return (
-    <Layout title="Registrar Vehiculo">
+    <Layout title="Presentar Reclamo">
       <Card
         sx={{
           p: 9,
           py: 3,
-          minWidth: '40%',
+          minWidth: '48%',
           display: 'flex',
           flexDirection: 'column',
           gap: 4,
@@ -120,149 +93,148 @@ const RegisterVehicle = () => {
               align="center"
               sx={{ m: 0 }}
             >
-              Registrar Vehículo
+              Formulario de Reclamo
             </Typography>
           </Box>
         </CardContent>
+        <Box display="flex" direction="row" letterSpacing={1}>
+          <TextField
+            value={user?.name}
+            label="Nombre(s)"
+            variant="outlined"
+            type={'text'}
+            disabled={true}
+            style={{ flexGrow: 1, flexShrink: 1, marginRight: '15px' }}
+          />
+          <TextField
+            value={user?.last_name}
+            label="Apellido(s)"
+            variant="outlined"
+            type={'text'}
+            disabled={true}
+            style={{ flexGrow: 1, flexShrink: 1 }}
+          />
+        </Box>
+        <Box display="flex" direction="row" letterSpacing={1}>
+          <TextField
+            value={user?.ci}
+            label="CI"
+            variant="outlined"
+            type={'number'}
+            disabled={true}
+            style={{ flexGrow: 1, flexShrink: 1, marginRight: '15px' }}
+          />
+          <TextField
+            value={user?.phone}
+            label="Número de celular"
+            variant="outlined"
+            type={'text'}
+            disabled={true}
+            style={{ flexGrow: 1, flexShrink: 1 }}
+          />
+        </Box>
         <Controller
           control={control}
-          name="plate"
+          name="affair"
           rules={{
             pattern: {
-              message: ERROR_MESSAGES.espacios,
-              value: /^[a-zA-Z0-9]*$/i,
-            },
-            maxLength: {
-              message: `${ERROR_MESSAGES.maxLength} 7.`,
-              value: 7,
-            },
-            minLength: { message: `${ERROR_MESSAGES.minLength} 6.`, value: 6 },
-            required: { message: ERROR_MESSAGES.required, value: true },
-          }}
-          render={({ field: { onChange, value } }) => (
-            <>
-              <TextField
-                error={!!errors.plate?.message}
-                value={value}
-                onChange={(event) => onChange(event.target.value)}
-                label="Número de placa"
-                variant="outlined"
-                type={'text'}
-                helperText={errors.plate?.message}
-              />
-            </>
-          )}
-        />
-        <Controller
-          control={control}
-          name="type"
-          rules={{
-            pattern: {
-              message: ERROR_MESSAGES.letters,
-              value: /^[a-zA-Z\s]*$/i,
+              message: ERROR_MESSAGES.numbers,
+              value: /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s.,¡!¿?-]+$/,
             },
             maxLength: {
               message: `${ERROR_MESSAGES.maxLength} 30.`,
               value: 30,
             },
-            minLength: { message: `${ERROR_MESSAGES.minLength} 4.`, value: 4 },
+            minLength: {
+              message: `${ERROR_MESSAGES.minLength} 10.`,
+              value: 10,
+            },
             required: { message: ERROR_MESSAGES.required, value: true },
           }}
           render={({ field: { onChange, value } }) => (
             <>
               <TextField
-                error={!!errors.type?.message}
+                error={!!errors.affair?.message}
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
-                label="Tipo de vehículo"
+                label="Asunto del reclamo"
                 variant="outlined"
                 type={'text'}
-                helperText={errors.type?.message}
+                helperText={errors.affair?.message}
               />
             </>
           )}
         />
         <Controller
           control={control}
-          name="color"
+          name="description"
           rules={{
             pattern: {
-              message: ERROR_MESSAGES.letters,
-              value: /^[a-zA-Z\s]*$/i,
+              message: ERROR_MESSAGES.symbols,
+              value: /^[a-zA-Z0-9áéíóúüñÁÉÍÓÚÜÑ\s.,:¡!¿?()-]*$/,
             },
             maxLength: {
-              message: `${ERROR_MESSAGES.maxLength} 20.`,
-              value: 20,
+              message: `${ERROR_MESSAGES.maxLength} 200.`,
+              value: 200,
             },
-            minLength: { message: `${ERROR_MESSAGES.minLength} 4.`, value: 4 },
+            minLength: {
+              message: `${ERROR_MESSAGES.minLength} 15.`,
+              value: 15,
+            },
             required: { message: ERROR_MESSAGES.required, value: true },
           }}
           render={({ field: { onChange, value } }) => (
             <>
               <TextField
-                error={!!errors.color?.message}
+                error={!!errors.description?.message}
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
-                label="Color del vehículo"
+                label="Descripción de los hechos que son objeto del reclamo"
                 variant="outlined"
+                multiline
+                rows={3}
                 type={'text'}
-                helperText={errors.color?.message}
+                helperText={errors.description?.message}
               />
             </>
           )}
         />
         <Controller
-          name="photo"
           control={control}
-          rules={{ required: true, validate: validateFile }}
-          defaultValue={null}
-          render={({ field: { onChange } }) => (
-            <FormControl variant="outlined" fullWidth>
-              <Button
-                variant="contained"
-                component="label"
-                startIcon={<CloudUploadIcon />}
-              >
-                Subir imagen
-                <input
-                  type="file"
-                  hidden
-                  onChange={(e) => {
-                    onChange(e.target.files)
-                    handleImageChange(e)
-                  }}
-                />
-              </Button>
-
-              {!!errors.photo?.message && (
-                <FormHelperText error>{errors.photo?.message}</FormHelperText>
-              )}
-            </FormControl>
+          name="suggestion"
+          rules={{
+            pattern: {
+              message: ERROR_MESSAGES.symbols,
+              value: /^[a-zA-Z0-9áéíóúüñÁÉÍÓÚÜÑ\s.,:¡!¿?()]*$/,
+            },
+            maxLength: {
+              message: `${ERROR_MESSAGES.maxLength} 125.`,
+              value: 125,
+            },
+            minLength: {
+              message: `${ERROR_MESSAGES.minLength} 10.`,
+              value: 10,
+            },
+            required: { message: ERROR_MESSAGES.required, value: true },
+          }}
+          render={({ field: { onChange, value } }) => (
+            <>
+              <TextField
+                error={!!errors.suggestion?.message}
+                value={value}
+                onChange={(event) => onChange(event.target.value)}
+                label="Sugerencia para la mejora de la funcionalidad"
+                variant="outlined"
+                multiline
+                rows={3}
+                type={'text'}
+                helperText={errors.suggestion?.message}
+              />
+            </>
           )}
         />
-        {!errors.photo?.message && imageSrc && (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <img
-              src={imageSrc}
-              alt="Preview"
-              style={{
-                maxWidth: '380px',
-                maxHeight: '380px',
-                marginTop: 3,
-                objectFit: 'contain',
-              }}
-            />
-          </div>
-        )}
-
         {isLoading ? (
-          <Typography textAlign="center">Registrando Vehiculo...</Typography>
+          <Typography textAlign="center">Registrando Reclamo...</Typography>
         ) : (
           <Stack
             direction="row"
@@ -293,16 +265,16 @@ const RegisterVehicle = () => {
               variant="contained"
               color="secondary"
               disabled={!isValid}
-              onClick={handleSubmit((data) => handleSubmitData(data))}
+              onClick={() => handleSubmitData(data)}
             >
-              Registrar
+              Enviar
             </Button>
           </Stack>
         )}
-        <div style={{ marginBottom: '3px' }}></div>
+        <div style={{ marginBottom: '2px' }}></div>
       </Card>
     </Layout>
   )
 }
 
-export default RegisterVehicle
+export default RegisterClaim
