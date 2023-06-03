@@ -226,7 +226,7 @@ const RegisterClaim = () => {
                 label="Sugerencia para la mejora de la funcionalidad"
                 variant="outlined"
                 multiline
-                rows={2}
+                rows={3}
                 type={'text'}
                 helperText={errors.suggestion?.message}
               />

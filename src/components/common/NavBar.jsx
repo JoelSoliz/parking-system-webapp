@@ -14,6 +14,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout, sessionSelector } from '../../store/slices/session'
+import logo from '../../assets/logo.webp'
 
 const NavBar = () => {
   const { isAuthenticate, user } = useSelector(sessionSelector)
@@ -33,7 +34,7 @@ const NavBar = () => {
       <Toolbar sx={{ justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <img
-            src="https://www.umss.edu.bo/wp-content/uploads/2019/04/escudo-01.png"
+            src={logo}
             alt="Logo"
             style={{ width: '50px', height: '50px', marginRight: '2px' }}
           />

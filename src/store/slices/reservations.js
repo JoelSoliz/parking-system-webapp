@@ -65,7 +65,6 @@ export const reservationsSlice = createSlice({
 
         return reservation
       })
-      console.log(state.reservations)
     },
   },
   extraReducers: (builder) => {
