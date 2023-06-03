@@ -8,6 +8,7 @@ import {
   Typography,
   Stack,
   FormHelperText,
+  Box,
 } from '@mui/material'
 import Layout from '../../components/Layout/Layout'
 import FormControl from '@mui/material/FormControl'
@@ -107,15 +108,21 @@ const RegisterVehicle = () => {
         style={{ borderColor: '#90b4ce' }}
       >
         <CardContent sx={{ m: 0 }}>
-          <Typography
-            gutterBottom
-            variant="h4"
-            component="div"
-            align="center"
-            sx={{ m: 0 }}
+          <Box
+            sx={{
+              marginBottom: '-15px',
+            }}
           >
-            Registrar Vehículo
-          </Typography>
+            <Typography
+              gutterBottom
+              variant="h4"
+              component="div"
+              align="center"
+              sx={{ m: 0 }}
+            >
+              Registrar Vehículo
+            </Typography>
+          </Box>
         </CardContent>
         <Controller
           control={control}

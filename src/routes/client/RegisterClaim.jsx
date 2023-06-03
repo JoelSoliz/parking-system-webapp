@@ -81,15 +81,21 @@ const RegisterClaim = () => {
         style={{ borderColor: '#90b4ce' }}
       >
         <CardContent sx={{ m: 0 }}>
-          <Typography
-            gutterBottom
-            variant="h4"
-            component="div"
-            align="center"
-            sx={{ m: 0 }}
+          <Box
+            sx={{
+              marginBottom: '-15px',
+            }}
           >
-            Formulario de Reclamo
-          </Typography>
+            <Typography
+              gutterBottom
+              variant="h4"
+              component="div"
+              align="center"
+              sx={{ m: 0 }}
+            >
+              Formulario de Reclamo
+            </Typography>
+          </Box>
         </CardContent>
         <Box display="flex" direction="row" letterSpacing={1}>
           <TextField

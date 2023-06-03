@@ -165,7 +165,7 @@ const CheckSite = () => {
           >
             <Box
               sx={{
-                marginBottom: '-12px',
+                marginBottom: '-15px',
               }}
             >
               <Typography
