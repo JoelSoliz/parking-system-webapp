@@ -68,8 +68,8 @@ const RegisterClaim = () => {
         sx={{
           p: 10,
           py: 5,
-          maxWidth: '50px auto',
-          display: 'flex',
+          minWidth: '60%',
+          display: 'row',
           flexDirection: 'column',
           gap: 4,
           borderRadius: '15px',
@@ -101,29 +101,15 @@ const RegisterClaim = () => {
           label="CI"
           variant="outlined"
           type={'number'}
-          disabled={true}
         />
-        <TextField
-          value={user?.email}
-          label="Correo electrónico"
-          variant="outlined"
-          type={'text'}
-          disabled={true}
-        />
-        <TextField
-          value={user?.phone}
-          label="Número de celular"
-          variant="outlined"
-          type={'number'}
-          disabled={true}
-        />
+
         <Controller
           control={control}
           name="affair"
           rules={{
             pattern: {
               message: ERROR_MESSAGES.numbers,
-              value: /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s.,!?-]+$/,
+              value: /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s.,¡!¿?-]+$/,
             },
             maxLength: {
               message: `${ERROR_MESSAGES.maxLength} 30.`,
@@ -155,7 +141,7 @@ const RegisterClaim = () => {
           rules={{
             pattern: {
               message: ERROR_MESSAGES.symbols,
-              value: /^[a-zA-Z0-9áéíóúüñÁÉÍÓÚÜÑ\s.,:¡!¿?()]*$/,
+              value: /^[a-zA-Z0-9áéíóúüñÁÉÍÓÚÜÑ\s.,:¡!¿?()-]*$/,
             },
             maxLength: {
               message: `${ERROR_MESSAGES.maxLength} 200.`,

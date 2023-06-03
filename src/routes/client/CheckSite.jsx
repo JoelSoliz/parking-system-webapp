@@ -259,11 +259,9 @@ const CheckSite = () => {
                     color="secondary"
                     disabled={!isValid}
                     onClick={() =>
-                      dispatch(
-                        acceptReservation({
-                          id: selectedReservation?.reservations?.id_reservation,
-                        }),
-                      )
+                      acceptReservation({
+                        id: selectedReservation?.reservations?.id_reservation,
+                      })
                     }
                     startIcon={
                       <CheckCircleOutlineIcon style={{ color: 'white' }} />

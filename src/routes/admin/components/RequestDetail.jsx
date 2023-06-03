@@ -317,12 +317,10 @@ const RequestDetail = ({ open, onClose }) => {
                                   color="secondary"
                                   startIcon={<CancelIcon />}
                                   onClick={() =>
-                                    dispatch(
-                                      rejectReservation({
-                                        id: selectedReservation?.reservations
-                                          ?.id_reservation,
-                                      }),
-                                    )
+                                    rejectReservation({
+                                      id: selectedReservation?.reservations
+                                        ?.id_reservation,
+                                    })
                                   }
                                 >
                                   Rechazar
