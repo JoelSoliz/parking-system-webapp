@@ -15,15 +15,24 @@ import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { sessionSelector } from '../../store/slices/session'
 import { useSelector } from 'react-redux'
+import ClaimDetail from '../admin/components/ClaimDetail'
 
 const ERROR_MESSAGES = {
-  maxLength: 'La longitud máxima es',
-  minLength: 'La longitud mínima es',
+  maxLength: 'La longitud máxima es de',
+  minLength: 'La longitud mínima es de',
   required: 'Este campo es requerido.',
   numbers: 'No se permiten números, símbolos o caracteres especiales.',
   symbols: 'No se permiten símbolos o caracteres especiales.',
 }
 const RegisterClaim = () => {
+  const [openModal, setOpenModal] = useState(false)
+  const handleOpenModal = () => {
+    setOpenModal(true)
+  }
+  const handleCloseModal = () => {
+    setOpenModal(false)
+  }
+
   const { user } = useSelector(sessionSelector)
   const navigate = useNavigate()
   const {
@@ -142,11 +151,11 @@ const RegisterClaim = () => {
               value: /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s.,¡!¿?-]+$/,
             },
             maxLength: {
-              message: `${ERROR_MESSAGES.maxLength} 30.`,
+              message: `${ERROR_MESSAGES.maxLength} 30 caracteres.`,
               value: 30,
             },
             minLength: {
-              message: `${ERROR_MESSAGES.minLength} 10.`,
+              message: `${ERROR_MESSAGES.minLength} 10 caracteres.`,
               value: 10,
             },
             required: { message: ERROR_MESSAGES.required, value: true },
@@ -174,11 +183,11 @@ const RegisterClaim = () => {
               value: /^[a-zA-Z0-9áéíóúüñÁÉÍÓÚÜÑ\s.,:¡!¿?()-]*$/,
             },
             maxLength: {
-              message: `${ERROR_MESSAGES.maxLength} 200.`,
+              message: `${ERROR_MESSAGES.maxLength} 200 caracteres.`,
               value: 200,
             },
             minLength: {
-              message: `${ERROR_MESSAGES.minLength} 15.`,
+              message: `${ERROR_MESSAGES.minLength} 15 caracteres.`,
               value: 15,
             },
             required: { message: ERROR_MESSAGES.required, value: true },
@@ -208,11 +217,11 @@ const RegisterClaim = () => {
               value: /^[a-zA-Z0-9áéíóúüñÁÉÍÓÚÜÑ\s.,:¡!¿?()]*$/,
             },
             maxLength: {
-              message: `${ERROR_MESSAGES.maxLength} 125.`,
+              message: `${ERROR_MESSAGES.maxLength} 125 caracteres.`,
               value: 125,
             },
             minLength: {
-              message: `${ERROR_MESSAGES.minLength} 10.`,
+              message: `${ERROR_MESSAGES.minLength} 10 caracteres.`,
               value: 10,
             },
             required: { message: ERROR_MESSAGES.required, value: true },
@@ -272,6 +281,19 @@ const RegisterClaim = () => {
           </Stack>
         )}
         <div style={{ marginBottom: '2px' }}></div>
+        <Button
+          sx={{
+            width: '180px',
+            height: '38px',
+            fontSize: '12px',
+          }}
+          variant="contained"
+          color="secondary"
+          onClick={handleOpenModal}
+        >
+          Detalles
+        </Button>
+        <ClaimDetail open={openModal} onClose={handleCloseModal} />
       </Card>
     </Layout>
   )

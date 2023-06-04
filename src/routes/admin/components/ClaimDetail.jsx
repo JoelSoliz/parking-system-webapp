@@ -7,8 +7,10 @@ import { customersSelector } from '../../../store/slices/customers'
 import BadgeIcon from '@mui/icons-material/Badge'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
-import EmailIcon from '@mui/icons-material/Email'
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid'
+import DescriptionIcon from '@mui/icons-material/Description'
+import WysiwygIcon from '@mui/icons-material/Wysiwyg'
+import FactCheckIcon from '@mui/icons-material/FactCheck'
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
@@ -24,7 +26,7 @@ const StyledModal = styled(Modal)(({ theme }) => ({
   },
 }))
 
-const UserDetailsModal = ({ open, onClose }) => {
+const ClaimDetail = ({ open, onClose }) => {
   const { loading, selectedCustomer } = useSelector(customersSelector)
 
   return (
@@ -35,13 +37,13 @@ const UserDetailsModal = ({ open, onClose }) => {
             backgroundColor={'#fffffe'}
             container
             spacing={5}
-            width={'47%'}
+            width={'50%'}
             paddingY={'50px'}
             borderRadius={'20px'}
           >
             <Box marginBottom={'20px'}>
               <Typography color="black" variant="h5" align="center">
-                <strong>DATOS DEL USUARIO</strong>
+                <strong>DETALLES DEL RECLAMO</strong>
               </Typography>
             </Box>
             {loading === 'pending' ? (
@@ -50,28 +52,12 @@ const UserDetailsModal = ({ open, onClose }) => {
               </Typography>
             ) : (
               <>
-                <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
+                <Box display={'flex'} flexDirection={'column'} gap={'5px'}>
                   <Box
                     display="flex"
                     alignItems="center"
                     marginBottom={'5px'}
-                    paddingLeft="60px"
-                  >
-                    <BadgeIcon sx={{ color: 'navy' }} />
-                    <Typography
-                      color="black"
-                      variant="subtitle1"
-                      paddingLeft="10px"
-                      paddingTop={'5px'}
-                    >
-                      <strong>CI: </strong> {selectedCustomer?.ci}
-                    </Typography>
-                  </Box>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    marginBottom={'5px'}
-                    paddingLeft="60px"
+                    paddingLeft="50px"
                   >
                     <AccountCircleIcon sx={{ color: 'navy' }} />
                     <Typography
@@ -80,14 +66,14 @@ const UserDetailsModal = ({ open, onClose }) => {
                       paddingLeft="10px"
                       paddingTop={'5px'}
                     >
-                      <strong>Nombre(s): </strong> {selectedCustomer?.name}
+                      <strong>Nombre(s):</strong> {selectedCustomer?.name}
                     </Typography>
                   </Box>
                   <Box
                     display="flex"
                     alignItems="center"
                     marginBottom={'5px'}
-                    paddingLeft="60px"
+                    paddingLeft="50px"
                   >
                     <AccountBoxIcon sx={{ color: 'navy' }} />
                     <Typography
@@ -96,7 +82,7 @@ const UserDetailsModal = ({ open, onClose }) => {
                       paddingLeft="10px"
                       paddingTop={'5px'}
                     >
-                      <strong>Apellido(s): </strong>{' '}
+                      <strong>Apellido(s):</strong>{' '}
                       {selectedCustomer?.last_name}
                     </Typography>
                   </Box>
@@ -104,24 +90,23 @@ const UserDetailsModal = ({ open, onClose }) => {
                     display="flex"
                     alignItems="center"
                     marginBottom={'5px'}
-                    paddingLeft="60px"
+                    paddingLeft="50px"
                   >
-                    <EmailIcon sx={{ color: 'navy' }} />
+                    <BadgeIcon sx={{ color: 'navy' }} />
                     <Typography
                       color="black"
                       variant="subtitle1"
                       paddingLeft="10px"
                       paddingTop={'5px'}
                     >
-                      <strong>Correo electrónico: </strong>
-                      {selectedCustomer?.email}
+                      <strong>CI:</strong> {selectedCustomer?.ci}
                     </Typography>
                   </Box>
                   <Box
                     display="flex"
                     alignItems="center"
                     marginBottom={'5px'}
-                    paddingLeft="60px"
+                    paddingLeft="50px"
                   >
                     <PhoneAndroidIcon sx={{ color: 'navy' }} />
                     <Typography
@@ -130,7 +115,62 @@ const UserDetailsModal = ({ open, onClose }) => {
                       paddingLeft="10px"
                       paddingTop={'5px'}
                     >
-                      <strong>Celular: </strong> {selectedCustomer?.phone}
+                      <strong>Celular:</strong> {selectedCustomer?.phone}
+                    </Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    marginBottom={'5px'}
+                    paddingLeft="50px"
+                  >
+                    <WysiwygIcon sx={{ color: 'navy' }} />
+                    <Typography
+                      color="black"
+                      variant="subtitle1"
+                      paddingLeft="10px"
+                      paddingTop={'5px'}
+                    >
+                      <strong>Asunto del reclamo:</strong>{' '}
+                      {selectedCustomer?.phone}
+                    </Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    marginBottom={'5px'}
+                    paddingLeft="50px"
+                  >
+                    <DescriptionIcon sx={{ color: 'navy' }} />
+                    <Typography
+                      color="black"
+                      variant="subtitle1"
+                      paddingLeft="10px"
+                      paddingTop={'5px'}
+                    >
+                      <strong>
+                        Descripción de los hechos que son objeto del reclamo:
+                      </strong>{' '}
+                      {selectedCustomer?.phone}
+                    </Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    marginBottom={'5px'}
+                    paddingLeft="50px"
+                  >
+                    <FactCheckIcon sx={{ color: 'navy' }} />
+                    <Typography
+                      color="black"
+                      variant="subtitle1"
+                      paddingLeft="10px"
+                      paddingTop={'5px'}
+                    >
+                      <strong>
+                        Sugerencia para la mejora de la funcionalidad:
+                      </strong>{' '}
+                      {selectedCustomer?.phone}
                     </Typography>
                   </Box>
                 </Box>
@@ -143,4 +183,4 @@ const UserDetailsModal = ({ open, onClose }) => {
   )
 }
 
-export default UserDetailsModal
+export default ClaimDetail
