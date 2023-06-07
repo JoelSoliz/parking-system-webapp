@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box } from '@mui/material';
-import Typography from '@material-ui/core/Typography';
+import { Box, Typography } from '@mui/material';
 import Layout from '../../components/Layout/Layout';
 import Weekdays from '../../components/weekdays/Weekdays';
 

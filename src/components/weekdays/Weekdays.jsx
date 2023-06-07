@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
 import Color from 'color';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import { Card, Box } from '@mui/material'
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
+import { Card, Box, CardActionArea, CardContent, CardMedia, Typography, Grid, styled } from '@mui/material'
 import Layout from '../../components/Layout/Layout';
 import { useGetWeekdayQuery } from '../../api/schedule';
 import RegisterDate from './RegisterDate';
 
-const useGridStyles = makeStyles(({ breakpoints }) => ({
+const useGridStyles = styled(({ breakpoints }) => ({
     root: {
         [breakpoints.up('md')]: {
             justifyContent: 'center',
@@ -20,40 +14,9 @@ const useGridStyles = makeStyles(({ breakpoints }) => ({
     },
 }));
 
-const useStyles = makeStyles(() => ({
-    actionArea: {
-        borderRadius: '15px',
-        transition: '0.2s',
-        '&:hover': {
-            transform: 'scale(1.1)',
-        },
-    },
-    card: ({ color }) => ({
-        Width: '50%',
-        boxShadow: 'none',
-        '&:hover': {
-            boxShadow: `0 6px 12px 0 ${Color(color)
-                .rotate(-12)
-                .darken(0.2)
-                .fade(0.5)}`,
-        },
-    }),
+const useStyles = styled(() => ({
     content: {
         padding: '1rem 1rem 1rem',
-    },
-    title: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        color: '#fff',
-        textTransform: 'uppercase',
-        align: "center",
-    },
-    subtitle: {
-        color: '#000',
-        opacity: 0.87,
-        fontWeight: 500,
-        fontSize: 14,
-        marginY: 2,
     },
 }));
 
@@ -78,16 +41,32 @@ function convertDayToSpanish(day) {
 
 const CustomCard = ({ classes, title, subtitle, subtitle2, onSelect }) => {
     return (
-        <CardActionArea className={classes.actionArea} onClick={onSelect}>
-            <Card className={classes.card} style={{ borderRadius: '15px' }}>
+        <CardActionArea onClick={onSelect} sx={{
+            borderRadius: '15px',
+            transition: '0.2s',
+            '&:hover': {
+                transform: 'scale(1.1)',
+            },
+        }}
+        >
+            <Card sx={{
+                borderRadius: '10px', width: '100%',
+                boxShadow: 'none',
+                '&:hover': {
+                    boxShadow: `0 6px 12px 0 ${Color()
+                        .rotate(-12)
+                        .darken(0.2)
+                        .fade(0.5)}`,
+                },
+            }} >
                 <CardMedia style={{ backgroundColor: '#203f52', padding: '1rem 1rem 1rem' }}>
-                    <Typography className={classes.title} variant={'h2'}>
+                    <Typography style={{ color: '#fff' }} variant="h5" fontWeight="bold" >
                         {convertDayToSpanish(title)}
                     </Typography>
                 </CardMedia>
                 <CardContent className={classes.content} style={{ backgroundColor: '#EBF2F5' }}>
-                    <Typography className={classes.subtitle}><b>Inicio:</b> {subtitle}</Typography>
-                    <Typography className={classes.subtitle}><b>Cierre:</b> {subtitle2}</Typography>
+                    <Typography ><b>Inicio:</b> {subtitle}</Typography>
+                    <Typography ><b>Cierre:</b> {subtitle2}</Typography>
 
                 </CardContent>
             </Card>
@@ -128,7 +107,7 @@ const Weekdays = ({ isEditable = false }) => {
                 }}
                     style={{ borderColor: '#90b4ce' }}
                 >
-                    <Grid classes={gridStyles} container spacing={3}>
+                    <Grid classes={gridStyles} container spacing={3} justifyContent='center'>
                         {data?.map((day, i) => (
                             <Grid item key={i}>
                                 <CustomCard

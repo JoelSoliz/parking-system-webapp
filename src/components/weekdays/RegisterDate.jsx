@@ -64,9 +64,17 @@ const RegisterDate = ({ open, onClose, inivalue, onChange }) => {
     const label = convertDayToSpanish(inivalue?.days || '')
     const op = toDay(inivalue?.openning_time)
     const cl = toDay(inivalue?.clousing_time)
-    console.log(op)
-    const [value, setvalue] = useState(() => ({ openning: op, clousing: cl }))
-    console.log(value.openning)
+    const [value, setvalue] = useState({ openning: op, clousing: cl })
+
+    useEffect(() => {
+        if (inivalue) {
+            setvalue({
+                openning: toDay(inivalue.openning_time),
+                clousing: toDay(inivalue.clousing_time),
+            })
+        }
+    }, [inivalue])
+
     const handleTimeChangeStart = (time) => {
         setvalue((val) => ({
             ...val,
