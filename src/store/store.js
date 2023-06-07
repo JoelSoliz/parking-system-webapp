@@ -12,6 +12,8 @@ import rootReducer from '.'
 import { vehicleAPI } from '../api/vehicle'
 import { customerAPI } from '../api/customer'
 import { reservationAPI } from '../api/reservations'
+import { scheduleAPI } from '../api/schedule'
+import { claimAPI } from '../api/claim'
 
 const store = configureStore({
   reducer: rootReducer,
@@ -23,7 +25,9 @@ const store = configureStore({
     })
       .concat(vehicleAPI.middleware)
       .concat(customerAPI.middleware)
-      .concat(reservationAPI.middleware),
+      .concat(reservationAPI.middleware)
+      .concat(scheduleAPI.middleware)
+      .concat(claimAPI.middleware),
 })
 
 export const persistor = persistStore(store)

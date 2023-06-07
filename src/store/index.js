@@ -8,7 +8,9 @@ import sessionReducer from './slices/session'
 import { vehicleAPI } from '../api/vehicle'
 import { customerAPI } from '../api/customer'
 import { reservationAPI } from '../api/reservations'
-
+import { scheduleAPI } from '../api/schedule'
+import { claimAPI } from '../api/claim'
+ 
 const sessionPersistConfig = {
   key: 'session',
   storage,
@@ -21,6 +23,8 @@ const rootReducer = combineReducers({
   [vehicleAPI.reducerPath]: vehicleAPI.reducer,
   [customerAPI.reducerPath]: customerAPI.reducer,
   [reservationAPI.reducerPath]: reservationAPI.reducer,
+  [scheduleAPI.reducerPath]: scheduleAPI.reducer,
+  [claimAPI.reducerPath]: claimAPI.reducer,
 })
 
 export default rootReducer
