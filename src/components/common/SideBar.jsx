@@ -81,7 +81,7 @@ export default function SideBar({ children }) {
           to="/admin/requests"
         />
         <LinkTab
-          label="Registrar Horario"
+          label="Horarios"
           {...a11yProps(2)}
           sx={{
             fontWeight: 'bold',
@@ -93,7 +93,22 @@ export default function SideBar({ children }) {
             },
           }}
           style={{ color: '#fff' }}
-          to="/admin/schedule"
+          to="/admin/registerSchedule"
+        />
+        <LinkTab
+          label="Reclamos"
+          {...a11yProps(2)}
+          sx={{
+            fontWeight: 'bold',
+            color: '#3da9fc',
+            '&:hover': {
+              backgroundColor: '#3da9fc',
+              color: '#fff',
+              fontWeight: 'bold',
+            },
+          }}
+          style={{ color: '#fff' }}
+          to="/admin/claim"
         />
       </Tabs>
       <Box sx={{ p: 1, bgcolor: '#fffffe', width: '100%' }}>{children}</Box>

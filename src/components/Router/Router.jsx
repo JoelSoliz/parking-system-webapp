@@ -18,7 +18,8 @@ import ErrorBoundary from './ErrorBoundary'
 import RegisterClaim from '../../routes/client/RegisterClaim'
 import Price from '../../routes/common/Price'
 import RegisterSchedule from '../../routes/admin/RegisterSchedule'
-
+import Schedule from '../../routes/common/Schedule'
+import ClaimList from '../../routes/admin/ClaimList'
 const Router = () => {
   return (
     <Routes>
@@ -26,6 +27,7 @@ const Router = () => {
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="price" element={<Price />} />
+        <Route path="schedule" element={<Schedule />} />
         <Route path="register-user" element={<RegisterUser />} />
         <Route path="unauthorized" element={<Unauthorized />} />
         <Route
@@ -83,10 +85,18 @@ const Router = () => {
           }
         />
         <Route
-          path="schedule"
+          path="registerSchedule"
           element={
             <PrivateRoute needed_permission={['EMPL', 'ADMN']}>
               <RegisterSchedule />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="claim"
+          element={
+            <PrivateRoute needed_permission={['EMPL', 'ADMN']}>
+              <ClaimList />
             </PrivateRoute>
           }
         />

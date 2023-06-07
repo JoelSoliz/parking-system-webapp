@@ -59,6 +59,12 @@ const NavBar = () => {
               >
                 Precios
               </Link>
+              <Link
+                style={{ color: '#fff', textDecoration: 'none' }}
+                to={'/Schedule'}
+              >
+                Horarios
+              </Link>
               {!isAuthenticate ? (
                 <>
                   <Link
@@ -147,6 +153,14 @@ const NavBar = () => {
                     to={'/price'}
                   >
                     Precios
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <Link
+                    style={{ color: '#333', textDecoration: 'none' }}
+                    to={'/schedule'}
+                  >
+                    Horarios
                   </Link>
                 </MenuItem>
                 {!isAuthenticate ? (
