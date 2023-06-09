@@ -2,15 +2,11 @@ import React from 'react'
 import { styled } from '@mui/material/styles'
 
 import { Modal, Fade, Typography, Box } from '@mui/material'
-import { useSelector } from 'react-redux'
-import { customersSelector } from '../../../store/slices/customers'
 import BadgeIcon from '@mui/icons-material/Badge'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid'
 import DescriptionIcon from '@mui/icons-material/Description'
 import WysiwygIcon from '@mui/icons-material/Wysiwyg'
-import FactCheckIcon from '@mui/icons-material/FactCheck'
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
@@ -26,156 +22,208 @@ const StyledModal = styled(Modal)(({ theme }) => ({
   },
 }))
 
-const ClaimDetail = ({ open, onClose }) => {
-  const { loading, selectedCustomer } = useSelector(customersSelector)
-
+const ClaimDetail = ({ open, onClose, claim }) => {
   return (
     <>
       <StyledModal open={open} onClose={onClose}>
         <Fade in={open}>
-          <Box
-            backgroundColor={'#fffffe'}
-            container
-            spacing={5}
-            width={'50%'}
-            paddingY={'50px'}
-            borderRadius={'20px'}
-          >
-            <Box marginBottom={'20px'}>
-              <Typography color="black" variant="h5" align="center">
-                <strong>DETALLES DEL RECLAMO</strong>
-              </Typography>
-            </Box>
-            {loading === 'pending' ? (
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
-                Cargando detalles...
-              </Typography>
-            ) : (
-              <>
-                <Box display={'flex'} flexDirection={'column'} gap={'5px'}>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    marginBottom={'5px'}
-                    paddingLeft="50px"
-                  >
-                    <AccountCircleIcon sx={{ color: 'navy' }} />
-                    <Typography
-                      color="black"
-                      variant="subtitle1"
-                      paddingLeft="10px"
-                      paddingTop={'5px'}
-                    >
-                      <strong>Nombre(s):</strong> {selectedCustomer?.name}
+          <Box backgroundColor={'#fffffe'} spacing={5} borderRadius={'20px'}>
+            <>
+              <Box
+                display={'flex'}
+                flexDirection={'row'}
+                gap={'5px'}
+                minwidth="70px"
+              >
+                <Box
+                  minwidth="70px"
+                  margin="0 auto"
+                  bgcolor="lightblue"
+                  display="flex"
+                  borderRadius="20px 0 0 20px"
+                  flexDirection={'column'}
+                  paddingTop={'1cm'}
+                  paddingLeft={'15px'}
+                  padding={'1cm 15px'}
+                >
+                  <Box marginBottom={'30px'}>
+                    <Typography color="black" variant="h5" align="center">
+                      <strong>USUARIO</strong>
                     </Typography>
                   </Box>
                   <Box
                     display="flex"
-                    alignItems="center"
-                    marginBottom={'5px'}
-                    paddingLeft="50px"
+                    marginBottom={'35px'}
+                    maxWidth="180px"
+                    gap={'10px'}
                   >
-                    <AccountBoxIcon sx={{ color: 'navy' }} />
-                    <Typography
-                      color="black"
-                      variant="subtitle1"
-                      paddingLeft="10px"
-                      paddingTop={'5px'}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
                     >
-                      <strong>Apellido(s):</strong>
-                      {selectedCustomer?.last_name}
-                    </Typography>
+                      <AccountCircleIcon sx={{ color: 'navy', fontSize: 35 }} />
+                    </Box>
+                    <Box
+                      sx={{
+                        display: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100%',
+                      }}
+                    >
+                      <Typography
+                        color="black"
+                        variant="subtitle1"
+                        marginBottom="5px"
+                      >
+                        <strong>Nombre y apellido:</strong>
+                      </Typography>
+                      <Typography
+                        color="black"
+                        sx={{ wordBreak: 'break-word' }}
+                      >
+                        {`${claim?.customer.name} ${claim?.customer.last_name}`}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Box
+                    display="flex"
+                    marginBottom={'35px'}
+                    maxWidth="190px"
+                    gap={'10px'}
+                  >
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <BadgeIcon sx={{ color: 'navy', fontSize: 35 }} />
+                    </Box>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: '100%',
+                      }}
+                    >
+                      <Typography
+                        color="black"
+                        variant="subtitle1"
+                        style={{ lineHeight: '1' }}
+                      >
+                        <strong>CI: </strong>
+                        {claim?.customer.ci}
+                      </Typography>
+                    </Box>
                   </Box>
                   <Box
                     display="flex"
                     alignItems="center"
-                    marginBottom={'5px'}
-                    paddingLeft="50px"
+                    maxWidth="180px"
+                    gap={'10px'}
                   >
-                    <BadgeIcon sx={{ color: 'navy' }} />
-                    <Typography
-                      color="black"
-                      variant="subtitle1"
-                      paddingLeft="10px"
-                      paddingTop={'5px'}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
                     >
-                      <strong>CI:</strong> {selectedCustomer?.ci}
+                      <PhoneAndroidIcon sx={{ color: 'navy', fontSize: 35 }} />
+                    </Box>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: '100%',
+                      }}
+                    >
+                      <Typography
+                        color="black"
+                        variant="subtitle1"
+                        style={{ lineHeight: '1' }}
+                      >
+                        <strong>Celular: </strong>
+                        {claim?.customer.phone}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box padding="1cm" maxWidth={'13cm'} minwidth={'70px'}>
+                  <Box marginBottom={'20px'}>
+                    <Typography color="black" variant="h5" align="center">
+                      <strong>DETALLES DEL RECLAMO</strong>
                     </Typography>
                   </Box>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    marginBottom={'5px'}
-                    paddingLeft="50px"
-                  >
-                    <PhoneAndroidIcon sx={{ color: 'navy' }} />
+                  <Box marginBottom={'15px'}>
+                    <Box display="flex" alignItems="center">
+                      <WysiwygIcon sx={{ color: 'navy' }} />
+                      <Typography
+                        color="black"
+                        variant="subtitle1"
+                        paddingTop={'5px'}
+                        paddingLeft="5px"
+                      >
+                        <strong>Asunto del reclamo</strong>
+                      </Typography>
+                    </Box>
                     <Typography
                       color="black"
-                      variant="subtitle1"
-                      paddingLeft="10px"
-                      paddingTop={'5px'}
+                      paddingLeft="28px"
+                      sx={{ wordBreak: 'break-word' }}
                     >
-                      <strong>Celular:</strong> {selectedCustomer?.phone}
+                      {claim?.claim.subject}
                     </Typography>
                   </Box>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    marginBottom={'5px'}
-                    paddingLeft="50px"
-                  >
-                    <WysiwygIcon sx={{ color: 'navy' }} />
+                  <Box marginBottom={'15px'}>
+                    <Box display="flex" alignItems="center">
+                      <DescriptionIcon sx={{ color: 'navy' }} />
+                      <Typography
+                        color="black"
+                        variant="subtitle1"
+                        paddingTop={'5px'}
+                        paddingLeft="5px"
+                      >
+                        <strong>Descripción de los hechos</strong>
+                      </Typography>
+                    </Box>
                     <Typography
                       color="black"
-                      variant="subtitle1"
-                      paddingLeft="10px"
-                      paddingTop={'5px'}
+                      paddingLeft="28px"
+                      sx={{ wordBreak: 'break-word' }}
                     >
-                      <strong>Asunto del reclamo:</strong>
-                      {selectedCustomer?.phone}
+                      {claim?.claim.description}
                     </Typography>
                   </Box>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    marginBottom={'5px'}
-                    paddingLeft="50px"
-                  >
-                    <DescriptionIcon sx={{ color: 'navy' }} />
+                  <Box marginBottom={'15px'}>
+                    <Box display="flex" alignItems="center">
+                      <WysiwygIcon sx={{ color: 'navy' }} />
+                      <Typography
+                        color="black"
+                        variant="subtitle1"
+                        paddingTop={'5px'}
+                        paddingLeft="5px"
+                      >
+                        <strong>Sugerencias</strong>
+                      </Typography>
+                    </Box>
                     <Typography
                       color="black"
-                      variant="subtitle1"
-                      paddingLeft="10px"
-                      paddingTop={'5px'}
+                      paddingLeft="28px"
+                      sx={{ wordBreak: 'break-word' }}
                     >
-                      <strong>
-                        Descripción de los hechos que son objeto del reclamo:
-                      </strong>
-                      {selectedCustomer?.phone}
-                    </Typography>
-                  </Box>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    marginBottom={'5px'}
-                    paddingLeft="50px"
-                  >
-                    <FactCheckIcon sx={{ color: 'navy' }} />
-                    <Typography
-                      color="black"
-                      variant="subtitle1"
-                      paddingLeft="10px"
-                      paddingTop={'5px'}
-                    >
-                      <strong>
-                        Sugerencia para la mejora de la funcionalidad:
-                      </strong>
-                      {selectedCustomer?.phone}
+                      {claim?.claim.request}
                     </Typography>
                   </Box>
                 </Box>
-              </>
-            )}
+              </Box>
+            </>
           </Box>
         </Fade>
       </StyledModal>

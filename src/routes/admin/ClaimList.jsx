@@ -22,7 +22,7 @@ const RequestList = () => {
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(20)
   const { data, refetch } = useGetClaimsQuery({ page: page + 1 })
-  const [openModal, setOpenModal] = React.useState(false)
+  const [openModal, setOpenModal] = React.useState(null)
 
   useEffect(() => {
     refetch()
@@ -38,7 +38,11 @@ const RequestList = () => {
   }
   return (
     <Layout title="Lista de reclamos">
-      <ClaimDetail open={openModal} onClose={() => setOpenModal(false)} />
+      <ClaimDetail
+        open={!!openModal}
+        onClose={() => setOpenModal(null)}
+        claim={openModal}
+      />
       <Box
         alignItems="center"
         justifyContent="center"
@@ -47,7 +51,7 @@ const RequestList = () => {
         marginTop={3}
         marginLeft={3}
       >
-        <Typography variant="h3" color={'black'}>
+        <Typography variant="h3" color={'black'} paddingLeft={'39px'}>
           Reclamos
         </Typography>
 
@@ -101,7 +105,7 @@ const RequestList = () => {
                           tabIndex={-1}
                           key={i}
                           onClick={() => {
-                            setOpenModal(true)
+                            setOpenModal(claim)
                           }}
                         >
                           <TableCell>
