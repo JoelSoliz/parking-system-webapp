@@ -7,7 +7,7 @@ export const claimAPI = createApi({
   }),
   endpoints: (builder) => ({
     getClaims: builder.query({
-      query: ({page}) => {
+      query: ({ page }) => {
         let token = localStorage.getItem('token')
         return {
           url: `/claim/?current_page=${page}`,
@@ -16,7 +16,17 @@ export const claimAPI = createApi({
         }
       },
     }),
+    getClaim: builder.query({
+      query: ({ id }) => {
+        let token = localStorage.getItem('token')
+        return {
+          url: `/claim/${id}`,
+          method: 'GET',
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      },
+    }),
   }),
 })
 
-export const { useGetClaimsQuery} = claimAPI
+export const { useGetClaimsQuery, useGetClaimQuery } = claimAPI

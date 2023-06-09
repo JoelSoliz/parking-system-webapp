@@ -113,6 +113,8 @@ const RequestList = () => {
                           style={{
                             minWidth: column.minWidth,
                             backgroundColor: '#90b4ce',
+                            fontWeight: 'bold',
+                            fontSize: '15px',
                           }}
                         >
                           {column.label}
