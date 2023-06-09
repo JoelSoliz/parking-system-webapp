@@ -26,7 +26,23 @@ export const claimAPI = createApi({
         }
       },
     }),
+    registerClaim: builder.mutation({
+      query: (data) => {
+        let token = localStorage.getItem('token')
+
+        return {
+          url: `/claim/`,
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-type': 'application/json',
+          },
+        }
+      },
+    }),
   }),
 })
 
-export const { useGetClaimsQuery, useGetClaimQuery } = claimAPI
+export const { useGetClaimsQuery, useGetClaimQuery, useRegisterClaimMutation } =
+  claimAPI
