@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import {
   Button,
@@ -10,11 +10,11 @@ import {
   Box,
 } from '@mui/material'
 import Layout from '../../components/Layout/Layout'
-import { useRegisterVehicleMutation } from '../../api/vehicle'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { sessionSelector } from '../../store/slices/session'
 import { useSelector } from 'react-redux'
+import { useRegisterClaimMutation } from '../../api/claim'
 
 const ERROR_MESSAGES = {
   maxLength: 'La longitud máxima es',
@@ -30,37 +30,33 @@ const RegisterClaim = () => {
     control,
     formState: { errors, isValid },
     reset,
+    handleSubmit,
   } = useForm({ mode: 'onChange' })
   const [
-    registerVehicle,
+    registerClaim,
     { data, error, isLoading, isError, isSuccess, reset: resetState },
-  ] = useRegisterVehicleMutation()
-  const [imageSrc, setImageSrc] = useState(null)
+  ] = useRegisterClaimMutation()
   const handleSubmitData = (data) => {
-    registerVehicle({ data, image: imageSrc })
+    registerClaim({
+      subject: data.subject,
+      description: data.description,
+      request: data.request,
+      registration_date: new Date().toISOString(),
+    })
   }
   useEffect(() => {
     if (isSuccess) {
       reset({
-        color: '',
-        photo: [],
-        plate: '',
-        type: '',
+        subject: '',
+        description: '',
+        request: '',
       })
-      setImageSrc(null)
-      toast.success(
-        `Vehiculo ${data?.license_plate} registrado correctamente.`,
-        {
-          action: {
-            label: 'Ir al Inicio',
-            onClick: () => navigate('/'),
-          },
-        },
-      )
+      toast.success(`Se registró su reclamo exitosamente.`)
+      navigate('/')
     } else if (isError) {
-      toast.error(`Vehiculo no registrado. ${error.data?.detail || error.data}`)
+      toast.error(`Reclamo no registrado. ${error.data?.detail || error.data}`)
     }
-    resetState()
+    return () => resetState()
   }, [data, error])
 
   return (
@@ -135,7 +131,7 @@ const RegisterClaim = () => {
         </Box>
         <Controller
           control={control}
-          name="affair"
+          name="subject"
           rules={{
             pattern: {
               message: ERROR_MESSAGES.numbers,
@@ -154,13 +150,13 @@ const RegisterClaim = () => {
           render={({ field: { onChange, value } }) => (
             <>
               <TextField
-                error={!!errors.affair?.message}
+                error={!!errors.subject?.message}
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
                 label="Asunto del reclamo"
                 variant="outlined"
                 type={'text'}
-                helperText={errors.affair?.message}
+                helperText={errors.subject?.message}
               />
             </>
           )}
@@ -201,7 +197,7 @@ const RegisterClaim = () => {
         />
         <Controller
           control={control}
-          name="suggestion"
+          name="request"
           rules={{
             pattern: {
               message: ERROR_MESSAGES.symbols,
@@ -220,7 +216,7 @@ const RegisterClaim = () => {
           render={({ field: { onChange, value } }) => (
             <>
               <TextField
-                error={!!errors.suggestion?.message}
+                error={!!errors.request?.message}
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
                 label="Sugerencia para la mejora de la funcionalidad"
@@ -228,7 +224,7 @@ const RegisterClaim = () => {
                 multiline
                 rows={3}
                 type={'text'}
-                helperText={errors.suggestion?.message}
+                helperText={errors.request?.message}
               />
             </>
           )}
@@ -265,7 +261,7 @@ const RegisterClaim = () => {
               variant="contained"
               color="secondary"
               disabled={!isValid}
-              onClick={() => handleSubmitData(data)}
+              onClick={handleSubmit((data) => handleSubmitData(data))}
             >
               Enviar
             </Button>
