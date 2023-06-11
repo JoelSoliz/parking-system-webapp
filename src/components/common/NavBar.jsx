@@ -88,13 +88,13 @@ const NavBar = () => {
                         style={{ color: '#fff', textDecoration: 'none' }}
                         to={'/register-vehicle'}
                       >
-                        Registrar Vehículo
+                        Registrar vehículo
                       </Link>
                       <Link
                         style={{ color: '#fff', textDecoration: 'none' }}
                         to={'/register-claim'}
                       >
-                        Presentar Reclamo
+                        Presentar reclamo
                       </Link>
                     </>
                   )}
@@ -114,7 +114,7 @@ const NavBar = () => {
                     }}
                     onClick={() => dispatch(logout())}
                   >
-                    Cerrar Sesión
+                    Cerrar sesión
                   </Button>
                 </>
               )}
@@ -178,7 +178,7 @@ const NavBar = () => {
                         style={{ color: '#333', textDecoration: 'none' }}
                         to={'/login'}
                       >
-                        Iniciar Sesión
+                        Iniciar sesión
                       </Link>
                     </MenuItem>
                     <MenuItem onClick={handleClose}>
@@ -199,7 +199,7 @@ const NavBar = () => {
                             style={{ color: '#333', textDecoration: 'none' }}
                             to={'/register-vehicle'}
                           >
-                            Registrar Vehículo
+                            Registrar vehículo
                           </Link>
                         </MenuItem>
 
@@ -208,7 +208,7 @@ const NavBar = () => {
                             style={{ color: '#333', textDecoration: 'none' }}
                             to={'/register-claim'}
                           >
-                            Presentar Reclamo
+                            Presentar reclamo
                           </Link>
                         </MenuItem>
                       </>
@@ -233,8 +233,14 @@ const NavBar = () => {
                         }}
                         onClick={() => dispatch(logout())}
                       >
-                        Cerrar Sesión
+                        Cerrar sesión
                       </Button>
+                      <Link
+                        style={{ color: '#333', textDecoration: 'none' }}
+                        to={'/'}
+                      >
+                        Adminitración
+                      </Link>
                     </MenuItem>
                   </>
                 )}

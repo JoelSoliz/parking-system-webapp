@@ -89,7 +89,7 @@ const RegisterClaim = () => {
               align="center"
               sx={{ m: 0 }}
             >
-              Formulario de Reclamo
+              Formulario de reclamo
             </Typography>
           </Box>
         </CardContent>

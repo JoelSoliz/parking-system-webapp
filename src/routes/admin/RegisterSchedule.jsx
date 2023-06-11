@@ -10,12 +10,17 @@ const RegisterSchedule = () => {
         align="center"
         justifyContent="center"
         marginY={3}
-        marginX={10}
-        marginLeft={3}
+        //marginX={10}
+        //marginLeft={3}
         width="100%"
       >
         <Box>
-          <Typography variant="h3" color="black" align="left">
+          <Typography
+            variant="h3"
+            color="black"
+            paddingLeft={'165px'}
+            align="left"
+          >
             Registro de horario
           </Typography>
           <Weekdays isEditable={true} />

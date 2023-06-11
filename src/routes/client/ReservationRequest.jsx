@@ -164,7 +164,7 @@ const ReservationRequest = () => {
           borderRadius: '15px',
           marginY: 1,
           border: 5,
-          marginBottom: '70px',
+          marginBottom: '60px',
         }}
         style={{ borderColor: '#90b4ce' }}
       >
@@ -212,7 +212,6 @@ const ReservationRequest = () => {
             style={{ flexGrow: 1, flexShrink: 1 }}
           />
         </Box>
-
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <CalendarPicker
             selectedDateStart={selectedDateStart}
@@ -221,7 +220,6 @@ const ReservationRequest = () => {
             onDateChangeEnd={handleDateChangeEnd}
           />
         </LocalizationProvider>
-
         {((weekdays.includes('Sunday') && weekdays.length > 1) ||
           weekdays.length > 0) && (
           <Typography gutterBottom variant="h8" component="div">

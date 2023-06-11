@@ -314,15 +314,17 @@ const RegisterUser = () => {
               }}
               render={({ field: { onChange, value } }) => (
                 <>
-                  <FormControl variant="outlined">
+                  <FormControl
+                    variant="outlined"
+                    style={{
+                      width: '100%',
+                      marginRight: '18px',
+                    }}
+                  >
                     <InputLabel htmlFor="outlined-adornment-password">
                       Contraseña
                     </InputLabel>
                     <OutlinedInput
-                      style={{
-                        marginRight: '18px',
-                        width: '265px',
-                      }}
                       id="outlined-adornment-password"
                       type={showPassword ? 'text' : 'password'}
                       endAdornment={
@@ -371,13 +373,12 @@ const RegisterUser = () => {
               }}
               render={({ field: { onChange, value } }) => (
                 <>
-                  <FormControl variant="outlined">
+                  <FormControl variant="outlined" sx={{ width: '100%' }}>
                     <InputLabel htmlFor="outlined-adornment-password">
                       Confirmar contraseña
                     </InputLabel>
                     <OutlinedInput
                       id="outlined-adornment-password"
-                      style={{ width: '265px' }}
                       type={showPasswordC ? 'text' : 'password'}
                       endAdornment={
                         <InputAdornment position="end">

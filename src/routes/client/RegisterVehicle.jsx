@@ -120,7 +120,7 @@ const RegisterVehicle = () => {
               align="center"
               sx={{ m: 0 }}
             >
-              Registrar Vehículo
+              Registrar vehículo
             </Typography>
           </Box>
         </CardContent>
