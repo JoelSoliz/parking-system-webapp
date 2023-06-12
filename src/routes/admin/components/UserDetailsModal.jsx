@@ -4,6 +4,11 @@ import { styled } from '@mui/material/styles'
 import { Modal, Fade, Typography, Box } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { customersSelector } from '../../../store/slices/customers'
+import BadgeIcon from '@mui/icons-material/Badge'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import AccountBoxIcon from '@mui/icons-material/AccountBox'
+import EmailIcon from '@mui/icons-material/Email'
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid'
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
@@ -30,13 +35,17 @@ const UserDetailsModal = ({ open, onClose }) => {
             backgroundColor={'#fffffe'}
             container
             spacing={5}
-            width={'40%'}
-            paddingY={'50px'}
-            borderRadius={'20px'}
+            width={'33%'}
+            paddingY={'45px'}
+            borderRadius={'40px'}
+            style={{
+              background:
+                'linear-gradient(to bottom,#b0bec5, #ffffff, #b0bec5)',
+            }}
           >
             <Box marginBottom={'20px'}>
-              <Typography color="black" variant="h4" align="center">
-                Detalles de usuario
+              <Typography color="black" variant="h5" align="center">
+                <strong>DATOS DEL USUARIO</strong>
               </Typography>
             </Box>
             {loading === 'pending' ? (
@@ -46,46 +55,88 @@ const UserDetailsModal = ({ open, onClose }) => {
             ) : (
               <>
                 <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
-                  <Typography
-                    color="black"
-                    variant="subtitle1"
-                    paddingLeft="100px"
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    marginBottom={'5px'}
+                    paddingLeft="60px"
                   >
-                    <strong>CI:</strong> {selectedCustomer?.ci}
-                  </Typography>
-
-                  <Typography
-                    color="black"
-                    variant="subtitle1"
-                    paddingLeft="100px"
+                    <BadgeIcon sx={{ color: 'navy' }} />
+                    <Typography
+                      color="black"
+                      variant="subtitle1"
+                      paddingLeft="10px"
+                      paddingTop={'5px'}
+                    >
+                      <strong>CI: </strong> {selectedCustomer?.ci}
+                    </Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    marginBottom={'5px'}
+                    paddingLeft="60px"
                   >
-                    <strong>Nombre(s):</strong> {selectedCustomer?.name}
-                  </Typography>
-
-                  <Typography
-                    color="black"
-                    variant="subtitle1"
-                    paddingLeft="100px"
+                    <AccountCircleIcon sx={{ color: 'navy' }} />
+                    <Typography
+                      color="black"
+                      variant="subtitle1"
+                      paddingLeft="10px"
+                      paddingTop={'5px'}
+                    >
+                      <strong>Nombre(s): </strong> {selectedCustomer?.name}
+                    </Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    marginBottom={'5px'}
+                    paddingLeft="60px"
                   >
-                    <strong>Apellido(s):</strong> {selectedCustomer?.last_name}
-                  </Typography>
-
-                  <Typography
-                    color="black"
-                    variant="subtitle1"
-                    paddingLeft="100px"
+                    <AccountBoxIcon sx={{ color: 'navy' }} />
+                    <Typography
+                      color="black"
+                      variant="subtitle1"
+                      paddingLeft="10px"
+                      paddingTop={'5px'}
+                    >
+                      <strong>Apellido(s): </strong>{' '}
+                      {selectedCustomer?.last_name}
+                    </Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    marginBottom={'5px'}
+                    paddingLeft="60px"
                   >
-                    <strong>Correo electrónico:</strong>{' '}
-                    {selectedCustomer?.email}
-                  </Typography>
-
-                  <Typography
-                    color="black"
-                    variant="subtitle1"
-                    paddingLeft="100px"
+                    <EmailIcon sx={{ color: 'navy' }} />
+                    <Typography
+                      color="black"
+                      variant="subtitle1"
+                      paddingLeft="10px"
+                      paddingTop={'5px'}
+                    >
+                      <strong>Correo electrónico: </strong>
+                      {selectedCustomer?.email}
+                    </Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    marginBottom={'5px'}
+                    paddingLeft="60px"
                   >
-                    <strong>Celular:</strong> {selectedCustomer?.phone}
-                  </Typography>
+                    <PhoneAndroidIcon sx={{ color: 'navy' }} />
+                    <Typography
+                      color="black"
+                      variant="subtitle1"
+                      paddingLeft="10px"
+                      paddingTop={'5px'}
+                    >
+                      <strong>Celular: </strong> {selectedCustomer?.phone}
+                    </Typography>
+                  </Box>
                 </Box>
               </>
             )}
