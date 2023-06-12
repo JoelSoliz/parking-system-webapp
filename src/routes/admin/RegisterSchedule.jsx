@@ -6,14 +6,7 @@ import Weekdays from '../../components/weekdays/Weekdays'
 const RegisterSchedule = () => {
   return (
     <Layout title="Registrar horario">
-      <Box
-        align="center"
-        justifyContent="center"
-        marginY={3}
-        //marginX={10}
-        //marginLeft={3}
-        width="100%"
-      >
+      <Box align="center" justifyContent="center" marginY={3} width="100%">
         <Box>
           <Typography
             variant="h3"
