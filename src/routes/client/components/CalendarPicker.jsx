@@ -86,7 +86,7 @@ const CalendarPicker = (props) => {
   }, [error])
 
   return (
-    <FormControl error={error}>
+    <FormControl error={error} sx={{ alignItems: 'center' }}>
       <DemoContainer components={['DesktopDatePicker', 'DesktopDatePicker']}>
         <DemoItem>
           <DesktopDatePicker

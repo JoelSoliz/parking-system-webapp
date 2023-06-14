@@ -1,65 +1,57 @@
-import { Box, Typography, Button } from '@mui/material'
 import React from 'react'
+import { Box, Typography, Button } from '@mui/material'
+import { NoteAlt, Info } from '@mui/icons-material'
 import { FeatureGroup, Polygon, Popup } from 'react-leaflet'
 import { useNavigate } from 'react-router-dom'
 
-const Spot = ({ value }) => {
+const Spot = ({ value, onSelect }) => {
   const navigate = useNavigate()
-  const getFeatureStyle = (feature) => {
-    const { properties } = feature
-
-    if (properties.status === 'free') {
-      return { fillColor: '#00ff00', color: 'black' }
-    } else if (properties.status === 'reserved') {
-      return { fillColor: '#0000ff', color: 'black' }
-    } else {
-      return { fillColor: '#ff0000', color: 'black' }
-    }
-  }
-  const getStatus = (status) => {
-    switch (status) {
-      case 'assigned':
-        return 'Asignado'
-      case 'reserved':
-        return 'Reservado'
-      case 'free':
-      default:
-        return 'Libre'
-    }
-  }
 
   return (
     <FeatureGroup>
       <Popup>
-        <Box>
+        <Box sx={{ '&>p': { margin: '0' } }}>
           <Typography>
-            <strong>Espacio:</strong> {value.properties.name}
+            <strong>Espacio:</strong> {value.name}
           </Typography>
-          <Typography>
-            <strong>Estado:</strong> {getStatus(value.properties.status)}
-          </Typography>
-
+          {/* <Typography>
+            <strong>Sección:</strong>{' '}
+            {value.section.slice(0, 1).toUpperCase() + value.section.slice(1)}
+          </Typography> */}
           <Box
             sx={{
               display: 'flex',
+              flexDirection: 'column',
+              gap: '5px',
               justifyContent: 'center',
-              marginTop: 1,
-              paddingLeft: '5px',
+              marginTop: '10px',
             }}
           >
             <Button
               variant="contained"
-              color="secondary"
-              onClick={() => navigate(`/request/${'OVEF'}`)}
+              color="primary"
+              startIcon={<NoteAlt />}
+              onClick={() => navigate(`/request/${value.id_spot}`)}
+              style={{ textTransform: 'none' }}
             >
               Solicitar
+            </Button>
+            <Button
+              variant="contained"
+              color="info"
+              startIcon={<Info />}
+              onClick={() => onSelect()}
+              style={{ textTransform: 'none' }}
+            >
+              Ver detalles
             </Button>
           </Box>
         </Box>
       </Popup>
       <Polygon
-        positions={value.geometry.coordinates}
-        {...getFeatureStyle(value)}
+        positions={JSON.parse(value.coordinate)}
+        fillColor="#5090ff"
+        color="black"
       />
     </FeatureGroup>
   )
