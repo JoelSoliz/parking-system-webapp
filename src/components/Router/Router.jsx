@@ -20,6 +20,7 @@ import Price from '../../routes/common/Price'
 import RegisterSchedule from '../../routes/admin/RegisterSchedule'
 import Schedule from '../../routes/common/Schedule'
 import ClaimList from '../../routes/admin/ClaimList'
+import RegisterEmployed from '../../routes/admin/RegisterEmployed'
 const Router = () => {
   return (
     <Routes>
@@ -97,6 +98,14 @@ const Router = () => {
           element={
             <PrivateRoute needed_permission={['EMPL', 'ADMN']}>
               <ClaimList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="employed"
+          element={
+            <PrivateRoute needed_permission={['EMPL', 'ADMN']}>
+              <RegisterEmployed />
             </PrivateRoute>
           }
         />
