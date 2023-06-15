@@ -110,6 +110,21 @@ export default function SideBar({ children }) {
           style={{ color: '#fff' }}
           to="/admin/claim"
         />
+        <LinkTab
+          label="Registrar empleado"
+          {...a11yProps(2)}
+          sx={{
+            fontWeight: 'bold',
+            color: '#3da9fc',
+            '&:hover': {
+              backgroundColor: '#3da9fc',
+              color: '#fff',
+              fontWeight: 'bold',
+            },
+          }}
+          style={{ color: '#fff' }}
+          to="/admin/employed"
+        />
       </Tabs>
       <Box sx={{ p: 1, bgcolor: '#fffffe', width: '100%' }}>{children}</Box>
     </Box>
