@@ -235,12 +235,6 @@ const NavBar = () => {
                       >
                         Cerrar sesión
                       </Button>
-                      <Link
-                        style={{ color: '#333', textDecoration: 'none' }}
-                        to={'/'}
-                      >
-                        Adminitración
-                      </Link>
                     </MenuItem>
                   </>
                 )}
