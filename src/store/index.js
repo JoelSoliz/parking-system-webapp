@@ -11,6 +11,7 @@ import { reservationAPI } from '../api/reservations'
 import { scheduleAPI } from '../api/schedule'
 import { claimAPI } from '../api/claim'
 import { parkingAPI } from '../api/parking'
+import { employAPI } from '../api/employed'
 
 const sessionPersistConfig = {
   key: 'session',
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   session: persistReducer(sessionPersistConfig, sessionReducer),
   [vehicleAPI.reducerPath]: vehicleAPI.reducer,
   [customerAPI.reducerPath]: customerAPI.reducer,
+  [employAPI.reducerPath]: employAPI.reducer,
   [reservationAPI.reducerPath]: reservationAPI.reducer,
   [scheduleAPI.reducerPath]: scheduleAPI.reducer,
   [claimAPI.reducerPath]: claimAPI.reducer,
