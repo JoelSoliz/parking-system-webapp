@@ -9,13 +9,12 @@ import {
   Stack,
   FormHelperText,
   Box,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
 } from '@mui/material'
-import FormControlLabel from '@mui/material/FormControlLabel'
 import Layout from '../../components/Layout/Layout'
-import Radio from '@mui/material/Radio'
-import RadioGroup from '@mui/material/RadioGroup'
 import IconButton from '@mui/material/IconButton'
-import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -42,6 +41,7 @@ const ERROR_MESSAGES = {
   celularValidoMin: 'El número movil debe tener 8 dígitos.',
   celularValidoMax: 'Solo se admiten 8 dígitos como máximo.',
   espacios: 'No se admiten espacios.',
+  notification: 'Debe seleccionar esta casilla de forma obligatoria.',
 }
 
 const RegisterUser = () => {
@@ -54,7 +54,9 @@ const RegisterUser = () => {
     formState: { errors, isValid },
     handleSubmit,
     watch,
-  } = useForm({ mode: 'onChange' })
+  } = useForm({
+    mode: 'onChange',
+  })
   const [showPassword, setShowPassword] = useState(false)
   const handleClickShowPassword = () => setShowPassword((show) => !show)
   const [showPasswordC, setShowPasswordC] = useState(false)
@@ -409,40 +411,45 @@ const RegisterUser = () => {
               )}
             />
           </Box>
-          <Box display="flex" alignItems="center" gap={3}>
-            <Typography gutterBottom variant="h8" component="div" sx={{ m: 0 }}>
-              Recibir notificaciones por:
-            </Typography>
-            <Controller
-              control={control}
-              name="notification_type"
-              rules={{
-                required: { message: ERROR_MESSAGES.required, value: true },
+
+          <Controller
+            control={control}
+            name="acceptEmail"
+            rules={{
+              required: { message: ERROR_MESSAGES.notification, value: true },
+              validate: (value) => value === true,
+            }}
+            render={({ field: { onChange, value } }) => (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    error={errors.acceptEmail?.message}
+                    checked={value}
+                    onChange={(event) => {
+                      onChange(event.target.checked)
+                    }}
+                    name="acceptEmail"
+                    color="primary"
+                  />
+                }
+                label="Acepto recibir notificaciones por correo electrónico."
+              />
+            )}
+          />
+          {!!errors.acceptEmail && (
+            <FormHelperText
+              error
+              sx={{
+                marginTop: -5,
+                paddingLeft: '30px',
+                fontSize: 11,
+                letterSpacing: 1,
               }}
-              render={({ field: { onChange, value } }) => (
-                <>
-                  <RadioGroup
-                    error={errors.notification?.message}
-                    value={value}
-                    onChange={(event) => onChange(event.target.value)}
-                  >
-                    <Stack direction="row" spacing={4}>
-                      <FormControlLabel
-                        value="Email"
-                        control={<Radio />}
-                        label="Email"
-                      />
-                      <FormControlLabel
-                        value="Whatsapp"
-                        control={<Radio />}
-                        label="WhatsApp"
-                      />
-                    </Stack>
-                  </RadioGroup>
-                </>
-              )}
-            />
-          </Box>
+            >
+              {errors.acceptEmail?.message}
+            </FormHelperText>
+          )}
+
           {isLoading ? (
             <Typography>Registrandote...</Typography>
           ) : (
@@ -476,7 +483,11 @@ const RegisterUser = () => {
                 variant="contained"
                 color="secondary"
                 onClick={handleSubmit((data) =>
-                  registerUser({ ...data, user_type: '' }),
+                  registerUser({
+                    ...data,
+                    user_type: '',
+                    notification_type: 'Email',
+                  }),
                 )}
                 disabled={!isValid}
               >
