@@ -42,7 +42,7 @@ export const reservationAPI = createApi({
         let token = localStorage.getItem('token')
 
         return {
-          url: `/reservation/spot/${id}?start_date=${startDate}&end_date=${endDate}`,
+          url: `/reservation/spot/${id}?start_date=${startDate}&end_date=${endDate}&id_spot=${id}`,
           method: 'GET',
           headers: { Authorization: `Bearer ${token}` },
         }

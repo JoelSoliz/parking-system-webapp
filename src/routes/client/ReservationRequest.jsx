@@ -19,6 +19,7 @@ import FormGroup from '@mui/material/FormGroup'
 import CalendarPicker from './components/CalendarPicker'
 import { useRegisterReservationMutation } from '../../api/reservations'
 import { toast } from 'sonner'
+import CheckSiteModal from './components/CheckSiteModal'
 
 function daysBetweenDates(date1, date2) {
   const oneDayMs = 24 * 60 * 60 * 1000
@@ -69,6 +70,12 @@ function toLists(schedule) {
   return { day: days, start_time: startTimes, end_time: endTimes }
 }
 
+function convertDate(date) {
+  return `${new Date(date)?.getFullYear()}-${String(
+    new Date(date)?.getMonth() + 1,
+  ).padStart(2, '0')}-${String(new Date(date)?.getDate()).padStart(2, '0')}`
+}
+
 const ReservationRequest = () => {
   const { spotId } = useParams()
   const [error, setError] = useState({
@@ -89,6 +96,7 @@ const ReservationRequest = () => {
   })
   const [selectedDateStart, setSelectedDateStart] = React.useState(null)
   const [selectedDateEnd, setSelectedDateEnd] = React.useState(null)
+  const [open, setOpen] = React.useState(false)
 
   const weekdays = React.useMemo(
     () => getUniqueDaysInRange(selectedDateStart, selectedDateEnd),
@@ -123,16 +131,8 @@ const ReservationRequest = () => {
 
   const handleSubmit = () => {
     registerReservation({
-      start_date: `${new Date(selectedDateStart)?.getFullYear()}-${String(
-        new Date(selectedDateStart)?.getMonth() + 1,
-      ).padStart(2, '0')}-${String(
-        new Date(selectedDateStart)?.getDate(),
-      ).padStart(2, '0')}`,
-      end_date: `${new Date(selectedDateEnd)?.getFullYear()}-${String(
-        new Date(selectedDateEnd)?.getMonth() + 1,
-      ).padStart(2, '0')}-${String(
-        new Date(selectedDateEnd)?.getDate(),
-      ).padStart(2, '0')}`,
+      start_date: convertDate(selectedDateStart),
+      end_date: convertDate(selectedDateEnd),
       id_price: 'PRIC',
       id_spot: spotId,
       ...toLists(days),
@@ -284,6 +284,18 @@ const ReservationRequest = () => {
             )}
           </FormGroup>
         </Box>
+        <CheckSiteModal
+          open={open}
+          onClose={() => setOpen(false)}
+          reservation={{
+            parkings_spots: { id_spot: spotId },
+            reservations: {
+              start_date: convertDate(selectedDateStart),
+              end_date: convertDate(selectedDateEnd),
+            },
+            days,
+          }}
+        />
         {isError && (
           <Typography color={'error'} textAlign={'center'}>
             Error, verifique los datos ingresados.
@@ -309,6 +321,22 @@ const ReservationRequest = () => {
               onClick={() => navigate('/')}
             >
               Cancelar
+            </Button>
+            <Button
+              sx={{
+                width: '180px',
+                height: '38px',
+                fontSize: '12px',
+              }}
+              variant="contained"
+              color="secondary"
+              disabled={!isValid}
+              onClick={() => {
+                console.log('Verificarrrr')
+                setOpen(true)
+              }}
+            >
+              Verificar disponibilidad
             </Button>
             <Button
               sx={{

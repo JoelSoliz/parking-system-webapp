@@ -12,11 +12,13 @@ const Home = () => {
           marginBottom: '20px',
         }}
       >
-        <Typography variant="h1" color="Highlight">
-          Parking System
+        <Typography variant="h2" color="Highlight">
+          Parqueo San Simón
         </Typography>
       </Box>
-      <Map />
+      <Box sx={{ paddingBottom: '20px' }}>
+        <Map />
+      </Box>
     </Layout>
   )
 }
