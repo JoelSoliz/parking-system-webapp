@@ -3,6 +3,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
 import { useNavigate } from 'react-router-dom'
+import ProtectComponent from './ProtectComponent'
 
 function a11yProps(index) {
   return {
@@ -47,24 +48,31 @@ export default function SideBar({ children }) {
         value={value}
         onChange={handleChange}
         aria-label="Vertical tabs example"
-        sx={{ borderRight: 2, borderColor: 'divider', width: '20%', color: '#3da9fc' }}
+        sx={{
+          borderRight: 2,
+          borderColor: 'divider',
+          width: '20%',
+          color: '#3da9fc',
+        }}
         style={{ fontWeight: 'bold', color: 'pink' }}
       >
-        <LinkTab
-          label="Clientes"
-          {...a11yProps(0)}
-          sx={{
-            fontWeight: 'bold',
-            color: '#3da9fc',
-            '&:hover': {
-              backgroundColor: '#3da9fc',
-              color: '#fff',
+        <ProtectComponent needed_permission={['ADMN']}>
+          <LinkTab
+            label="Clientes"
+            {...a11yProps(0)}
+            sx={{
               fontWeight: 'bold',
-            },
-          }}
-          style={{ color: '#fff' }}
-          to="/admin"
-        />
+              color: '#3da9fc',
+              '&:hover': {
+                backgroundColor: '#3da9fc',
+                color: '#fff',
+                fontWeight: 'bold',
+              },
+            }}
+            style={{ color: '#fff', opacity: 1 }}
+            to="/admin"
+          />
+        </ProtectComponent>
         <LinkTab
           label="Solicitudes"
           {...a11yProps(1)}
@@ -110,21 +118,23 @@ export default function SideBar({ children }) {
           style={{ color: '#fff' }}
           to="/admin/claim"
         />
-        <LinkTab
-          label="Registrar empleado"
-          {...a11yProps(2)}
-          sx={{
-            fontWeight: 'bold',
-            color: '#3da9fc',
-            '&:hover': {
-              backgroundColor: '#3da9fc',
-              color: '#fff',
+        <ProtectComponent needed_permission={['ADMN']}>
+          <LinkTab
+            label="Registrar empleado"
+            {...a11yProps(2)}
+            sx={{
               fontWeight: 'bold',
-            },
-          }}
-          style={{ color: '#fff' }}
-          to="/admin/employed"
-        />
+              color: '#3da9fc',
+              '&:hover': {
+                backgroundColor: '#3da9fc',
+                color: '#fff',
+                fontWeight: 'bold',
+              },
+            }}
+            style={{ color: '#fff', opacity: 1 }}
+            to="/admin/employed"
+          />
+        </ProtectComponent>
       </Tabs>
       <Box sx={{ p: 1, bgcolor: '#fffffe', width: '100%' }}>{children}</Box>
     </Box>

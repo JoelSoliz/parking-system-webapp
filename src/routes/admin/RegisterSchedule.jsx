@@ -2,6 +2,7 @@ import React from 'react'
 import { Box, Typography } from '@mui/material'
 import Layout from '../../components/Layout/Layout'
 import Weekdays from '../../components/weekdays/Weekdays'
+import ProtectComponent from '../../components/common/ProtectComponent'
 
 const RegisterSchedule = () => {
   return (
@@ -16,7 +17,12 @@ const RegisterSchedule = () => {
           >
             Registro de horario
           </Typography>
-          <Weekdays isEditable={true} />
+          <ProtectComponent needed_permission={['ADMN']}>
+            <Weekdays isEditable={true} />
+          </ProtectComponent>
+          <ProtectComponent needed_permission={['EMPL']}>
+            <Weekdays />
+          </ProtectComponent>
         </Box>
       </Box>
     </Layout>
