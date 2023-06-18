@@ -1,33 +1,33 @@
 import React from 'react'
+import { Close } from '@mui/icons-material'
 import { Box, Typography } from '@mui/material'
 import { useGetSpotQuery } from '../../api/parking'
-import { useGetDaysBySpotQuery } from '../../api/reservations'
+import Calendar from '../common/Calendar'
 import { generateEvents } from '../../utils/events'
-import { Close } from '@mui/icons-material'
+
+const backgroundColors = ['#0D0221', '#0F084B', '#26408B', '#A6CFD5', '#C2E7D9']
+
+function getAllEvents(reservations) {
+  const events = []
+  reservations.forEach((reservation, i) => {
+    events.push(
+      ...generateEvents(
+        reservation.days,
+        reservation.reservation.start_date,
+        reservation.reservation.end_date,
+        'Reservado',
+        backgroundColors[i % 5],
+      ),
+    )
+  })
+
+  return events
+}
 
 const SelectedSpot = ({ id, onClose }) => {
   const { data } = useGetSpotQuery({ id })
-  const startDate = new Date().toISOString().slice(0, 10)
-  const date = new Date()
-  date.setFullYear(date.getFullYear() + 1)
-  const endDate = date.toISOString().slice(0, 10)
-  const { data: spotEvents } = useGetDaysBySpotQuery({
-    id,
-    startDate,
-    endDate,
-  })
+  const events = getAllEvents(data?.reservations || [])
 
-  console.log(data)
-  console.log(spotEvents)
-  console.log(
-    generateEvents(
-      spotEvents?.week_days ?? [],
-      startDate,
-      endDate,
-      'Hola',
-      'red',
-    ),
-  )
   return (
     <Box
       sx={{
@@ -36,6 +36,7 @@ const SelectedSpot = ({ id, onClose }) => {
         border: 'solid rgb(9, 64, 103)',
         paddingY: '20px',
         paddingX: '20px',
+        maxWidth: '600px',
       }}
     >
       <Box
@@ -58,7 +59,27 @@ const SelectedSpot = ({ id, onClose }) => {
           }}
         />
       </Box>
-      <Box>Hola</Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '5px',
+          marginTop: '10px',
+        }}
+      >
+        <Typography>
+          <strong>Nombre: </strong>
+          {data?.parking.name}
+        </Typography>
+        <Typography>
+          <strong>Sección: </strong>
+          {data?.parking.section.slice(0, 1).toUpperCase() +
+            data?.parking.section.slice(1)}
+        </Typography>
+        <Box sx={{ marginTop: '10px' }}>
+          <Calendar events={events} />
+        </Box>
+      </Box>
     </Box>
   )
 }
