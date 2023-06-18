@@ -17,6 +17,10 @@ import {
 } from '../../store/slices/reservations'
 import RequestDetail from './components/RequestDetail'
 import { StringParam, useQueryParam } from 'use-query-params'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
 
 const columns = [
   { id: 'id', label: 'Reservación', minWidth: 100 },
@@ -30,10 +34,10 @@ const RequestList = () => {
   const dispatch = useDispatch()
   const [modal] = useQueryParam('modal', StringParam)
   const [reservationId] = useQueryParam('reservation-id', StringParam)
-
-  const [page, setPage] = React.useState(1)
-  const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  const [page, setPage] = React.useState(0)
+  const [rowsPerPage, setRowsPerPage] = React.useState(7)
   const [openModal, setOpenModal] = React.useState(false)
+
   useEffect(() => {
     if (reservationId) {
       dispatch(getReservation(reservationId))
@@ -42,8 +46,9 @@ const RequestList = () => {
   }, [])
 
   useEffect(() => {
-    dispatch(getReservations(page))
+    dispatch(getReservations(page + 1))
   }, [page])
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
   }
@@ -52,6 +57,12 @@ const RequestList = () => {
     setRowsPerPage(+event.target.value)
     setPage(0)
   }
+
+  const [estado, setStatus] = React.useState('');
+
+  const handleChange = (event) => {
+    setStatus(event.target.value);
+  };
 
   return (
     <Layout title="Lista de Solicitudes">
@@ -67,18 +78,36 @@ const RequestList = () => {
         backgroundColor="#fffffe"
         width="100%"
         marginTop={3}
-        marginLeft={3}
+        marginX={3}
       >
         <Box
           sx={{
             display: 'flex',
             paddingLeft: '39px',
             alignItems: 'center',
+            justifyContent: 'space-between'
           }}
         >
           <Typography variant="h3" color={'black'}>
             Lista de Solicitudes
           </Typography>
+          <Box sx={{ paddingRight: '140px' }} >
+            <FormControl variant="standard" sx={{ minWidth: 120 }}>
+              <InputLabel id="demo-simple-select-standard-label" style={{ color: 'black' }} >Mostrar</InputLabel>
+              <Select
+                labelId="demo-simple-select-standard-label"
+                id="demo-simple-select-standard"
+                value={estado}
+                onChange={handleChange}
+                label="estado"
+              >
+                <MenuItem value={''}>Todos</MenuItem>
+                <MenuItem value={'Reserved'}>Pendientes</MenuItem>
+                <MenuItem value={'Occupied'}>Aceptados</MenuItem>
+                <MenuItem value={'Available'}>Rechazados</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
         </Box>
 
         <Paper
@@ -98,7 +127,7 @@ const RequestList = () => {
             </Typography>
           ) : (
             <>
-              <TableContainer sx={{ maxHeight: 400 }}>
+              <TableContainer sx={{ maxHeight: 500 }}>
                 <Table
                   stickyHeader
                   aria-label="sticky table"
@@ -125,9 +154,11 @@ const RequestList = () => {
                   <TableBody>
                     {reservations.map(({ reservation, status }) => {
                       const rowStyle =
-                        status === 'Occupied' || status === 'Available'
-                          ? { backgroundColor: '#CCCCCC' }
-                          : {}
+                        status === 'Occupied'
+                          ? { backgroundColor: '#D0FFFF' } :
+                          status === 'Available'
+                            ? { backgroundColor: '#D98880' }
+                            : {}
                       return (
                         <TableRow
                           hover
@@ -161,11 +192,11 @@ const RequestList = () => {
                 </Table>
               </TableContainer>
               <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
+                rowsPerPageOptions={[7]}
                 component="div"
                 count={total}
                 rowsPerPage={rowsPerPage}
-                page={page - 1}
+                page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />

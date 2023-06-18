@@ -6,12 +6,12 @@ import Weekdays from '../../components/weekdays/Weekdays'
 const RegisterSchedule = () => {
   return (
     <Layout title="Registrar horario">
-      <Box align="center" justifyContent="center" marginY={3} width="100%">
+      <Box align="center" justifyContent="center" marginY={3} width="100%" paddingX={'63px'}>
         <Box>
           <Typography
             variant="h3"
             color="black"
-            paddingLeft={'165px'}
+            //paddingLeft={'165px'}
             align="left"
           >
             Registro de horario
