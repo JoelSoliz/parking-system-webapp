@@ -1,10 +1,27 @@
 import React from 'react'
-import { Typography, Box, CardContent, Select } from '@mui/material'
+import { Typography, Box, CardContent, Select, Grid, styled, CardMedia, Card } from '@mui/material'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import Layout from '../../components/Layout/Layout'
+import Color from 'color'
+
+const useGridStyles = styled(({ breakpoints }) => ({
+  root: {
+    [breakpoints.up('md')]: {
+      justifyContent: 'center',
+      align: 'center',
+    },
+  },
+}))
+
+const useStyles = styled(() => ({
+  content: {
+    padding: '1rem 1rem 1rem',
+  },
+}))
+
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
 const MenuProps = {
@@ -58,7 +75,50 @@ const Price = () => {
     }
     return costo
   }
-  //const total = precio()
+  const gridStyles = useGridStyles()
+  const styles = useStyles({ color: '#203f52' })
+
+  const CustomCard = ({ classes, title, subtitle, subtitle2 }) => {
+    return (
+      <Card
+        sx={{
+          marginTop: '10%',
+          borderRadius: '5px',
+          width: '80%',
+          height: '80%',
+          boxShadow: 'none',
+          '&:hover': {
+            boxShadow: `0 6px 5px 0 ${Color()
+              .rotate(-12)
+              .darken(0.2)
+              .fade(0.2)}`,
+          },
+        }}
+      >
+        <CardMedia
+          style={{ backgroundColor: '#203f52', padding: '0.5rem 1rem 0.5rem' }}
+        >
+          <Typography style={{ color: '#fff' }} variant="h6" fontWeight="bold">
+            {title}
+          </Typography>
+        </CardMedia>
+        <CardContent
+          className={classes.content}
+          style={{ backgroundColor: '#EBF2F5', padding: '1rem 0.8rem 1rem' }}
+          sx={{ height: '80%' }}
+        >
+          <Typography>
+            {subtitle}
+          </Typography>
+          <Typography paddingTop='5%' variant="h6">
+            <b>Precio:</b> {subtitle2}
+          </Typography>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  //const total = precio() 
   return (
     <Layout title="price">
       <Box alignItems="center" justifyContent="center" marginY={8} width="90%">
@@ -71,6 +131,8 @@ const Price = () => {
           Precios de Estacionamiento
         </Typography>
 
+
+
         <CardContent>
           <Typography
             gutterBottom
@@ -79,70 +141,61 @@ const Price = () => {
             align="left"
             sx={{ m: 0, marginY: 2 }}
           >
-            Actualmente los precios del estacionamiento varia según las
+            Los precios del estacionamiento varia según las
             siguientes categorias:
           </Typography>
-          <Typography
-            gutterBottom
-            variant="h6"
-            component="div"
-            align="left"
-            sx={{ m: 0 }}
-          >
-            <Typography
-              gutterBottom
-              variant="h6"
-              component="div"
-              align="left"
-              sx={{ m: 0 }}
-              style={{ fontWeight: 'bold' }}
+          <Box align="center"
+            display="flex"
+            //alignItems="center"
+            justifyContent="center"
+            //marginY={5}
+            width='100%'>
+            <Grid
+              classes={gridStyles}
+              container
+              spacing={3}
+              justifyContent="center"
             >
-              Categoria Privilegiada:
-            </Typography>
-            Zona especial, ubicada cerca de la entrada/salida del
-            estacionamiento. Precio: 6 bs/hrs
-          </Typography>
-          <Typography
-            gutterBottom
-            variant="h6"
-            component="div"
-            align="left"
-            sx={{ m: 0 }}
-          >
-            <Typography
-              gutterBottom
-              variant="h6"
-              component="div"
-              align="left"
-              sx={{ m: 0 }}
-              style={{ fontWeight: 'bold' }}
+              <Grid >
+                <CustomCard
+                  classes={styles}
+                  title={'Privilegiada'}
+                  subtitle={'Zona especial, ubicada cerca de la entrada/salida del estacionamiento.'}
+                  subtitle2={'6 bs/hrs'}
+                />
+              </Grid>
+            </Grid>
+            <Grid
+              classes={gridStyles}
+              container
+              spacing={3}
+              justifyContent="center"
             >
-              Categoria Regular:{' '}
-            </Typography>
-            Zona disponible para todos los usuarios del estacionamiento de la
-            institución. Precio: 4bs/hrs
-          </Typography>
-          <Typography
-            gutterBottom
-            variant="h6"
-            component="div"
-            align="left"
-            sx={{ m: 0 }}
-          >
-            <Typography
-              gutterBottom
-              variant="h6"
-              component="div"
-              align="left"
-              sx={{ m: 0 }}
-              style={{ fontWeight: 'bold' }}
+              <Grid >
+                <CustomCard
+                  classes={styles}
+                  title={'Regular'}
+                  subtitle={'Zona disponible para todos los usuarios del estacionamiento de la institución.'}
+                  subtitle2={'4bs/hrs'}
+                />
+              </Grid>
+            </Grid>
+            <Grid
+              classes={gridStyles}
+              container
+              spacing={3}
+              justifyContent="center"
             >
-              Categoria Común:
-            </Typography>
-            Categoria Común: Zona diaponible para cualquier usuario, ubicada en
-            la parte final del estacionamiento, sin ningun tipo de beneficio.
-            Pecio: 3 bs/hrs
-          </Typography>
+              <Grid >
+                <CustomCard
+                  classes={styles}
+                  title={'Común'}
+                  subtitle={'Zona diaponible para cualquier usuario, ubicada en la parte final del estacionamiento, sin ningun tipo de beneficio.'}
+                  subtitle2={'3 bs/hrs'}
+                />
+              </Grid>
+            </Grid>
+          </Box>
           <Box
             component="form"
             sx={{
@@ -150,7 +203,7 @@ const Price = () => {
             }}
             noValidate
             autoComplete="off"
-            marginTop={4}
+            marginTop={6}
             align="center"
             justifyContent="center"
           >

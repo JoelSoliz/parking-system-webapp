@@ -27,12 +27,12 @@ const columns = [
 const UserList = () => {
   const { customers, total, loading } = useSelector(customersSelector)
   const dispatch = useDispatch()
-  const [page, setPage] = React.useState(1)
+  const [page, setPage] = React.useState(0)
   const [openModal, setOpenModal] = React.useState(false)
-  const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  const [rowsPerPage, setRowsPerPage] = React.useState(7)
 
   useEffect(() => {
-    dispatch(getCustomers(page))
+    dispatch(getCustomers(page + 1))
   }, [page])
 
   const handleChangePage = (event, newPage) => {
@@ -83,7 +83,7 @@ const UserList = () => {
             </Typography>
           ) : (
             <>
-              <TableContainer sx={{ maxHeight: 400 }}>
+              <TableContainer sx={{ maxHeight: 500 }}>
                 <Table
                   stickyHeader
                   aria-label="sticky table"
@@ -138,11 +138,11 @@ const UserList = () => {
               </TableContainer>
               <TablePagination
                 labelRowsPerPage="Filas por pagina  "
-                rowsPerPageOptions={[10, 25, 100]}
+                rowsPerPageOptions={[7]}
                 component="div"
                 count={total}
                 rowsPerPage={rowsPerPage}
-                page={page - 1}
+                page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />

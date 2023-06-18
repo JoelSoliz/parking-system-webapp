@@ -30,7 +30,7 @@ const NavBar = () => {
   const isNonMobileDevice = useMediaQuery('(min-width: 1000px)')
 
   return (
-    <AppBar sx={{ p: '0 5%' }} style={{ background: '#094067' }}>
+    <AppBar sx={{ p: '0 1%' }} style={{ background: '#094067' }}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <img

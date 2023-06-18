@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { React } from 'react'
 import { styled } from '@mui/material/styles'
 
 import {
@@ -12,10 +12,9 @@ import {
   CardContent,
   CircularProgress,
 } from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import {
   reservationsSelector,
-  updateStatus,
 } from '../../../store/slices/reservations'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import BadgeIcon from '@mui/icons-material/Badge'
@@ -23,13 +22,10 @@ import DateRangeIcon from '@mui/icons-material/DateRange'
 import EventIcon from '@mui/icons-material/Event'
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded'
 import { useNavigate } from 'react-router-dom'
-import CancelIcon from '@mui/icons-material/Cancel'
 import InfoIcon from '@mui/icons-material/Info'
 import TaskAltIcon from '@mui/icons-material/TaskAlt'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { useRejectReservationMutation } from '../../../api/reservations'
-import { toast } from 'sonner'
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
@@ -46,28 +42,9 @@ const StyledModal = styled(Modal)(({ theme }) => ({
 }))
 
 const RequestDetail = ({ open, onClose }) => {
-  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const { loading, selectedReservation } = useSelector(reservationsSelector)
-
-  const [
-    rejectReservation,
-    { data: dataAR, isLoading, error, isSuccess, reset, isError },
-  ] = useRejectReservationMutation()
-  useEffect(() => {
-    if (isSuccess) {
-      toast.success(`La solicitud fue rechazada.`)
-      dispatch(updateStatus(dataAR.status))
-    } else if (isError) {
-      toast.error(
-        `Hubo un error al rechazar la solicitud. ${
-          error.data?.detail || error.data
-        }`,
-      )
-    }
-    return () => reset()
-  }, [dataAR, error])
 
   return (
     <>
@@ -213,11 +190,7 @@ const RequestDetail = ({ open, onClose }) => {
                         background: '#f0f5ff',
                       }}
                     >
-                      {isLoading ? (
-                        <Typography textAlign="center">
-                          Realizando acción...
-                        </Typography>
-                      ) : (
+                      {(
                         <>
                           {selectedReservation?.status === 'Occupied' && (
                             <>
@@ -305,25 +278,6 @@ const RequestDetail = ({ open, onClose }) => {
                                   }
                                 >
                                   Verificar
-                                </Button>
-
-                                <Button
-                                  sx={{
-                                    width: '190px',
-                                    height: '40px',
-                                    paddingTop: '5px',
-                                  }}
-                                  variant="contained"
-                                  color="secondary"
-                                  startIcon={<CancelIcon />}
-                                  onClick={() =>
-                                    rejectReservation({
-                                      id: selectedReservation?.reservations
-                                        ?.id_reservation,
-                                    })
-                                  }
-                                >
-                                  Rechazar
                                 </Button>
                               </Stack>
                             </>

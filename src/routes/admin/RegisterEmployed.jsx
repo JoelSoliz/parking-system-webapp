@@ -90,7 +90,7 @@ const RegisterEmployed = () => {
                         }}
                     >
                         <Typography variant="h3" color={'black'}>
-                            Registrar Empleados
+                            Registrar Empleado
                         </Typography>
                     </Box>
                 </CardContent>
@@ -108,7 +108,7 @@ const RegisterEmployed = () => {
                         marginY: 2,
                         marginBottom: '40px',
                     }}
-                    style={{ borderColor: '#90b4ce' }}
+                    style={{ borderColor: '#094067' }}
                 >
                     <Box display="flex" direction="row" letterSpacing={1}>
                         <Controller

@@ -20,7 +20,7 @@ const columns = [
 
 const RequestList = () => {
   const [page, setPage] = React.useState(0)
-  const [rowsPerPage, setRowsPerPage] = React.useState(20)
+  const [rowsPerPage, setRowsPerPage] = React.useState(7)
   const { data, refetch } = useGetClaimsQuery({ page: page + 1 })
   const [openModal, setOpenModal] = React.useState(null)
 
@@ -72,7 +72,7 @@ const RequestList = () => {
             </Typography>
           ) : (
             <>
-              <TableContainer sx={{ maxHeight: 400 }}>
+              <TableContainer sx={{ maxHeight: 500 }}>
                 <Table
                   stickyHeader
                   aria-label="sticky table"
@@ -124,7 +124,7 @@ const RequestList = () => {
                 </Table>
               </TableContainer>
               <TablePagination
-                rowsPerPageOptions={[20]}
+                rowsPerPageOptions={[7]}
                 component="div"
                 count={data?.total_elements || 0}
                 rowsPerPage={rowsPerPage}

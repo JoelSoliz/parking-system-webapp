@@ -53,7 +53,7 @@ const CustomCard = ({ classes, title, subtitle, subtitle2, onSelect }) => {
     <CardActionArea
       onClick={onSelect}
       sx={{
-        borderRadius: '15px',
+        borderRadius: '10px',
         transition: '0.2s',
         '&:hover': {
           transform: 'scale(1.1)',
@@ -74,7 +74,7 @@ const CustomCard = ({ classes, title, subtitle, subtitle2, onSelect }) => {
         }}
       >
         <CardMedia
-          style={{ backgroundColor: '#203f52', padding: '1rem 1rem 1rem' }}
+          style={{ backgroundColor: '#203f52', padding: '0.5rem 1rem 0.5rem' }}
         >
           <Typography style={{ color: '#fff' }} variant="h5" fontWeight="bold">
             {convertDayToSpanish(title)}
@@ -120,19 +120,20 @@ const Weekdays = ({ isEditable = false }) => {
         alignItems="center"
         justifyContent="center"
         marginY={5}
+        width='100%'
       >
         <Card
           sx={{
-            width: '70%',
+            width: '100%',
             display: 'flex',
             justifyContent: 'center',
             gap: 4,
-            borderRadius: '15px',
+            borderRadius: '8px',
             border: 2,
             paddingY: 3,
             paddingX: 2,
           }}
-          style={{ borderColor: '#90b4ce' }}
+          style={{ borderColor: '#094067' }}
         >
           <Grid
             classes={gridStyles}

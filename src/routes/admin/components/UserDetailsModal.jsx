@@ -9,6 +9,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import EmailIcon from '@mui/icons-material/Email'
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid'
+import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople'
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
@@ -32,41 +33,45 @@ const UserDetailsModal = ({ open, onClose }) => {
       <StyledModal open={open} onClose={onClose}>
         <Fade in={open}>
           <Box
-            backgroundColor={'#fffffe'}
+            backgroundColor={'#094067'}
             container
             spacing={5}
-            width={'33%'}
-            paddingY={'45px'}
-            borderRadius={'40px'}
-            style={{
-              background:
-                'linear-gradient(to bottom,#b0bec5, #ffffff, #b0bec5)',
-            }}
+            width={'35%'}
+            //height={'36%'}
+            // padding={'15px'}
+            borderRadius={'20px'}
           >
-            <Box marginBottom={'20px'}>
-              <Typography color="black" variant="h5" align="center">
-                <strong>DATOS DEL USUARIO</strong>
-              </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', paddingTop: '5px' }}>
+              <Box sx={{ backgroundColor: '#094067', width: '70%', marginTop: '-15px', borderTopLeftRadius: '15px', textAlign: 'center' }}>
+                <Typography color="white" variant="h5" align="center" marginTop='15px'>
+                  <strong>DATOS DEL USUARIO</strong>
+                </Typography>
+              </Box>
+              <Box sx={{ backgroundColor: '#B0C4DE', width: '30%', marginTop: '-15px', borderStartEndRadius: '15px', textAlign: 'center' }}>
+                <EmojiPeopleIcon sx={{ color: 'navy', fontSize: '50px' }} />
+              </Box>
             </Box>
+
             {loading === 'pending' ? (
-              <Typography color="black" variant="subtitle1" paddingLeft="100px">
+              <Typography color="white" variant="subtitle1" paddingLeft="100px">
                 Cargando detalles...
               </Typography>
             ) : (
               <>
-                <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
+                <Box display={'flex'} flexDirection={'column'} gap={'10px'} sx={{ backgroundColor: '#fffffe', borderEndEndRadius: '15px', borderEndStartRadius: '15px' }}>
                   <Box
                     display="flex"
                     alignItems="center"
                     marginBottom={'5px'}
                     paddingLeft="60px"
+                    paddingTop={'15px'}
                   >
                     <BadgeIcon sx={{ color: 'navy' }} />
                     <Typography
                       color="black"
                       variant="subtitle1"
                       paddingLeft="10px"
-                      paddingTop={'5px'}
+
                     >
                       <strong>CI: </strong> {selectedCustomer?.ci}
                     </Typography>
@@ -124,8 +129,10 @@ const UserDetailsModal = ({ open, onClose }) => {
                   <Box
                     display="flex"
                     alignItems="center"
-                    marginBottom={'5px'}
+                    marginBottom={'15px'}
                     paddingLeft="60px"
+                  //paddingTop={'5px'}
+
                   >
                     <PhoneAndroidIcon sx={{ color: 'navy' }} />
                     <Typography
