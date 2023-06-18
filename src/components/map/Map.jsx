@@ -12,7 +12,13 @@ const Map = () => {
   const entrance = [-17.393026872868276, -66.14659755100136]
 
   return (
-    <Box display="flex" justifyContent="center" gap="30px" flexWrap="wrap">
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      gap="30px"
+      flexWrap="wrap"
+    >
       <MapContainer
         center={[-17.3930013842986, -66.14623643675405]}
         zoom={20}
