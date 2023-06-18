@@ -70,7 +70,7 @@ const Router = () => {
         <Route
           index
           element={
-            <PrivateRoute needed_permission={['EMPL', 'ADMN']}>
+            <PrivateRoute needed_permission={['ADMN']}>
               <UserList />
             </PrivateRoute>
           }
@@ -104,7 +104,7 @@ const Router = () => {
         <Route
           path="employed"
           element={
-            <PrivateRoute needed_permission={['EMPL', 'ADMN']}>
+            <PrivateRoute needed_permission={['ADMN']}>
               <RegisterEmployed />
             </PrivateRoute>
           }

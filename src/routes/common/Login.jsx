@@ -45,8 +45,10 @@ const Login = () => {
       {isAuthenticate ? (
         user?.role === 'CUST' ? (
           <Navigate to={'/'} />
-        ) : (
+        ) : user?.role === 'ADMN' ? (
           <Navigate to={'/admin'} />
+        ) : (
+          <Navigate to={'/admin/requests'} />
         )
       ) : (
         <Box alignItems="center" justifyContent="center" marginY={8}>

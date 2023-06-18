@@ -28,6 +28,7 @@ const NavBar = () => {
     setAnchorEl(null)
   }
   const isNonMobileDevice = useMediaQuery('(min-width: 1000px)')
+  const adminPage = user?.role === 'EMPL' ? '/admin/requests' : '/admin'
 
   return (
     <AppBar sx={{ p: '0 1%' }} style={{ background: '#094067' }}>
@@ -101,7 +102,7 @@ const NavBar = () => {
                   {['ADMN', 'EMPL'].includes(user?.role) && (
                     <Link
                       style={{ color: '#fff', textDecoration: 'none' }}
-                      to={'/admin'}
+                      to={adminPage}
                     >
                       Administración
                     </Link>
@@ -192,7 +193,7 @@ const NavBar = () => {
                   </>
                 ) : (
                   <>
-                    {['ADMN', 'EMPL'].includes(user?.role) && (
+                    {user?.role === 'CUST' && (
                       <>
                         <MenuItem onClick={handleClose}>
                           <Link
@@ -213,11 +214,11 @@ const NavBar = () => {
                         </MenuItem>
                       </>
                     )}
-                    {user?.role === 'CUST' && (
+                    {['ADMN', 'EMPL'].includes(user?.role) && (
                       <MenuItem onClick={handleClose}>
                         <Link
                           style={{ color: '#333', textDecoration: 'none' }}
-                          to={'/admin'}
+                          to={adminPage}
                         >
                           Adminitración
                         </Link>

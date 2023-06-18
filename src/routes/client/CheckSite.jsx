@@ -13,11 +13,15 @@ import {
   reservationsSelector,
   updateStatus,
 } from '../../store/slices/reservations'
-import { useAcceptReservationMutation, useRejectReservationMutation } from '../../api/reservations'
+import {
+  useAcceptReservationMutation,
+  useRejectReservationMutation,
+} from '../../api/reservations'
 import { toast } from 'sonner'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
-import CheckForm from './components/CheckForm'
 import CancelIcon from '@mui/icons-material/Cancel'
+import ProtectComponent from '../../components/common/ProtectComponent'
+import CheckForm from './components/CheckForm'
 
 const CheckSite = () => {
   const dispatch = useDispatch()
@@ -25,11 +29,22 @@ const CheckSite = () => {
   const { loading, selectedReservation } = useSelector(reservationsSelector)
   const [isValid, setIsValid] = useState(true)
 
-  const [rejectReservation, { data, isLoading: isLoadingR, error: errorR, isSuccess: isSucceessR, reset: resetR, isError: isErrorR }]
-    = useRejectReservationMutation()
+  const [
+    rejectReservation,
+    {
+      data,
+      isLoading: isLoadingR,
+      error: errorR,
+      isSuccess: isSucceessR,
+      reset: resetR,
+      isError: isErrorR,
+    },
+  ] = useRejectReservationMutation()
 
-  const [acceptReservation, { data: dataAR, isLoading, error, isSuccess, reset, isError }]
-    = useAcceptReservationMutation()
+  const [
+    acceptReservation,
+    { data: dataAR, isLoading, error, isSuccess, reset, isError },
+  ] = useAcceptReservationMutation()
 
   useEffect(() => {
     if (isSucceessR) {
@@ -37,7 +52,8 @@ const CheckSite = () => {
       dispatch(updateStatus(data.status))
     } else if (isErrorR) {
       toast.error(
-        `Hubo un error al rechazar la solicitud. ${errorR.data?.detail || errorR.data
+        `Hubo un error al rechazar la solicitud. ${
+          errorR.data?.detail || errorR.data
         }`,
       )
     }
@@ -50,7 +66,8 @@ const CheckSite = () => {
       dispatch(updateStatus(dataAR.status))
     } else if (isError) {
       toast.error(
-        `Hubo un error al rechazar la solicitud. ${error.data?.detail || error.data
+        `Hubo un error al rechazar la solicitud. ${
+          error.data?.detail || error.data
         }`,
       )
     }
@@ -108,49 +125,50 @@ const CheckSite = () => {
                 >
                   Volver a detalle
                 </Button>
-                {(selectedReservation?.status == 'Reserved') && (
-                  <Button
-                    sx={{
-                      width: '190px',
-                      height: '40px',
-                      paddingTop: '5px',
-                    }}
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<CancelIcon />}
-                    onClick={() =>
-                      rejectReservation({
-                        id: selectedReservation?.reservations
-                          ?.id_reservation,
-                      })
-                    }
-                  >
-                    Rechazar
-                  </Button>
-                )}
-                {(selectedReservation?.status == 'Reserved') && (
-                  <Button
-                    sx={{
-                      width: '180px',
-                      height: '38px',
-                      fontSize: '12px',
-                      marginBottom: '15px',
-                    }}
-                    variant="contained"
-                    color="secondary"
-                    disabled={!isValid}
-                    onClick={() =>
-                      acceptReservation({
-                        id: selectedReservation?.reservations?.id_reservation,
-                      })
-                    }
-                    startIcon={
-                      <CheckCircleOutlineIcon style={{ color: 'white' }} />
-                    }
-                  >
-                    Aprobar
-                  </Button>
-                )}
+                <ProtectComponent needed_permission={['EMPL']}>
+                  {selectedReservation?.status == 'Reserved' && (
+                    <Button
+                      sx={{
+                        width: '190px',
+                        height: '40px',
+                        paddingTop: '5px',
+                      }}
+                      variant="contained"
+                      color="secondary"
+                      startIcon={<CancelIcon />}
+                      onClick={() =>
+                        rejectReservation({
+                          id: selectedReservation?.reservations?.id_reservation,
+                        })
+                      }
+                    >
+                      Rechazar
+                    </Button>
+                  )}
+                  {selectedReservation?.status == 'Reserved' && (
+                    <Button
+                      sx={{
+                        width: '180px',
+                        height: '38px',
+                        fontSize: '12px',
+                        marginBottom: '15px',
+                      }}
+                      variant="contained"
+                      color="secondary"
+                      disabled={!isValid}
+                      onClick={() =>
+                        acceptReservation({
+                          id: selectedReservation?.reservations?.id_reservation,
+                        })
+                      }
+                      startIcon={
+                        <CheckCircleOutlineIcon style={{ color: 'white' }} />
+                      }
+                    >
+                      Aprobar
+                    </Button>
+                  )}
+                </ProtectComponent>
               </Stack>
             )}
           </Card>
