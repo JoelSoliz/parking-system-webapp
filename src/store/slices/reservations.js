@@ -25,14 +25,14 @@ export const getReservation = createAsyncThunk(
 
 export const getReservations = createAsyncThunk(
   'getReservations/getReservationsAsync',
-  async (page) => {
+  async ({ page, filter }) => {
     let token = localStorage.getItem('token')
     if (!token) {
       console.error('Vuelve a iniciar sesión')
       throw new Error('invalid credential')
     }
 
-    const result = await getReservationsAsync(page, token)
+    const result = await getReservationsAsync(page, filter, token)
     const { detail } = result
     if (detail) {
       console.error(detail)

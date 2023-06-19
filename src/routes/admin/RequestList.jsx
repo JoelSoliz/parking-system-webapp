@@ -37,6 +37,7 @@ const RequestList = () => {
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(7)
   const [openModal, setOpenModal] = React.useState(false)
+  const [filter, setFilter] = React.useState('')
 
   useEffect(() => {
     if (reservationId) {
@@ -46,8 +47,8 @@ const RequestList = () => {
   }, [])
 
   useEffect(() => {
-    dispatch(getReservations(page + 1))
-  }, [page])
+    dispatch(getReservations({ page: page + 1, filter }))
+  }, [page, filter])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -58,11 +59,9 @@ const RequestList = () => {
     setPage(0)
   }
 
-  const [estado, setStatus] = React.useState('');
-
   const handleChange = (event) => {
-    setStatus(event.target.value);
-  };
+    setFilter(event.target.value)
+  }
 
   return (
     <Layout title="Lista de Solicitudes">
@@ -85,21 +84,26 @@ const RequestList = () => {
             display: 'flex',
             paddingLeft: '39px',
             alignItems: 'center',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <Typography variant="h3" color={'black'}>
             Lista de Solicitudes
           </Typography>
-          <Box sx={{ paddingRight: '140px' }} >
+          <Box sx={{ paddingRight: '140px' }}>
             <FormControl variant="standard" sx={{ minWidth: 120 }}>
-              <InputLabel id="demo-simple-select-standard-label" style={{ color: 'black' }} >Mostrar</InputLabel>
+              <InputLabel
+                id="demo-simple-select-standard-label"
+                style={{ color: 'black' }}
+              >
+                Mostrar
+              </InputLabel>
               <Select
                 labelId="demo-simple-select-standard-label"
                 id="demo-simple-select-standard"
-                value={estado}
+                value={filter}
                 onChange={handleChange}
-                label="estado"
+                label="Estado"
               >
                 <MenuItem value={''}>Todos</MenuItem>
                 <MenuItem value={'Reserved'}>Pendientes</MenuItem>
@@ -155,10 +159,10 @@ const RequestList = () => {
                     {reservations.map(({ reservation, status }) => {
                       const rowStyle =
                         status === 'Occupied'
-                          ? { backgroundColor: '#D0FFFF' } :
-                          status === 'Available'
-                            ? { backgroundColor: '#D98880' }
-                            : {}
+                          ? { backgroundColor: '#D0FFFF' }
+                          : status === 'Available'
+                          ? { backgroundColor: '#D98880' }
+                          : {}
                       return (
                         <TableRow
                           hover
