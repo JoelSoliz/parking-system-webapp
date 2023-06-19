@@ -58,7 +58,7 @@ export default function SideBar({ children }) {
       >
         <ProtectComponent needed_permission={['ADMN']}>
           <LinkTab
-            label="Clientes"
+            label="Usuarios"
             {...a11yProps(0)}
             sx={{
               fontWeight: 'bold',

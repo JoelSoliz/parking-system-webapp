@@ -24,7 +24,7 @@ import Select from '@mui/material/Select'
 
 const columns = [
   { id: 'id', label: 'Reservación', minWidth: 100 },
-  { id: 'cliente', label: 'Cliente', minWidth: 100 },
+  { id: 'cliente', label: 'Usuario', minWidth: 100 },
   { id: 'start_date', label: 'Fecha de Inicio', minWidth: 100 },
   { id: 'end_date', label: 'Fecha de Fin', minWidth: 100 },
 ]
