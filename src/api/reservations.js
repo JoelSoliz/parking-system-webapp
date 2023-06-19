@@ -16,8 +16,10 @@ export const getReservationAsync = async (id, token) => {
     })
 }
 
-export const getReservationsAsync = async (page, token) => {
-  const apiURL = `${HOST}/reservation/?current_page=${page}`
+export const getReservationsAsync = async (page, filter, token) => {
+  const apiURL =
+    `${HOST}/reservation/?current_page=${page}` +
+    (filter ? `&status=${filter}` : '')
   return fetch(apiURL, {
     headers: {
       Authorization: `Bearer ${token}`,

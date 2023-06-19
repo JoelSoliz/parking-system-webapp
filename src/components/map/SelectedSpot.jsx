@@ -36,7 +36,10 @@ const SelectedSpot = ({ id, onClose }) => {
         border: 'solid rgb(9, 64, 103)',
         paddingY: '20px',
         paddingX: '20px',
-        maxWidth: '600px',
+        '@media only screen and (max-width: 1500px)': {
+          maxWidth: '700px',
+        },
+        maxWidth: '500px',
       }}
     >
       <Box
