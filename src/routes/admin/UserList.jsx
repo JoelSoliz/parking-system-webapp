@@ -23,7 +23,6 @@ const columns = [
   { id: 'last_name', label: 'Apellido', minWidth: 100 },
 ]
 
-
 const UserList = () => {
   const { customers, total, loading } = useSelector(customersSelector)
   const dispatch = useDispatch()
@@ -62,7 +61,7 @@ const UserList = () => {
           }}
         >
           <Typography variant="h3" color={'black'}>
-            Lista de Clientes
+            Lista de Usuarios
           </Typography>
         </Box>
 

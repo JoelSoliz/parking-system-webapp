@@ -13,7 +13,7 @@ import { useGetClaimsQuery } from '../../api/claim'
 import ClaimDetail from './components/ClaimDetail'
 
 const columns = [
-  { id: 'cliente', label: 'Cliente', minWidth: 100 },
+  { id: 'cliente', label: 'Usuario', minWidth: 100 },
   { id: 'subject', label: 'Asunto', minWidth: 100 },
   { id: 'date', label: 'Fecha de registro', minWidth: 100 },
 ]

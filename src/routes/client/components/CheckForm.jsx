@@ -30,7 +30,7 @@ const CheckForm = ({ reservation, onCollision }) => {
     reservation?.days,
     reservation?.reservations.start_date,
     reservation?.reservations.end_date,
-    'Reserva Cliente',
+    'Reserva del Cliente',
     'blue',
   )
 
