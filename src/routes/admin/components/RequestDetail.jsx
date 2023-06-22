@@ -135,7 +135,7 @@ const RequestDetail = ({ open, onClose }) => {
                       >
                         <strong>Fecha y hora de la solicitud:</strong>
                         {new Date(
-                          selectedReservation?.reservations.create_at,
+                          selectedReservation?.reservations.create_at + "Z",
                         ).toLocaleString('es-Es')}
                       </Typography>
                     </Box>
