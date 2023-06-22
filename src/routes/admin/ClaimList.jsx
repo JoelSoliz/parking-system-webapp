@@ -114,7 +114,7 @@ const RequestList = () => {
                           <TableCell>{claim.claim.subject}</TableCell>
                           <TableCell>
                             {new Date(
-                              claim.claim.registration_date,
+                              claim.claim.registration_date + "Z",
                             ).toLocaleDateString('es-ES')}
                           </TableCell>
                         </TableRow>

@@ -61,6 +61,7 @@ const RequestList = () => {
 
   const handleChange = (event) => {
     setFilter(event.target.value)
+    setPage(0)
   }
 
   return (
@@ -161,8 +162,8 @@ const RequestList = () => {
                         status === 'Occupied'
                           ? { backgroundColor: '#D0FFFF' }
                           : status === 'Available'
-                          ? { backgroundColor: '#D98880' }
-                          : {}
+                            ? { backgroundColor: '#D98880' }
+                            : {}
                       return (
                         <TableRow
                           hover
