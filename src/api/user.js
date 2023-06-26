@@ -1,4 +1,4 @@
-const HOST = 'https://parking-system-api-production.up.railway.app'
+const HOST = import.meta.env.VITE_API_URL
 
 export const getUserInfoAsync = async (token) => {
   const apiURL = `${HOST}/me`

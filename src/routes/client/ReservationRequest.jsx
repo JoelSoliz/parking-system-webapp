@@ -332,7 +332,6 @@ const ReservationRequest = () => {
               color="secondary"
               disabled={!isValid}
               onClick={() => {
-                console.log('Verificarrrr')
                 setOpen(true)
               }}
             >
