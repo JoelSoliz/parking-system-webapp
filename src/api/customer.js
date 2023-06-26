@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
 
-const HOST = 'https://parking-system-api-production.up.railway.app'
+const HOST = import.meta.env.VITE_API_URL
 
 export const getUserByIdInfoAsync = async (id, token) => {
   const apiURL = `${HOST}/customer/${id}`
@@ -35,7 +35,7 @@ export const getUsersInfoAsync = async (page, token) => {
 export const customerAPI = createApi({
   reducerPath: 'customerApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://parking-system-api-production.up.railway.app',
+    baseUrl: import.meta.env.VITE_API_URL,
   }),
   endpoints: (builder) => ({
     registerUser: builder.mutation({

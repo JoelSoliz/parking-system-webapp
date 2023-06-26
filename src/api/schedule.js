@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const scheduleAPI = createApi({
   reducerPath: 'scheduleApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://parking-system-api-production.up.railway.app',
+    baseUrl: import.meta.env.VITE_API_URL,
   }),
   endpoints: (builder) => ({
     registerSchedule: builder.mutation({

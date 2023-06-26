@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import Layout from '../../components/Layout/Layout'
 
 const NotFound = () => {
-  console.log('Not found')
   return (
     <Layout title="Not Found">
       <Typography>

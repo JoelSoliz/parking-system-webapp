@@ -5,7 +5,6 @@ import { Box, Card, TextField, Typography } from '@mui/material'
 import Calendar from '../../../components/common/Calendar'
 
 const CheckForm = ({ reservation, onCollision }) => {
-  console.log(reservation)
   const { data } = useGetDaysBySpotQuery({
     id: reservation?.parkings_spots.id_spot,
     startDate: reservation?.reservations.start_date,
