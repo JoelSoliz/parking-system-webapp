@@ -3,6 +3,7 @@ import { Box, Typography, Button } from '@mui/material'
 import { NoteAlt, Info } from '@mui/icons-material'
 import { FeatureGroup, Polygon, Popup } from 'react-leaflet'
 import { useNavigate } from 'react-router-dom'
+import ProtectComponent from '../common/ProtectComponent'
 
 const Spot = ({ value, onSelect }) => {
   const navigate = useNavigate()
@@ -27,15 +28,18 @@ const Spot = ({ value, onSelect }) => {
               marginTop: '10px',
             }}
           >
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<NoteAlt />}
-              onClick={() => navigate(`/request/${value.id_spot}`)}
-              style={{ textTransform: 'none' }}
-            >
-              Solicitar
-            </Button>
+            <ProtectComponent needed_permission={['CUST']}>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<NoteAlt />}
+                onClick={() => navigate(`/request/${value.id_spot}`)}
+                style={{ textTransform: 'none' }}
+              >
+                Solicitar
+              </Button>
+            </ProtectComponent>
+
             <Button
               variant="contained"
               color="info"
