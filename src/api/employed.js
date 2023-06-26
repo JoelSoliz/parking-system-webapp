@@ -9,8 +9,6 @@ export const employAPI = createApi({
     registerEmploy: builder.mutation({
       query: (data) => {
         let token = localStorage.getItem('token')
-        delete data['passwordConfirmation']
-
         return {
           url: '/employee/',
           method: 'POST',

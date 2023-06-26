@@ -153,7 +153,8 @@ const RegisterClaim = () => {
                 error={!!errors.subject?.message}
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
-                label="Asunto del reclamo"
+                label="Asunto"
+                placeholder='Asunto del reclamo'
                 variant="outlined"
                 type={'text'}
                 helperText={errors.subject?.message}
@@ -185,7 +186,8 @@ const RegisterClaim = () => {
                 error={!!errors.description?.message}
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
-                label="Descripción de los hechos que son objeto del reclamo"
+                label="Descripción"
+                placeholder='Descripción de los hechos que son objeto del reclamo'
                 variant="outlined"
                 multiline
                 rows={3}
@@ -219,7 +221,8 @@ const RegisterClaim = () => {
                 error={!!errors.request?.message}
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
-                label="Sugerencia para la mejora de la funcionalidad"
+                label="Sugerencias"
+                placeholder='Sugerencias para la mejora de la funcionalidad'
                 variant="outlined"
                 multiline
                 rows={3}

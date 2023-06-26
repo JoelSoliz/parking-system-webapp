@@ -1,5 +1,5 @@
 import { Controller, useForm } from 'react-hook-form'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
     Button,
     Card,
@@ -11,13 +11,7 @@ import {
     Box,
 } from '@mui/material'
 import Layout from '../../components/Layout/Layout'
-import IconButton from '@mui/material/IconButton'
 import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import InputAdornment from '@mui/material/InputAdornment'
-import Visibility from '@mui/icons-material/Visibility'
-import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { useRegisterEmployMutation } from '../../api/employed'
@@ -54,13 +48,8 @@ const RegisterEmployed = () => {
         control,
         formState: { errors, isValid },
         handleSubmit,
-        watch,
     } = useForm({ mode: 'onChange' })
-    const [showPassword, setShowPassword] = useState(false)
-    const handleClickShowPassword = () => setShowPassword((show) => !show)
-    const [showPasswordC, setShowPasswordC] = useState(false)
-    const handleClickShowPasswordC = () => setShowPasswordC((show) => !show)
-
+    const randomstring = Math.random().toString(36).slice(-8);
     useEffect(() => {
         if (isSuccess) {
             toast.success(`Se registro correctamente ${data?.name}.`)
@@ -309,9 +298,8 @@ const RegisterEmployed = () => {
                                     message: `${ERROR_MESSAGES.minLength} 5.`,
                                     value: 5,
                                 },
-                                required: { message: ERROR_MESSAGES.required, value: true },
                             }}
-                            render={({ field: { onChange, value } }) => (
+                            render={({ field: { onChange } }) => (
                                 <>
                                     <FormControl
                                         variant="outlined"
@@ -320,29 +308,16 @@ const RegisterEmployed = () => {
                                             marginRight: '18px',
                                         }}
                                     >
-                                        <InputLabel htmlFor="outlined-adornment-password">
-                                            Contraseña
-                                        </InputLabel>
-                                        <OutlinedInput
-                                            id="outlined-adornment-password"
-                                            type={showPassword ? 'text' : 'password'}
-                                            endAdornment={
-                                                <InputAdornment position="end">
-                                                    <IconButton
-                                                        color="black"
-                                                        aria-label="toggle password visibility"
-                                                        onClick={handleClickShowPassword}
-                                                        edge="end"
-                                                    >
-                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            }
+                                        <TextField
+                                            id="outlined-read-only-input"
                                             error={!!errors.password?.message}
-                                            value={value}
-                                            onChange={(event) => onChange(event.target.value)}
                                             label="Contraseña"
-                                            variant="outlined"
+                                            type='password'
+                                            defaultValue={randomstring}
+                                            InputProps={{
+                                                readOnly: true,
+                                            }}
+                                            onChange={(event) => onChange(event.target.defaultValue)}
                                             helperText={errors.password?.message}
                                         />
                                         {!!errors.password?.message && (
@@ -354,59 +329,7 @@ const RegisterEmployed = () => {
                                 </>
                             )}
                         />
-                        <Controller
-                            control={control}
-                            name="passwordConfirmation"
-                            rules={{
-                                maxLength: {
-                                    message: `${ERROR_MESSAGES.maxLength} 8.`,
-                                    value: 8,
-                                },
-                                minLength: {
-                                    message: `${ERROR_MESSAGES.minLength} 5.`,
-                                    value: 5,
-                                },
-                                required: { message: ERROR_MESSAGES.required, value: true },
-                                validate: (value) =>
-                                    value === watch('password') || 'La contraseña no coincide.',
-                            }}
-                            render={({ field: { onChange, value } }) => (
-                                <>
-                                    <FormControl variant="outlined" sx={{ width: '100%' }}>
-                                        <InputLabel htmlFor="outlined-adornment-password">
-                                            Confirmar contraseña
-                                        </InputLabel>
-                                        <OutlinedInput
-                                            id="outlined-adornment-password"
-                                            type={showPasswordC ? 'text' : 'password'}
-                                            endAdornment={
-                                                <InputAdornment position="end">
-                                                    <IconButton
-                                                        color="black"
-                                                        aria-label="toggle password visibility"
-                                                        onClick={handleClickShowPasswordC}
-                                                        edge="end"
-                                                    >
-                                                        {showPasswordC ? <VisibilityOff /> : <Visibility />}
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            }
-                                            error={!!errors.passwordConfirmation?.message}
-                                            value={value}
-                                            onChange={(event) => onChange(event.target.value)}
-                                            label="Confirmar contraseña"
-                                            variant="outlined"
-                                            helperText={errors.passwordConfirmation?.message}
-                                        />
-                                        {!!errors.passwordConfirmation?.message && (
-                                            <FormHelperText error>
-                                                {errors.passwordConfirmation?.message}
-                                            </FormHelperText>
-                                        )}
-                                    </FormControl>
-                                </>
-                            )}
-                        />
+
                     </Box>
                     <Box display="flex" direction="row" letterSpacing={1}>
                         <Controller
@@ -479,7 +402,7 @@ const RegisterEmployed = () => {
                                 variant="contained"
                                 color="secondary"
                                 onClick={handleSubmit((data) =>
-                                    registerEmploy({ ...data, user_type: '', hire_date: new Date().toISOString(), }),
+                                    registerEmploy({ ...data, password: randomstring, user_type: '', hire_date: new Date().toISOString(), }),
                                 )}
                                 disabled={!isValid}
                             >
